@@ -1,7 +1,17 @@
 import { StatusBar } from "expo-status-bar";
-import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
-import Button from "../components/Button";
+import {
+  Button,
+  Image,
+  ImageBackground,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
+import PageButton from "../components/PageButton";
 import { Link } from "expo-router";
+import React from "react";
 
 const placeholderLogo = require("../assets/images/placeholderLogo.png");
 
@@ -15,11 +25,15 @@ export default function App() {
     >
       <View style={styles.container}>
         <Image source={placeholderLogo} style={styles.logo} />
-        <Link href={"./LoginPage"}>
-          <Button theme="login" label="Login" onPress={null} />
+        <Link href={"./LoginPage"} asChild>
+          <TouchableOpacity style={styles.button}>
+            <Text>Login</Text>
+          </TouchableOpacity>
         </Link>
-        <Link href={"./SignUpPage"}>
-          <Button theme="signUp" label="Sign Up" onPress={null} />
+        <Link href={"./SignUpPage"} asChild>
+          <TouchableOpacity style={styles.button}>
+            <Text>Sign Up</Text>
+          </TouchableOpacity>
         </Link>
         <StatusBar style="auto" />
       </View>
@@ -43,5 +57,13 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     marginTop: 50,
     marginBottom: 300,
+  },
+  button: {
+    margin: 10,
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "black",
+    backgroundColor: "white",
   },
 });
