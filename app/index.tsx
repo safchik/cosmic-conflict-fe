@@ -1,15 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import {
-  Button,
   Image,
   ImageBackground,
-  Pressable,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
 } from "react-native";
-import PageButton from "../components/PageButton";
 import { Link } from "expo-router";
 import React from "react";
 
