@@ -4,5 +4,6 @@
     "jsx": "react",
     "strict": true
   },
-  "types": ["react-native-web"]
+  "types": ["react-native-web"],
+  "esModuleInterop": true
 }

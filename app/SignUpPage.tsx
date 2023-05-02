@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   Pressable,
+  Image,
 } from "react-native";
 import { postAccount } from "../utils/api";
 
@@ -15,7 +16,10 @@ import { postAccount } from "../utils/api";
 import * as Yup from "yup";
 import { useRouter } from "expo-router";
 
-interface SignUpPageProps {}
+interface SignUpPageProps {
+  human: Image;
+  alien: Image;
+}
 
 interface SignUpFormValues {
   email: string;
@@ -35,20 +39,25 @@ const SignupSchema = Yup.object().shape({
   username: Yup.string()
     .min(5, "Should be a minimum of 5 characters")
     .required(),
+  race: Yup.string().required("Please select a race"),
 });
 
 const SignUpPage: FC<SignUpPageProps> = () => {
   //needed for Go Back Button
   const router = useRouter();
+  const human = require("../assets/images/human.png");
+  const alien = require("../assets/images/alien.png");
 
   return (
     <SafeAreaView style={styles.form}>
+      <Text style={styles.title}>Create your character</Text>
       <Formik
         initialValues={{
           email: "",
           username: "",
           password: "",
           confirmPassword: "",
+          race: "",
         }}
         validationSchema={SignupSchema}
         onSubmit={(values) => {
@@ -57,6 +66,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
             email: values.email,
             username: values.username,
             password: values.password,
+            race: values.race,
           };
           postAccount(newAccount);
         }}
@@ -123,7 +133,40 @@ const SignUpPage: FC<SignUpPageProps> = () => {
                 secureTextEntry
               />
             </View>
-            <View style={styles.createAccount}>
+            <Text>Select your race: {values.race}</Text>
+            <View style={styles.images}>
+              <Pressable
+                style={{
+                  backgroundColor: values.race === "Alien" ? "#000" : "#ccc",
+                  padding: 1,
+                  marginVertical: 5,
+                  marginHorizontal: 5,
+                  borderRadius: 10,
+                  borderWidth: 2,
+                }}
+                onPress={() => handleChange("race")("Human")}
+              >
+                <Image style={styles.eachImage} source={human} />
+              </Pressable>
+              <Pressable
+                style={{
+                  backgroundColor: values.race === "Human" ? "#000" : "#ccc",
+                  padding: 1,
+                  marginVertical: 5,
+                  marginHorizontal: 5,
+                  borderRadius: 10,
+                  borderWidth: 2,
+                }}
+                onPress={() => handleChange("race")("Alien")}
+              >
+                <Image style={styles.eachImage} source={alien} />
+              </Pressable>
+            </View>
+            <View style={styles.bonuses}>
+              <Text style={styles.eachBonusText}>10% Defence Bonus</Text>
+              <Text style={styles.eachBonusText}>10% Attack Bonus</Text>
+            </View>
+            <View style={styles.button}>
               <TouchableOpacity
                 disabled={!isValid}
                 onPress={(e: any) => handleSubmit(e)}
@@ -150,6 +193,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#f62681",
   },
+  title: {
+    fontSize: 40,
+    marginBottom: 25,
+  },
   input: {
     height: 40,
     width: 300,
@@ -164,6 +211,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
+    borderColor: "black",
+    borderWidth: 2,
   },
   button: {
     margin: 10,
@@ -172,6 +221,24 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "black",
     backgroundColor: "white",
+  },
+  images: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  eachImage: {
+    width: 100,
+    height: 100,
+    margin: 10,
+    borderRadius: 5,
+  },
+  bonuses: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  eachBonusText: {
+    marginRight: 12,
+    marginLeft: 5,
   },
 });
 
