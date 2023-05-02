@@ -7,6 +7,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { postAccount } from "../utils/api";
 
@@ -29,7 +30,7 @@ const SignupSchema = Yup.object().shape({
     .max(16, "Should be a max of 16 characters")
     .required(),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), ""], "Passwords must match")
+    .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Please Confirm Your Password"),
   username: Yup.string()
     .min(5, "Should be a minimum of 5 characters")
@@ -51,6 +52,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
         }}
         validationSchema={SignupSchema}
         onSubmit={(values) => {
+          console.log(values);
           const newAccount = {
             email: values.email,
             username: values.username,
@@ -122,7 +124,10 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               />
             </View>
             <View style={styles.createAccount}>
-              <TouchableOpacity disabled={!isValid} onPress={handleSubmit}>
+              <TouchableOpacity
+                disabled={!isValid}
+                onPress={(e: any) => handleSubmit(e)}
+              >
                 <Text>Create Account</Text>
               </TouchableOpacity>
             </View>
@@ -130,9 +135,9 @@ const SignUpPage: FC<SignUpPageProps> = () => {
         )}
       </Formik>
       <View>
-        <TouchableOpacity onPress={() => router.back()} style={styles.button}>
+        <Pressable onPress={() => router.back()} style={styles.button}>
           <Text>Go Back</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </SafeAreaView>
   );

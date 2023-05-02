@@ -6,6 +6,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { Link } from "expo-router";
 import React from "react";
@@ -13,8 +14,6 @@ import React from "react";
 const placeholderLogo = require("../assets/images/placeholderLogo.png");
 
 export default function App() {
-  const handleSignUp = () => {};
-
   return (
     <ImageBackground
       source={require("../assets/images/placeholderBg.webp")}
@@ -28,9 +27,9 @@ export default function App() {
           </TouchableOpacity>
         </Link>
         <Link href={"./SignUpPage"} asChild>
-          <TouchableOpacity style={styles.button}>
+          <Pressable style={styles.button}>
             <Text>Sign Up</Text>
-          </TouchableOpacity>
+          </Pressable>
         </Link>
         <StatusBar style="auto" />
       </View>
