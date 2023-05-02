@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, createContext, useState } from "react";
 import { Formik } from "formik";
 import {
   StyleSheet,
@@ -166,8 +166,8 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               </Pressable>
             </View>
             <View style={styles.bonuses}>
-              <Text style={styles.eachBonusText}>10% Defence Bonus</Text>
-              <Text style={styles.eachBonusText}>10% Attack Bonus</Text>
+              <Text style={styles.eachBonusText}>20% Defence Bonus</Text>
+              <Text style={styles.eachBonusText}>20% Attack Bonus</Text>
             </View>
             <View style={styles.button}>
               <TouchableOpacity
