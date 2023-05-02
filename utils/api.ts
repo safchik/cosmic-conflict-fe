@@ -9,3 +9,9 @@ export const postAccount = async (postedAccount) => {
   const response = await gameAPI.post("/signup", postedAccount);
   return response.data;
 };
+
+export const login = async (account) => {
+  console.log(account);
+  const response = await gameAPI.post("/login", account);
+  return response.data;
+};
