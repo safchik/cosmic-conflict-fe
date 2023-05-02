@@ -14,7 +14,7 @@ import { postAccount } from "../utils/api";
 
 //Form validation
 import * as Yup from "yup";
-import { useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 
 interface SignUpPageProps {
   human: Image;
@@ -43,6 +43,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 const SignUpPage: FC<SignUpPageProps> = () => {
+  const [user, setUser] = useState<object>({});
   //needed for Go Back Button
   const router = useRouter();
   const human = require("../assets/images/human.png");
@@ -68,7 +69,9 @@ const SignUpPage: FC<SignUpPageProps> = () => {
             password: values.password,
             race: values.race,
           };
+          setUser(newAccount);
           postAccount(newAccount);
+          router.push({ pathname: "./Account" });
         }}
       >
         {({
