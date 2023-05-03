@@ -14,10 +14,7 @@ const Account: FC<AccountProps> = ({ logout }) => {
   };
 
   return (
-    <LinearGradient
-      colors={["#f62681", "#2e4cff"]}
-      style={styles.container}
-    >
+    <LinearGradient colors={["#f62681", "#2e4cff"]} style={styles.container}>
       <Text style={styles.title}>Account Details</Text>
       <View style={styles.row}>
         <Text style={styles.label}>Username:</Text>
