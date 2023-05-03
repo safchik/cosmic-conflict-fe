@@ -27,9 +27,12 @@ interface SignUpFormValues {
   password: string;
   confirmPassword: string;
 }
+
+//defines the schema for the form, i.e. the rules for each field
 const SignupSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
+  email: Yup.string().email("Invalid email").required("Required").lowercase(),
   password: Yup.string()
+    .matches(/^\S*$/, "Password should not contain spaces")
     .min(5, "Should be a min of 5 characters")
     .max(16, "Should be a max of 16 characters")
     .required(),
@@ -37,17 +40,15 @@ const SignupSchema = Yup.object().shape({
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Please Confirm Your Password"),
   username: Yup.string()
+    .matches(/^\S*$/, "Username should not contain spaces")
     .min(5, "Should be a minimum of 5 characters")
     .required(),
-  race: Yup.string().required("Please select a race"),
 });
 
 const SignUpPage: FC<SignUpPageProps> = () => {
   const [user, setUser] = useState<object>({});
   //needed for Go Back Button
   const router = useRouter();
-  const human = require("../assets/images/human.png");
-  const alien = require("../assets/images/alien.png");
 
   return (
     <SafeAreaView style={styles.form}>
@@ -62,6 +63,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
         }}
         validationSchema={SignupSchema}
         onSubmit={(values) => {
+          router.push({ pathname: "./CharacterPage" });
           console.log(values);
           const newAccount = {
             email: values.email,
@@ -71,7 +73,6 @@ const SignUpPage: FC<SignUpPageProps> = () => {
           };
           setUser(newAccount);
           postAccount(newAccount);
-          router.push({ pathname: "./Account" });
         }}
       >
         {({
@@ -136,39 +137,6 @@ const SignUpPage: FC<SignUpPageProps> = () => {
                 secureTextEntry
               />
             </View>
-            <Text>Select your race: {values.race}</Text>
-            <View style={styles.images}>
-              <Pressable
-                style={{
-                  backgroundColor: values.race === "Alien" ? "#000" : "#ccc",
-                  padding: 1,
-                  marginVertical: 5,
-                  marginHorizontal: 5,
-                  borderRadius: 10,
-                  borderWidth: 2,
-                }}
-                onPress={() => handleChange("race")("Human")}
-              >
-                <Image style={styles.eachImage} source={human} />
-              </Pressable>
-              <Pressable
-                style={{
-                  backgroundColor: values.race === "Human" ? "#000" : "#ccc",
-                  padding: 1,
-                  marginVertical: 5,
-                  marginHorizontal: 5,
-                  borderRadius: 10,
-                  borderWidth: 2,
-                }}
-                onPress={() => handleChange("race")("Alien")}
-              >
-                <Image style={styles.eachImage} source={alien} />
-              </Pressable>
-            </View>
-            <View style={styles.bonuses}>
-              <Text style={styles.eachBonusText}>10% Defence Bonus</Text>
-              <Text style={styles.eachBonusText}>10% Attack Bonus</Text>
-            </View>
             <View style={styles.button}>
               <TouchableOpacity
                 disabled={!isValid}
@@ -180,11 +148,9 @@ const SignUpPage: FC<SignUpPageProps> = () => {
           </>
         )}
       </Formik>
-      <View>
-        <Pressable onPress={() => router.back()} style={styles.button}>
-          <Text>Go Back</Text>
-        </Pressable>
-      </View>
+      <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Text>Go Back</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };
@@ -242,6 +208,18 @@ const styles = StyleSheet.create({
   eachBonusText: {
     marginRight: 12,
     marginLeft: 5,
+  },
+  backButton: {
+    margin: 10,
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "black",
+    backgroundColor: "white",
+    position: "absolute",
+    top: 50,
+    right: 5,
+    zIndex: 1,
   },
 });
 
