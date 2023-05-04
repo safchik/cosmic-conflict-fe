@@ -11,6 +11,7 @@ import {
 import { Link } from "expo-router";
 import React, { useState } from "react";
 
+
 const placeholderLogo = require("../assets/images/placeholderLogo.png");
 
 export default function App() {
