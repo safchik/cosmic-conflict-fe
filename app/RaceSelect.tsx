@@ -28,20 +28,10 @@ interface SignUpFormValues {
   confirmPassword: string;
 }
 const SignupSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
-  password: Yup.string()
-    .min(5, "Should be a min of 5 characters")
-    .max(16, "Should be a max of 16 characters")
-    .required(),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Passwords must match")
-    .required("Please Confirm Your Password"),
-  username: Yup.string()
-    .min(5, "Should be a minimum of 5 characters")
-    .required(),
+  race: Yup.string().required("Please select a race"),
 });
 
-const SignUpPage: FC<SignUpPageProps> = () => {
+const RaceSelect: FC<SignUpPageProps> = () => {
   const [user, setUser] = useState<object>({});
   //needed for Go Back Button
   const router = useRouter();
@@ -50,25 +40,20 @@ const SignUpPage: FC<SignUpPageProps> = () => {
 
   return (
     <SafeAreaView style={styles.form}>
-      <Text style={styles.title}>Create your character</Text>
+      <Text style={styles.title}>Select your race</Text>
       <Formik
         initialValues={{
-          email: "",
-          username: "",
-          password: "",
-          confirmPassword: "",
+          race: "",
         }}
         validationSchema={SignupSchema}
         onSubmit={(values) => {
           console.log(values);
           const newAccount = {
-            email: values.email,
-            username: values.username,
-            password: values.password,
+            race: values.race,
           };
           setUser(newAccount);
           postAccount(newAccount);
-          router.push({ pathname: "./RaceSelect" });
+          router.push({ pathname: "./Account" });
         }}
       >
         {({
@@ -81,64 +66,45 @@ const SignUpPage: FC<SignUpPageProps> = () => {
           isValid,
         }) => (
           <>
-            <View>
-              <Text>Email</Text>
-              {touched.email && errors.email && <Text>{errors.email}</Text>}
-              <TextInput
-                style={styles.input}
-                value={values.email}
-                onChangeText={handleChange("email")}
-                onBlur={handleBlur("email")}
-                placeholder="email"
-              />
+            <Text>Select your race: {values.race}</Text>
+            <View style={styles.images}>
+              <Pressable
+                style={{
+                  backgroundColor: values.race === "Alien" ? "#000" : "#ccc",
+                  padding: 1,
+                  marginVertical: 5,
+                  marginHorizontal: 5,
+                  borderRadius: 10,
+                  borderWidth: 2,
+                }}
+                onPress={() => handleChange("race")("Human")}
+              >
+                <Image style={styles.eachImage} source={human} />
+              </Pressable>
+              <Pressable
+                style={{
+                  backgroundColor: values.race === "Human" ? "#000" : "#ccc",
+                  padding: 1,
+                  marginVertical: 5,
+                  marginHorizontal: 5,
+                  borderRadius: 10,
+                  borderWidth: 2,
+                }}
+                onPress={() => handleChange("race")("Alien")}
+              >
+                <Image style={styles.eachImage} source={alien} />
+              </Pressable>
             </View>
-            <View>
-              <Text>Username</Text>
-              {touched.username && errors.username && (
-                <Text>{errors.username}</Text>
-              )}
-              <TextInput
-                style={styles.input}
-                value={values.username}
-                onChangeText={handleChange("username")}
-                onBlur={handleBlur("username")}
-                placeholder="username"
-              />
-            </View>
-            <View>
-              <Text>Password</Text>
-              {touched.password && errors.password && (
-                <Text>{errors.password}</Text>
-              )}
-              <TextInput
-                style={styles.input}
-                value={values.password}
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-                placeholder="password"
-                secureTextEntry
-              />
-            </View>
-            <View>
-              <Text>Confirm Password</Text>
-              {touched.confirmPassword && errors.confirmPassword && (
-                <Text style={{ color: "white" }}>{errors.confirmPassword}</Text>
-              )}
-              <TextInput
-                style={styles.input}
-                value={values.confirmPassword}
-                onChangeText={handleChange("confirmPassword")}
-                onBlur={handleBlur("confirmPassword")}
-                placeholder="confirm password"
-                secureTextEntry
-              />
+            <View style={styles.bonuses}>
+              <Text style={styles.eachBonusText}>20% Defence Bonus</Text>
+              <Text style={styles.eachBonusText}>20% Attack Bonus</Text>
             </View>
             <View style={styles.button}>
               <TouchableOpacity
                 disabled={!isValid}
                 onPress={(e: any) => handleSubmit(e)}
               >
-                <Text>Choose Your Race</Text>
+                <Text>Create Account</Text>
               </TouchableOpacity>
             </View>
           </>
@@ -209,4 +175,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUpPage;
+export default RaceSelect;
