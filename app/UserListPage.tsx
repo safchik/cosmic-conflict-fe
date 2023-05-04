@@ -1,8 +1,15 @@
-import React, { FC, useState } from "react";
-import { Text, SafeAreaView, View, FlatList, StyleSheet, Image } from "react-native";
+import React, { FC, useEffect, useState } from "react";
+import {
+  Text,
+  SafeAreaView,
+  View,
+  FlatList,
+  StyleSheet,
+  Image,
+} from "react-native";
 import usersData from "./users";
 import { LinearGradient } from "expo-linear-gradient";
-
+import * as api from "../utils/api";
 
 interface User {
   username: string;
@@ -15,6 +22,12 @@ interface User {
 }
 
 const UserListItem: FC<{ user: User }> = ({ user }) => {
+  useEffect(() => {
+    api.getUsers().then((data) => {
+      console.log(data);
+    });
+  });
+
   return (
     <View style={styles.userListItem}>
       <View style={styles.userListItemText}>
@@ -34,10 +47,7 @@ const UserListPage: FC = () => {
   const [userList, setUserList] = useState<User[]>(usersData);
 
   return (
-    <LinearGradient
-      colors={["#f62681", "#2e4cff"]}
-      style={styles.container}
-    >
+    <LinearGradient colors={["#f62681", "#2e4cff"]} style={styles.container}>
       <SafeAreaView>
         <FlatList
           data={userList}

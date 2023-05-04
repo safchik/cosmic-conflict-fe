@@ -47,7 +47,7 @@ const RaceSelect: FC<SignUpPageProps> = () => {
         }}
         validationSchema={SignupSchema}
         onSubmit={(values) => {
-          console.log(values);
+          //console.log(values);
           const newAccount = {
             race: values.race,
           };
