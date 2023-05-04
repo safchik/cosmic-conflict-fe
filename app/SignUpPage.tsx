@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, createContext, useState } from "react";
 import { Formik } from "formik";
 import {
   StyleSheet,
@@ -59,7 +59,6 @@ const SignUpPage: FC<SignUpPageProps> = () => {
           username: "",
           password: "",
           confirmPassword: "",
-          race: "",
         }}
         validationSchema={SignupSchema}
         onSubmit={(values) => {
@@ -69,10 +68,10 @@ const SignUpPage: FC<SignUpPageProps> = () => {
             email: values.email,
             username: values.username,
             password: values.password,
-            race: values.race,
           };
           setUser(newAccount);
           postAccount(newAccount);
+          router.push({ pathname: "./RaceSelect" });
         }}
       >
         {({
@@ -142,7 +141,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
                 disabled={!isValid}
                 onPress={(e: any) => handleSubmit(e)}
               >
-                <Text>Create Account</Text>
+                <Text>Choose Your Race</Text>
               </TouchableOpacity>
             </View>
           </>

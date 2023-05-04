@@ -1,12 +1,15 @@
 import React, { FC } from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { Link } from "expo-router";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface AccountProps {
   logout: () => void;
 }
 
 const Account: FC<AccountProps> = ({ logout }) => {
+  const gold = require("../assets/images/gold.jpeg");
   const user = {
     username: "johnpaul",
     email: "johnpaul@test.com",
@@ -28,6 +31,12 @@ const Account: FC<AccountProps> = ({ logout }) => {
         <Text style={styles.label}>Email Address:</Text>
         <Text style={styles.value}>{user.email}</Text>
       </View>
+
+      <Link href={"./Shop"}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Shop</Text>
+        </TouchableOpacity>
+      </Link>
       <Pressable style={styles.button} onPress={logout}>
         <Text style={styles.buttonText}>Log Out</Text>
       </Pressable>
