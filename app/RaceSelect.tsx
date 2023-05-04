@@ -53,7 +53,7 @@ const RaceSelect: FC<SignUpPageProps> = () => {
           };
           setUser(newAccount);
           postAccount(newAccount);
-          router.push({ pathname: "./Account" });
+          router.push({ pathname: "./CharacterPage" });
         }}
       >
         {({
