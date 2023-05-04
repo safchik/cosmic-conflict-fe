@@ -13,6 +13,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Audio, AVPlaybackStatus } from "expo-av";
 // import { AuthContext, AuthProvider } from "../contexts/Auth";
 
+
 const splashSound = require("../assets/media/splash.mp3");
 const placeholderLogo = require("../assets/images/placeholderLogo.png");
 
