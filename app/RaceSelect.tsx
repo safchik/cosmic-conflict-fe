@@ -10,7 +10,8 @@ import {
   Pressable,
   Image,
 } from "react-native";
-import { postAccount } from "../utils/api";
+// import { postAccount } from "../utils/api";
+import * as api from "../utils/api";
 
 //Form validation
 import * as Yup from "yup";
@@ -47,11 +48,12 @@ const RaceSelect: FC<SignUpPageProps> = () => {
         }}
         validationSchema={SignupSchema}
         onSubmit={(values) => {
-          console.log(values);
+          //console.log(values);
           const newAccount = {
             race: values.race,
           };
           setUser(newAccount);
+
           postAccount(newAccount);
           router.push({ pathname: "./CharacterPage" });
         }}
