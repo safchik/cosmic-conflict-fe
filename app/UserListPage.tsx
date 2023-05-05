@@ -1,5 +1,5 @@
 
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from 'react';
 import {
   Text,
   SafeAreaView,
@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import usersData from './users';
 import { LinearGradient } from 'expo-linear-gradient';
+
 
 
 import * as api from "../utils/api";
@@ -37,11 +38,13 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
   const hideModal = () => {
     setModalVisible(false);
   };
+
   useEffect(() => {
     api.getUsers().then((data) => {
       console.log(data);
     });
   });
+
 
   return (
     <View style={styles.userListItem}>
@@ -86,7 +89,6 @@ const UserListPage: FC = () => {
 
   return (
     <LinearGradient colors={["#7DF9FF", "#3D3D3D"]} style={styles.container}>
-
       <SafeAreaView>
         <FlatList
           data={userList}
