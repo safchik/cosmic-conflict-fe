@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { Formik } from "formik";
 import {
   StyleSheet,
@@ -9,11 +9,12 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
+import { getUserCharacter, login } from "../utils/api";
 
 //Form validation
 import * as Yup from "yup";
 import { useRouter } from "expo-router";
-import { login } from "../utils/api";
+import { setAsyncStorage } from "../utils/asyncStorage";
 
 interface LoginPageProps {}
 
@@ -37,12 +38,23 @@ const LoginPage: FC<LoginPageProps> = () => {
           password: "",
         }}
         validationSchema={LoginSchema}
-        onSubmit={(values) => {
-          const account = {
-            username: values.username,
-            password: values.password,
-          };
-          login(account);
+        onSubmit={async (values) => {
+          await setAsyncStorage("user", values.username);
+          login(values)
+            .then(async () => {
+              const fetchedChar = await getUserCharacter(
+                "username",
+                values.username
+              );
+              if (fetchedChar) {
+                router.push({ pathname: "./CharacterPage" });
+              } else {
+                router.push({ pathname: "./RaceSelect" });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }}
       >
         {({
