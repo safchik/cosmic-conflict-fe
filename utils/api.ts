@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const gameAPI = axios.create({
-  baseURL: "toBeDetermined",
+  baseURL: "http://localhost:9090/api"
 });
 
 export const postAccount = async (postedAccount) => {
