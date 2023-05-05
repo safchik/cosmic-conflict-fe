@@ -16,7 +16,6 @@ import * as api from '../utils/api';
 //Form validation
 import * as Yup from 'yup';
 import { useNavigation, useRouter } from 'expo-router';
-import { getUser, storeUser } from '../utils/userData';
 import { getAsyncStorage, setAsyncStorage } from '../utils/asyncStorage';
 
 interface SignUpPageProps {
