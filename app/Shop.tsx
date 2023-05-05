@@ -11,7 +11,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
-import ItemCard from "./ItemCard";
+import ItemCard from "../components/ItemCard";
 
 
 
@@ -31,7 +31,9 @@ interface ItemCardProps {
 
 const Shop: FC<AccountProps> = ({ logout }) => {
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [basket, setBasket] = useState([]);
+  
+  
   const showModal = () => {
     setModalVisible(true);
   };
@@ -82,11 +84,56 @@ const Shop: FC<AccountProps> = ({ logout }) => {
             buff="healing"
             cost={100}
           />
+          <ItemCard
+           onPress={showModal}
+            type="weapon"
+            itemName="Plasma Rifle"
+            attackStat={20}
+            defenceStat={0}
+            buff="poison"
+            cost={250}
+          />
+           <ItemCard
+           onPress={showModal}
+            type="weapon"
+            itemName="Ion Blaster"
+            attackStat={30}
+            defenceStat={0}
+            buff="stun"
+            cost={500}
+          />
         </ScrollView>
         <View style={styles.row}>
           <Text style={styles.label}>Armour </Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <ItemCard
+           onPress={showModal}
+            type="armor"
+            itemName="Power Suit"
+            attackStat={0}
+            defenceStat={20}
+            buff="health"
+            cost={100}
+          />
+          <ItemCard
+          onPress={showModal}
+            type="armor"
+            itemName="Reflective Shield"
+            attackStat={0}
+            defenceStat={30}
+            buff="reflect"
+            cost={250}
+          />
+          <ItemCard
+          onPress={showModal}
+            type="armor"
+            itemName="Energy Shield"
+            attackStat={0}
+            defenceStat={40}
+            buff="energy"
+            cost={500}
+          />
         </ScrollView>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Purchase</Text>
@@ -94,19 +141,24 @@ const Shop: FC<AccountProps> = ({ logout }) => {
       </SafeAreaView>
 
       <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={hideModal}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Pressable style={styles.closeButton} onPress={hideModal}>
-              <Text style={styles.closeButtonText}>Close</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
+  animationType="slide"
+  transparent={true}
+  visible={modalVisible}
+  onRequestClose={hideModal}
+>
+  <View style={styles.centeredView}>
+    <View style={styles.modalView}>
+      <Text style={styles.itemText}>Item name</Text>
+      <Text style={styles.itemText}>Are you sure?</Text>
+      <Pressable style={styles.addToBasketButton}>
+        <Text style={styles.addToBasketText}>Add to basket</Text>
+      </Pressable>
+      <Pressable style={styles.closeButton} onPress={hideModal}>
+        <Text style={styles.closeButtonText}>Close</Text>
+      </Pressable>
+    </View>
+  </View>
+</Modal>
     </ImageBackground>
   );
 };
@@ -197,7 +249,42 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-});
+  scrollView: {
+    marginVertical: 10,
+  },
+  itemCard: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 10,
+    marginHorizontal: 10,
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  itemText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 4,
+  },
+  addToBasketButton: {
+    backgroundColor: "#2196F3",
+    borderRadius: 20,
+    padding: 10,
+    marginTop: 15,
+  },
 
+  addToBasketText: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+});
 
 export default Shop;

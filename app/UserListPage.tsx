@@ -13,6 +13,7 @@ import {
 import usersData from './users';
 import { LinearGradient } from 'expo-linear-gradient';
 
+
 interface User {
   username: string;
   race: string;
@@ -34,7 +35,6 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
     setModalVisible(false);
   };
 
-
   return (
     <View style={styles.userListItem}>
       <View style={styles.userListItemText}>
@@ -45,8 +45,8 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <Modal visible={modalVisible} animationType='slide' transparent>
-        <LinearGradient colors={['#f62681', '#2e4cff']} style={styles.modalContainer}>
+      <Modal visible={modalVisible} animationType='fade' transparent >
+        <LinearGradient colors={["#3D3D3D"]} style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={[styles.modalTitle, { fontFamily: 'Roboto' }]}>
               {user.username}
@@ -57,12 +57,12 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
             <Text style={styles.modalText}>Attack: {user.attack}</Text>
             <Text style={styles.modalText}>Defence: {user.defence}</Text>
             <TouchableOpacity style={styles.modalButton} onPress={hideModal}>
-              <Text style={[styles.modalButtonText, { fontFamily: 'sci-fi-font' }]}>
+              <Text style={[styles.modalButtonText, { fontFamily: 'Roboto' }]}>
                 Close
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.modalButton}>
-              <Text style={[styles.modalButtonText, { fontFamily: 'sci-fi-font' }]}>
+              <Text style={[styles.modalButtonText, { fontFamily: 'Roboto' }]}>
                 Attack
               </Text>
             </TouchableOpacity>
@@ -77,7 +77,7 @@ const UserListPage: FC = () => {
   const [userList, setUserList] = useState<User[]>(usersData);
 
   return (
-    <LinearGradient colors={['#f62681', '#2e4cff']} style={styles.container}>
+    <LinearGradient colors={["#7DF9FF", "#3D3D3D"]} style={styles.container}>
       <SafeAreaView>
         <FlatList
           data={userList}
@@ -158,7 +158,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-
 
 export default UserListPage;
