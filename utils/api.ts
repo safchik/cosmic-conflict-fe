@@ -5,8 +5,6 @@ const gameAPI = axios.create({
 });
 
 export const createNewAccount = async (postedAccount) => {
-  console.log(postedAccount);
-
   const response = await gameAPI.post("/auth/signup", postedAccount);
   console.log(response.data);
   return response.data;
@@ -21,4 +19,11 @@ export const login = async (account) => {
 export const getUsers = async () => {
   const response = await gameAPI.get("/characters");
   return response;
+};
+
+export const createNewCharacter = async (postedCharacter) => {
+  console.log(postedCharacter);
+  const response = await gameAPI.post("/characters", postedCharacter);
+  console.log(response.data);
+  return response.data;
 };

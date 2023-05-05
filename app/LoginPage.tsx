@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { Formik } from "formik";
 import {
   StyleSheet,
@@ -9,11 +9,11 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import { postAccount } from "../utils/api";
 
 //Form validation
 import * as Yup from "yup";
 import { useRouter } from "expo-router";
+import { login } from "../utils/api";
 
 interface LoginPageProps {}
 
@@ -38,7 +38,11 @@ const LoginPage: FC<LoginPageProps> = () => {
         }}
         validationSchema={LoginSchema}
         onSubmit={(values) => {
-          postAccount(values);
+          const account = {
+            username: values.username,
+            password: values.password,
+          };
+          login(account);
         }}
       >
         {({

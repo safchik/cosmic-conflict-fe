@@ -1,4 +1,4 @@
-import React, { FC, createContext, useState } from "react";
+import React, { FC, createContext, useEffect, useState } from "react";
 import { Formik } from "formik";
 import {
   StyleSheet,
@@ -16,6 +16,7 @@ import * as api from "../utils/api";
 //Form validation
 import * as Yup from "yup";
 import { useNavigation, useRouter } from "expo-router";
+import { getUser, storeUser } from "../utils/userData";
 
 interface SignUpPageProps {
   human: Image;
@@ -33,7 +34,6 @@ const SignupSchema = Yup.object().shape({
 });
 
 const RaceSelect: FC<SignUpPageProps> = () => {
-  const [user, setUser] = useState<object>({});
   //needed for Go Back Button
   const router = useRouter();
   const human = require("../assets/images/human.png");
@@ -48,13 +48,14 @@ const RaceSelect: FC<SignUpPageProps> = () => {
         }}
         validationSchema={SignupSchema}
         onSubmit={(values) => {
-          //console.log(values);
+          console.log(values);
           const newAccount = {
             race: values.race,
           };
-          setUser(newAccount);
-
-          postAccount(newAccount);
+          const currentUser = getUser();
+          const updatedUser = { ...currentUser, race: values.race };
+          storeUser(updatedUser);
+          // postAccount(newAccount); TODO
           router.push({ pathname: "./CharacterPage" });
         }}
       >

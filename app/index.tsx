@@ -9,16 +9,13 @@ import {
   Pressable,
 } from "react-native";
 import { Link } from "expo-router";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Audio, AVPlaybackStatus } from "expo-av";
-// import { AuthContext, AuthProvider } from "../contexts/Auth";
 
 const splashSound = require("../assets/media/splash.mp3");
 const placeholderLogo = require("../assets/images/placeholderLogo.png");
 
 export default function App() {
-  // const auth = useContext(AuthContext);
-
   useEffect(() => {
     const soundObject = new Audio.Sound();
     const playSound = async (): Promise<void> => {
@@ -37,7 +34,6 @@ export default function App() {
   }, []);
 
   return (
-    // <AuthProvider>
     <ImageBackground
       source={require("../assets/images/mainBackground.jpg")}
       style={styles.background}
@@ -60,7 +56,6 @@ export default function App() {
         <StatusBar style="auto" />
       </View>
     </ImageBackground>
-    // </AuthProvider>
   );
 }
 

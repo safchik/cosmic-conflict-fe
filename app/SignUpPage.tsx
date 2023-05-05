@@ -10,12 +10,13 @@ import {
   Pressable,
   Image,
 } from "react-native";
-import * as api from "../utils/api";
+import { storeUser } from "../utils/userData";
 
 //Form validation
 import * as Yup from "yup";
 import { useNavigation, useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import { createNewAccount } from "../utils/api";
 
 interface SignUpPageProps {
   human: Image;
@@ -47,7 +48,6 @@ const SignupSchema = Yup.object().shape({
 });
 
 const SignUpPage: FC<SignUpPageProps> = () => {
-  const [user, setUser] = useState<object>({});
   //needed for Go Back Button
   const router = useRouter();
 
@@ -62,15 +62,18 @@ const SignUpPage: FC<SignUpPageProps> = () => {
           confirmPassword: "",
         }}
         validationSchema={SignupSchema}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           console.log(values);
           const newAccount = {
             email: values.email,
             username: values.username,
             password: values.password,
           };
-          setUser(newAccount);
-          api.createNewAccount(newAccount);
+          const newUser = {
+            username: values.username,
+          };
+          await storeUser(newUser);
+          createNewAccount(newAccount);
           router.push({ pathname: "./RaceSelect" });
         }}
       >
