@@ -1,5 +1,5 @@
-import React, { FC, createContext, useState } from "react";
-import { Formik } from "formik";
+import React, { FC, createContext, useEffect, useState } from 'react';
+import { Formik } from 'formik';
 import {
   StyleSheet,
   Text,
@@ -9,14 +9,14 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
-} from "react-native";
-import { storeUser } from "../utils/userData";
+} from 'react-native';
+import { getAsyncStorage, setAsyncStorage } from '../utils/asyncStorage';
 
 //Form validation
-import * as Yup from "yup";
-import { useNavigation, useRouter } from "expo-router";
-import { LinearGradient } from "expo-linear-gradient";
-import { createNewAccount } from "../utils/api";
+import * as Yup from 'yup';
+import { useNavigation, useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
+import { createNewAccount } from '../utils/api';
 
 interface SignUpPageProps {
   human: Image;
@@ -32,18 +32,18 @@ interface SignUpFormValues {
 
 //defines the schema for the form, i.e. the rules for each field
 const SignupSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required").lowercase(),
+  email: Yup.string().email('Invalid email').required('Required').lowercase(),
   password: Yup.string()
-    .matches(/^\S*$/, "Password should not contain spaces")
-    .min(5, "Should be a min of 5 characters")
-    .max(16, "Should be a max of 16 characters")
+    .matches(/^\S*$/, 'Password should not contain spaces')
+    .min(5, 'Should be a min of 5 characters')
+    .max(16, 'Should be a max of 16 characters')
     .required(),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Passwords must match")
-    .required("Please Confirm Your Password"),
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required('Please Confirm Your Password'),
   username: Yup.string()
-    .matches(/^\S*$/, "Username should not contain spaces")
-    .min(5, "Should be a minimum of 5 characters")
+    .matches(/^\S*$/, 'Username should not contain spaces')
+    .min(5, 'Should be a minimum of 5 characters')
     .required(),
 });
 
@@ -52,14 +52,14 @@ const SignUpPage: FC<SignUpPageProps> = () => {
   const router = useRouter();
 
   return (
-    <LinearGradient colors={["#3D3D3D", "#7DF9FF"]} style={styles.form}>
+    <LinearGradient colors={['#3D3D3D', '#7DF9FF']} style={styles.form}>
       <Text style={styles.title}>Create your character</Text>
       <Formik
         initialValues={{
-          email: "",
-          username: "",
-          password: "",
-          confirmPassword: "",
+          email: '',
+          username: '',
+          password: '',
+          confirmPassword: '',
         }}
         validationSchema={SignupSchema}
         onSubmit={async (values) => {
@@ -72,9 +72,16 @@ const SignUpPage: FC<SignUpPageProps> = () => {
           const newUser = {
             username: values.username,
           };
-          await storeUser(newUser);
-          createNewAccount(newAccount);
-          router.push({ pathname: "./RaceSelect" });
+          await setAsyncStorage('user', newUser);
+
+          createNewAccount(newAccount)
+            .then((response) => {
+              router.push({ pathname: './RaceSelect' });
+            })
+            .catch((err) => {
+              // TODO render error message in UI
+              console.log(err.message);
+            });
         }}
       >
         {({
@@ -93,8 +100,8 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               <TextInput
                 style={styles.input}
                 value={values.email}
-                onChangeText={handleChange("email")}
-                onBlur={handleBlur("email")}
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
                 placeholder="email"
               />
             </View>
@@ -106,8 +113,8 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               <TextInput
                 style={styles.input}
                 value={values.username}
-                onChangeText={handleChange("username")}
-                onBlur={handleBlur("username")}
+                onChangeText={handleChange('username')}
+                onBlur={handleBlur('username')}
                 placeholder="username"
               />
             </View>
@@ -119,8 +126,8 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               <TextInput
                 style={styles.input}
                 value={values.password}
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
                 placeholder="password"
                 secureTextEntry
               />
@@ -128,13 +135,13 @@ const SignUpPage: FC<SignUpPageProps> = () => {
             <View>
               <Text>Confirm Password</Text>
               {touched.confirmPassword && errors.confirmPassword && (
-                <Text style={{ color: "white" }}>{errors.confirmPassword}</Text>
+                <Text style={{ color: 'white' }}>{errors.confirmPassword}</Text>
               )}
               <TextInput
                 style={styles.input}
                 value={values.confirmPassword}
-                onChangeText={handleChange("confirmPassword")}
-                onBlur={handleBlur("confirmPassword")}
+                onChangeText={handleChange('confirmPassword')}
+                onBlur={handleBlur('confirmPassword')}
                 placeholder="confirm password"
                 secureTextEntry
               />
@@ -160,16 +167,16 @@ const SignUpPage: FC<SignUpPageProps> = () => {
 const styles = StyleSheet.create({
   form: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     // backgroundColor: "#f62681",
   },
   title: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 35,
-    color: "white",
+    color: 'white',
     marginBottom: 25,
-    textShadowColor: "black",
+    textShadowColor: 'black',
     textShadowRadius: 5,
     textShadowOffset: { width: 2, height: 2 },
   },
@@ -184,10 +191,10 @@ const styles = StyleSheet.create({
   createAccount: {
     marginTop: 20,
     borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-    borderColor: "black",
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    borderColor: 'black',
     borderWidth: 2,
   },
   button: {
@@ -195,9 +202,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "black",
-    backgroundColor: "white",
-    shadowColor: "#000",
+    borderColor: 'black',
+    backgroundColor: 'white',
+    shadowColor: '#000',
     shadowOffset: {
       width: 2,
       height: 2,
@@ -207,11 +214,11 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   images: {
-    display: "flex",
-    flexDirection: "row",
+    display: 'flex',
+    flexDirection: 'row',
   },
   eachImage: {
     width: 100,
@@ -220,8 +227,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   bonuses: {
-    display: "flex",
-    flexDirection: "row",
+    display: 'flex',
+    flexDirection: 'row',
   },
   eachBonusText: {
     marginRight: 12,
@@ -232,9 +239,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "black",
-    backgroundColor: "white",
-    position: "absolute",
+    borderColor: 'black',
+    backgroundColor: 'white',
+    position: 'absolute',
     top: 50,
     right: 5,
     zIndex: 1,
