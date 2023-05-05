@@ -16,7 +16,7 @@ export const loadFonts = async () => {
     "sci-fi-font": require("../assets/images/Fonts/AquireBold-8Ma60.otf"),
   });
 };
-import { useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { Audio, AVPlaybackStatus } from "expo-av";
 // import { AuthContext, AuthProvider } from "../contexts/Auth";
 
