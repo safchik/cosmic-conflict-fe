@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, createContext, useState } from "react";
 import { Formik } from "formik";
 import {
   StyleSheet,
@@ -15,6 +15,7 @@ import { postAccount } from "../utils/api";
 //Form validation
 import * as Yup from "yup";
 import { useNavigation, useRouter } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface SignUpPageProps {
   human: Image;
@@ -27,9 +28,12 @@ interface SignUpFormValues {
   password: string;
   confirmPassword: string;
 }
+
+//defines the schema for the form, i.e. the rules for each field
 const SignupSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
+  email: Yup.string().email("Invalid email").required("Required").lowercase(),
   password: Yup.string()
+    .matches(/^\S*$/, "Password should not contain spaces")
     .min(5, "Should be a min of 5 characters")
     .max(16, "Should be a max of 16 characters")
     .required(),
@@ -37,20 +41,18 @@ const SignupSchema = Yup.object().shape({
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Please Confirm Your Password"),
   username: Yup.string()
+    .matches(/^\S*$/, "Username should not contain spaces")
     .min(5, "Should be a minimum of 5 characters")
     .required(),
-  race: Yup.string().required("Please select a race"),
 });
 
 const SignUpPage: FC<SignUpPageProps> = () => {
   const [user, setUser] = useState<object>({});
   //needed for Go Back Button
   const router = useRouter();
-  const human = require("../assets/images/human.png");
-  const alien = require("../assets/images/alien.png");
 
   return (
-    <SafeAreaView style={styles.form}>
+    <LinearGradient colors={["#3D3D3D", "#7DF9FF"]} style={styles.form}>
       <Text style={styles.title}>Create your character</Text>
       <Formik
         initialValues={{
@@ -58,7 +60,6 @@ const SignUpPage: FC<SignUpPageProps> = () => {
           username: "",
           password: "",
           confirmPassword: "",
-          race: "",
         }}
         validationSchema={SignupSchema}
         onSubmit={(values) => {
@@ -67,11 +68,10 @@ const SignUpPage: FC<SignUpPageProps> = () => {
             email: values.email,
             username: values.username,
             password: values.password,
-            race: values.race,
           };
           setUser(newAccount);
-          postAccount(newAccount);
-          router.push({ pathname: "./Account" });
+          // postAccount(newAccount);
+          router.push({ pathname: "./RaceSelect" });
         }}
       >
         {({
@@ -136,56 +136,21 @@ const SignUpPage: FC<SignUpPageProps> = () => {
                 secureTextEntry
               />
             </View>
-            <Text>Select your race: {values.race}</Text>
-            <View style={styles.images}>
-              <Pressable
-                style={{
-                  backgroundColor: values.race === "Alien" ? "#000" : "#ccc",
-                  padding: 1,
-                  marginVertical: 5,
-                  marginHorizontal: 5,
-                  borderRadius: 10,
-                  borderWidth: 2,
-                }}
-                onPress={() => handleChange("race")("Human")}
-              >
-                <Image style={styles.eachImage} source={human} />
-              </Pressable>
-              <Pressable
-                style={{
-                  backgroundColor: values.race === "Human" ? "#000" : "#ccc",
-                  padding: 1,
-                  marginVertical: 5,
-                  marginHorizontal: 5,
-                  borderRadius: 10,
-                  borderWidth: 2,
-                }}
-                onPress={() => handleChange("race")("Alien")}
-              >
-                <Image style={styles.eachImage} source={alien} />
-              </Pressable>
-            </View>
-            <View style={styles.bonuses}>
-              <Text style={styles.eachBonusText}>10% Defence Bonus</Text>
-              <Text style={styles.eachBonusText}>10% Attack Bonus</Text>
-            </View>
             <View style={styles.button}>
               <TouchableOpacity
                 disabled={!isValid}
                 onPress={(e: any) => handleSubmit(e)}
               >
-                <Text>Create Account</Text>
+                <Text style={styles.buttonText}>Choose Your Race</Text>
               </TouchableOpacity>
             </View>
           </>
         )}
       </Formik>
-      <View>
-        <Pressable onPress={() => router.back()} style={styles.button}>
-          <Text>Go Back</Text>
-        </Pressable>
-      </View>
-    </SafeAreaView>
+      <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Text>Go Back</Text>
+      </Pressable>
+    </LinearGradient>
   );
 };
 
@@ -194,11 +159,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f62681",
+    // backgroundColor: "#f62681",
   },
   title: {
-    fontSize: 40,
+    fontWeight: "bold",
+    fontSize: 35,
+    color: "white",
     marginBottom: 25,
+    textShadowColor: "black",
+    textShadowRadius: 5,
+    textShadowOffset: { width: 2, height: 2 },
   },
   input: {
     height: 40,
@@ -224,6 +194,17 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "black",
     backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
   images: {
     display: "flex",
@@ -242,6 +223,18 @@ const styles = StyleSheet.create({
   eachBonusText: {
     marginRight: 12,
     marginLeft: 5,
+  },
+  backButton: {
+    margin: 10,
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "black",
+    backgroundColor: "white",
+    position: "absolute",
+    top: 50,
+    right: 5,
+    zIndex: 1,
   },
 });
 

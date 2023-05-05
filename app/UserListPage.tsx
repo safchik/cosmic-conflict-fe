@@ -46,7 +46,7 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
         </TouchableOpacity>
       </View>
       <Modal visible={modalVisible} animationType='fade' transparent >
-        <LinearGradient colors={['#f62681', '#2e4cff']} style={styles.modalContainer}>
+        <LinearGradient colors={["#3D3D3D"]} style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={[styles.modalTitle, { fontFamily: 'Roboto' }]}>
               {user.username}
@@ -77,7 +77,7 @@ const UserListPage: FC = () => {
   const [userList, setUserList] = useState<User[]>(usersData);
 
   return (
-    <LinearGradient colors={['#f62681', '#2e4cff']} style={styles.container}>
+    <LinearGradient colors={["#7DF9FF", "#3D3D3D"]} style={styles.container}>
       <SafeAreaView>
         <FlatList
           data={userList}
@@ -158,7 +158,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-
 
 export default UserListPage;
