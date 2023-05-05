@@ -17,30 +17,58 @@ export const loadFonts = async () => {
     'sci-fi-font': require('../assets/images/Fonts/AquireBold-8Ma60.otf'),
   });
 };
+import React, { useEffect, useState, useContext } from "react";
+import { Audio, AVPlaybackStatus } from "expo-av";
+// import { AuthContext, AuthProvider } from "../contexts/Auth";
 
+const splashSound = require("../assets/media/splash.mp3");
 const placeholderLogo = require("../assets/images/placeholderLogo.png");
 
 export default function App() {
+  // const auth = useContext(AuthContext);
+
+  useEffect(() => {
+    const soundObject = new Audio.Sound();
+    const playSound = async (): Promise<void> => {
+      try {
+        await soundObject.loadAsync(splashSound);
+        await soundObject.setIsLoopingAsync(true);
+        await soundObject.playAsync();
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    playSound();
+    return (): void => {
+      soundObject.unloadAsync();
+    };
+  }, []);
+
   return (
+    // <AuthProvider>
     <ImageBackground
-      source={require("../assets/images/placeholderBg.webp")}
+      source={require("../assets/images/mainBackground.jpg")}
       style={styles.background}
     >
       <View style={styles.container}>
-        <Image source={placeholderLogo} style={styles.logo} />
+        <Image
+          source={require("../assets/images/cosmicLogo.png")}
+          style={styles.logo}
+        />
         <Link href={"./LoginPage"} asChild>
           <TouchableOpacity style={styles.button}>
-            <Text>Login</Text>
+            <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
         </Link>
         <Link href={"./SignUpPage"} asChild>
-          <Pressable style={styles.button}>
-            <Text>Sign Up</Text>
-          </Pressable>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
         </Link>
         <StatusBar style="auto" />
       </View>
     </ImageBackground>
+    // </AuthProvider>
   );
 }
 
@@ -55,11 +83,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   logo: {
-    width: 250,
-    height: 100,
+    width: 400,
+    height: 400,
     resizeMode: "contain",
-    marginTop: 50,
-    marginBottom: 300,
+    marginBottom: 100,
+    shadowColor: "black",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
   },
   button: {
     margin: 10,
@@ -68,5 +102,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "black",
     backgroundColor: "white",
+  },
+  buttonText: {
+    color: "black",
+    fontWeight: "bold",
+    fontSize: 20,
   },
 });
