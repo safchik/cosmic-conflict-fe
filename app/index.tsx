@@ -9,12 +9,11 @@ import {
   Pressable,
 } from "react-native";
 import { Link } from "expo-router";
-import React, { useState } from "react";
-import * as Font from 'expo-font';
+import * as Font from "expo-font";
 
 export const loadFonts = async () => {
   return Font.loadAsync({
-    'sci-fi-font': require('../assets/images/Fonts/AquireBold-8Ma60.otf'),
+    "sci-fi-font": require("../assets/images/Fonts/AquireBold-8Ma60.otf"),
   });
 };
 import React, { useEffect, useState, useContext } from "react";

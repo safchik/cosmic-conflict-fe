@@ -5,19 +5,19 @@ import {
   View,
   Pressable,
   ImageBackground,
-  Modal
+  Modal,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
-import ItemCard from "../components/ItemCard";
-
-
+import ItemCardCollection from "../app/ItemCardCollection";
 
 interface AccountProps {
   logout: () => void;
+  showModal: () => void;
 }
+
 interface ItemCardProps {
   onPress: () => void;
   type: string;
@@ -27,13 +27,20 @@ interface ItemCardProps {
   buff: string;
   cost: number;
 }
-// const gold = require("../assets/images/gold.jpeg");
+interface ItemCollectionProps {
+  onPress: () => void;
+  type: string;
+  itemName: string;
+  attackStat: number;
+  defenceStat: number;
+  buff: string;
+  cost: number;
+}
 
 const Shop: FC<AccountProps> = ({ logout }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [basket, setBasket] = useState([]);
-  
-  
+
   const showModal = () => {
     setModalVisible(true);
   };
@@ -41,7 +48,6 @@ const Shop: FC<AccountProps> = ({ logout }) => {
   const hideModal = () => {
     setModalVisible(false);
   };
-
 
   const user = {
     username: "player2",
@@ -51,14 +57,6 @@ const Shop: FC<AccountProps> = ({ logout }) => {
     attack: 15,
     defense: 2,
   };
-  // const testItem = {
-  //   type: "weapon",
-  //   itemName: "Laser Baton",
-  //   attackStat: 10,
-  //   defenceStat: 0,
-  //   buff: "healing",
-  //   cost: 100,
-  // };
   return (
     <ImageBackground
       source={require("../assets/images/shop/shop-background2.jpg")}
@@ -75,65 +73,13 @@ const Shop: FC<AccountProps> = ({ logout }) => {
           <Text style={styles.label}>Weapons </Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <ItemCard
-            onPress={showModal}
-            type="weapon"
-            itemName="Laser Baton"
-            attackStat={10}
-            defenceStat={0}
-            buff="healing"
-            cost={100}
-          />
-          <ItemCard
-           onPress={showModal}
-            type="weapon"
-            itemName="Plasma Rifle"
-            attackStat={20}
-            defenceStat={0}
-            buff="poison"
-            cost={250}
-          />
-           <ItemCard
-           onPress={showModal}
-            type="weapon"
-            itemName="Ion Blaster"
-            attackStat={30}
-            defenceStat={0}
-            buff="stun"
-            cost={500}
-          />
+          <ItemCardCollection logout={logout} showModal={showModal} />
         </ScrollView>
         <View style={styles.row}>
           <Text style={styles.label}>Armour </Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <ItemCard
-           onPress={showModal}
-            type="armor"
-            itemName="Power Suit"
-            attackStat={0}
-            defenceStat={20}
-            buff="health"
-            cost={100}
-          />
-          <ItemCard
-          onPress={showModal}
-            type="armor"
-            itemName="Reflective Shield"
-            attackStat={0}
-            defenceStat={30}
-            buff="reflect"
-            cost={250}
-          />
-          <ItemCard
-          onPress={showModal}
-            type="armor"
-            itemName="Energy Shield"
-            attackStat={0}
-            defenceStat={40}
-            buff="energy"
-            cost={500}
-          />
+          <ItemCardCollection logout={logout} showModal={showModal} />
         </ScrollView>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Purchase</Text>
@@ -141,24 +87,24 @@ const Shop: FC<AccountProps> = ({ logout }) => {
       </SafeAreaView>
 
       <Modal
-  animationType="slide"
-  transparent={true}
-  visible={modalVisible}
-  onRequestClose={hideModal}
->
-  <View style={styles.centeredView}>
-    <View style={styles.modalView}>
-      <Text style={styles.itemText}>Item name</Text>
-      <Text style={styles.itemText}>Are you sure?</Text>
-      <Pressable style={styles.addToBasketButton}>
-        <Text style={styles.addToBasketText}>Add to basket</Text>
-      </Pressable>
-      <Pressable style={styles.closeButton} onPress={hideModal}>
-        <Text style={styles.closeButtonText}>Close</Text>
-      </Pressable>
-    </View>
-  </View>
-</Modal>
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={hideModal}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.itemText}>Item name</Text>
+            <Text style={styles.itemText}>Are you sure?</Text>
+            <Pressable style={styles.addToBasketButton}>
+              <Text style={styles.addToBasketText}>Add to basket</Text>
+            </Pressable>
+            <Pressable style={styles.closeButton} onPress={hideModal}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </ImageBackground>
   );
 };
