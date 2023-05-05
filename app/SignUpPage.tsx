@@ -15,6 +15,7 @@ import { postAccount } from "../utils/api";
 //Form validation
 import * as Yup from "yup";
 import { useNavigation, useRouter } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface SignUpPageProps {
   human: Image;
@@ -51,7 +52,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
   const router = useRouter();
 
   return (
-    <SafeAreaView style={styles.form}>
+    <LinearGradient colors={["#3D3D3D", "#7DF9FF"]} style={styles.form}>
       <Text style={styles.title}>Create your character</Text>
       <Formik
         initialValues={{
@@ -62,7 +63,6 @@ const SignUpPage: FC<SignUpPageProps> = () => {
         }}
         validationSchema={SignupSchema}
         onSubmit={(values) => {
-          router.push({ pathname: "./CharacterPage" });
           console.log(values);
           const newAccount = {
             email: values.email,
@@ -70,7 +70,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
             password: values.password,
           };
           setUser(newAccount);
-          postAccount(newAccount);
+          // postAccount(newAccount);
           router.push({ pathname: "./RaceSelect" });
         }}
       >
@@ -141,7 +141,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
                 disabled={!isValid}
                 onPress={(e: any) => handleSubmit(e)}
               >
-                <Text>Choose Your Race</Text>
+                <Text style={styles.buttonText}>Choose Your Race</Text>
               </TouchableOpacity>
             </View>
           </>
@@ -150,7 +150,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
       <Pressable onPress={() => router.back()} style={styles.backButton}>
         <Text>Go Back</Text>
       </Pressable>
-    </SafeAreaView>
+    </LinearGradient>
   );
 };
 
@@ -159,11 +159,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f62681",
+    // backgroundColor: "#f62681",
   },
   title: {
-    fontSize: 40,
+    fontWeight: "bold",
+    fontSize: 35,
+    color: "white",
     marginBottom: 25,
+    textShadowColor: "black",
+    textShadowRadius: 5,
+    textShadowOffset: { width: 2, height: 2 },
   },
   input: {
     height: 40,
@@ -189,6 +194,17 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "black",
     backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
   images: {
     display: "flex",
