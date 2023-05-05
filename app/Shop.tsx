@@ -1,23 +1,46 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   Pressable,
   ImageBackground,
+  Modal
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ItemCard from "../components/ItemCard";
 import { ScrollView } from "react-native-gesture-handler";
+import ItemCard from "./ItemCard";
+
+
 
 interface AccountProps {
   logout: () => void;
 }
+interface ItemCardProps {
+  onPress: () => void;
+  type: string;
+  itemName: string;
+  attackStat: number;
+  defenceStat: number;
+  buff: string;
+  cost: number;
+}
 // const gold = require("../assets/images/gold.jpeg");
 
 const Shop: FC<AccountProps> = ({ logout }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const showModal = () => {
+    setModalVisible(true);
+  };
+
+  const hideModal = () => {
+    setModalVisible(false);
+  };
+
+
   const user = {
     username: "player2",
     characterName: "Zorg",
@@ -51,22 +74,7 @@ const Shop: FC<AccountProps> = ({ logout }) => {
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <ItemCard
-            type="weapon"
-            itemName="Laser Baton"
-            attackStat={10}
-            defenceStat={0}
-            buff="healing"
-            cost={100}
-          />
-          <ItemCard
-            type="weapon"
-            itemName="Laser Baton"
-            attackStat={10}
-            defenceStat={0}
-            buff="healing"
-            cost={100}
-          />
-          <ItemCard
+            onPress={showModal}
             type="weapon"
             itemName="Laser Baton"
             attackStat={10}
@@ -79,35 +87,26 @@ const Shop: FC<AccountProps> = ({ logout }) => {
           <Text style={styles.label}>Armour </Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <ItemCard
-            type="weapon"
-            itemName="Laser Baton"
-            attackStat={10}
-            defenceStat={0}
-            buff="healing"
-            cost={100}
-          />
-          <ItemCard
-            type="weapon"
-            itemName="Laser Baton"
-            attackStat={10}
-            defenceStat={0}
-            buff="healing"
-            cost={100}
-          />
-          <ItemCard
-            type="weapon"
-            itemName="Laser Baton"
-            attackStat={10}
-            defenceStat={0}
-            buff="healing"
-            cost={100}
-          />
         </ScrollView>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Purchase</Text>
         </Pressable>
       </SafeAreaView>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={hideModal}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Pressable style={styles.closeButton} onPress={hideModal}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </ImageBackground>
   );
 };
@@ -126,11 +125,6 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
   },
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   title: {
     display: "flex",
     marginTop: 60,
@@ -143,8 +137,14 @@ const styles = StyleSheet.create({
     textShadowColor: "black",
     textShadowRadius: 30,
   },
-  item: {
-    color: "white",
+  gold: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "gold",
+    textShadowColor: "black",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 2,
   },
   row: {
     flexDirection: "row",
@@ -158,19 +158,6 @@ const styles = StyleSheet.create({
     textShadowColor: "black",
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 2,
-  },
-  gold: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: "gold",
-    textShadowColor: "black",
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 2,
-  },
-  value: {
-    fontSize: 18,
-    color: "white",
   },
   button: {
     marginBottom: 40,
@@ -186,6 +173,31 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalView: {
+    width: "80%",
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+  },
+  closeButton: {
+    backgroundColor: "#2196F3",
+    borderRadius: 20,
+    padding: 10,
+    marginTop: 15,
+  },
+  closeButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
 });
+
 
 export default Shop;

@@ -34,6 +34,8 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
     setModalVisible(false);
   };
 
+  const [basket, setBasket] = useState([]);
+
   return (
     <View style={styles.userListItem}>
       <View style={styles.userListItemText}>
