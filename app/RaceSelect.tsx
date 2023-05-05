@@ -10,11 +10,11 @@ import {
   Pressable,
   Image,
 } from "react-native";
-import { postAccount } from "../utils/api";
 
 //Form validation
 import * as Yup from "yup";
 import { useNavigation, useRouter } from "expo-router";
+import { createNewAccount } from "../utils/api";
 
 interface SignUpPageProps {
   human: Image;
@@ -47,12 +47,13 @@ const RaceSelect: FC<SignUpPageProps> = () => {
         }}
         validationSchema={SignupSchema}
         onSubmit={(values) => {
-          console.log(values);
+          //console.log(values);
           const newAccount = {
             race: values.race,
           };
           setUser(newAccount);
-          postAccount(newAccount);
+
+          createNewAccount(newAccount);
           router.push({ pathname: "./CharacterPage" });
         }}
       >

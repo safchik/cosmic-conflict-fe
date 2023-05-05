@@ -1,3 +1,4 @@
+
 import React, { FC, useState } from 'react';
 import {
   Text,
@@ -13,6 +14,9 @@ import {
 import usersData from './users';
 import { LinearGradient } from 'expo-linear-gradient';
 
+
+
+import * as api from "../utils/api";
 
 interface User {
   username: string;
@@ -34,6 +38,13 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
   const hideModal = () => {
     setModalVisible(false);
   };
+
+  useEffect(() => {
+    api.getUsers().then((data) => {
+      console.log(data);
+    });
+  });
+
 
   return (
     <View style={styles.userListItem}>
