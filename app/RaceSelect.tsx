@@ -40,10 +40,11 @@ const RaceSelect: FC<SignUpPageProps> = () => {
 
   return (
     <SafeAreaView style={styles.form}>
-      <Text style={styles.title}>Select your race</Text>
+      <Text style={styles.title}>Select Your Race</Text>
       <Formik
         initialValues={{
           race: "",
+          character: "",
         }}
         validationSchema={SignupSchema}
         onSubmit={(values) => {
@@ -67,7 +68,7 @@ const RaceSelect: FC<SignUpPageProps> = () => {
           isValid,
         }) => (
           <>
-            <Text>Select your race: {values.race}</Text>
+            <Text>Select your Race: {values.race}</Text>
             <View style={styles.images}>
               <Pressable
                 style={{
@@ -100,6 +101,18 @@ const RaceSelect: FC<SignUpPageProps> = () => {
               <Text style={styles.eachBonusText}>20% Defence Bonus</Text>
               <Text style={styles.eachBonusText}>20% Attack Bonus</Text>
             </View>
+            <View>
+              {touched.character && errors.character && (
+                <Text>{errors.character}</Text>
+              )}
+              <TextInput
+                style={styles.input}
+                value={values.character}
+                onChangeText={handleChange("character")}
+                onBlur={handleBlur("character")}
+                placeholder="Character Name"
+              />
+            </View>
             <View style={styles.button}>
               <TouchableOpacity
                 disabled={!isValid}
@@ -111,6 +124,7 @@ const RaceSelect: FC<SignUpPageProps> = () => {
           </>
         )}
       </Formik>
+
       <View>
         <Pressable onPress={() => router.back()} style={styles.button}>
           <Text>Go Back</Text>
