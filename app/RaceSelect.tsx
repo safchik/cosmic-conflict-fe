@@ -53,8 +53,9 @@ const RaceSelect: FC<SignUpPageProps> = () => {
             race: values.race,
           };
           setUser(newAccount);
-          api.createNewAccount(newAccount);
-          router.push({ pathname: "./Account" });
+
+          postAccount(newAccount);
+          router.push({ pathname: "./CharacterPage" });
         }}
       >
         {({

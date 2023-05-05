@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const CharacterPage = () => {
   return (
@@ -21,9 +22,9 @@ const CharacterPage = () => {
         </View>
         <View>
           <Link href={"./Shop"}>
-            <Pressable style={styles.button}>
+            <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>Shop</Text>
-            </Pressable>
+            </TouchableOpacity>
           </Link>
         </View>
         <View>
