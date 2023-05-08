@@ -19,9 +19,14 @@ export const login = async (account) => {
   return response.data;
 };
 
-export const getUsers = async () => {
+export const logout = async () => {
+const response = await gameAPI.post("/logout");
+return response.data;
+}
+
+export const getAllCharacters = async () => {
   const response = await gameAPI.get("/characters");
-  return response;
+  return response.data;
 };
 
 export const createNewCharacter = async (postedCharacter) => {
@@ -33,7 +38,32 @@ export const createNewCharacter = async (postedCharacter) => {
 
 export const getUserCharacter = async (queryKey, queryValue) => {
   console.log(queryKey, queryValue);
-  const response = await gameAPI.get(`/characters?${queryKey}=${queryValue}`);
+  const response = await gameAPI.get(`/characters/single?${queryKey}=${queryValue}`);
   console.log(response.data);
   return response.data;
 };
+
+export const attackCharacter = async (characterName) => {
+  const response = await gameAPI.post(`/battle/attack/${characterName}`);
+  return response.data;
+}
+
+export const getBattleLog = async () => {
+  const response = await gameAPI.get(`/battle/log`);
+  return response.data;
+}
+
+export const getAllItems = async () => {
+  const response = await gameAPI.get("/shop");
+  return response.data;
+}
+
+export const getSingleItem = async (itemId) => {
+  const response = await gameAPI.get(`/shop/${itemId}`);
+  return response.data;
+}
+
+export const buyItem = async (itemId) => {
+  const response = await gameAPI.patch(`/shop/${itemId}/purchase`);
+  return response.data;
+}
