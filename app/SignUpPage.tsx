@@ -14,7 +14,7 @@ import { getAsyncStorage, setAsyncStorage } from "../utils/asyncStorage";
 
 //Form validation
 import * as Yup from "yup";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { createNewAccount } from "../utils/api";
 

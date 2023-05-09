@@ -32,83 +32,86 @@ const LoginPage: FC<LoginPageProps> = () => {
   const router = useRouter();
 
   return (
-    <LinearGradient colors={['#3D3D3D', '#7DF9FF']} style={styles.form}>
-    <SafeAreaView style={styles.form}>
-      <Formik
-        initialValues={{
-          username: "",
-          password: "",
-        }}
-        validationSchema={LoginSchema}
-        onSubmit={async (values) => {
-          await setAsyncStorage("user", values.username);
-          login(values)
-            .then(async (userCharacter) => {
-              if (userCharacter) {
-                await setAsyncStorage("user", userCharacter);
-                router.push({ pathname: "./CharacterPage" });
-              } else {
-                router.push({ pathname: "./RaceSelect" });
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }}
-      >
-        {({
-          handleChange,
-          handleSubmit,
-          handleBlur,
-          values,
-          errors,
-          touched,
-          isValid,
-        }) => (
-          <>
-            <View>
-            <Text style={{ fontWeight: 'bold' }}>Username</Text>
-              {touched.username && errors.username && (
-                <Text>{errors.username}</Text>
-              )}
-              <TextInput
-                style={styles.input}
-                value={values.username}
-                onChangeText={handleChange("username")}
-                onBlur={handleBlur("username")}
-                placeholder="username"
-              />
-            </View>
-            <View>
-            <Text style={{ fontWeight: 'bold' }}>Password</Text>
-              {touched.password && errors.password && (
-                <Text>{errors.password}</Text>
-              )}
-              <TextInput
-                style={styles.input}
-                value={values.password}
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-                placeholder="password"
-                secureTextEntry
-              />
-            </View>
-            <View style={styles.createAccount}>
-              <TouchableOpacity
-                disabled={!isValid}
-                onPress={(e: any) => handleSubmit(e)}
-                style={styles.button}
-              >
-                <Text>Login</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
-      </Formik>
-      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-        <Text>Go Back</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+    <LinearGradient colors={["#3D3D3D", "#7DF9FF"]} style={styles.form}>
+      <SafeAreaView style={styles.form}>
+        <Formik
+          initialValues={{
+            username: "",
+            password: "",
+          }}
+          validationSchema={LoginSchema}
+          onSubmit={async (values) => {
+            try {
+              await setAsyncStorage("user", values.username);
+
+              const { character } = await login(values);
+              const userCharacter = await getUserCharacter(
+                "characterName",
+                character[0].characterName
+              );
+              await setAsyncStorage("user", userCharacter.character);
+              router.push({ pathname: "./CharacterPage" });
+            } catch (error) {
+              console.error(error);
+            }
+          }}
+        >
+          {({
+            handleChange,
+            handleSubmit,
+            handleBlur,
+            values,
+            errors,
+            touched,
+            isValid,
+          }) => (
+            <>
+              <View>
+                <Text style={{ fontWeight: "bold" }}>Username</Text>
+                {touched.username && errors.username && (
+                  <Text>{errors.username}</Text>
+                )}
+                <TextInput
+                  style={styles.input}
+                  value={values.username}
+                  onChangeText={handleChange("username")}
+                  onBlur={handleBlur("username")}
+                  placeholder="username"
+                />
+              </View>
+              <View>
+                <Text style={{ fontWeight: "bold" }}>Password</Text>
+                {touched.password && errors.password && (
+                  <Text>{errors.password}</Text>
+                )}
+                <TextInput
+                  style={styles.input}
+                  value={values.password}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  placeholder="password"
+                  secureTextEntry
+                />
+              </View>
+              <View style={styles.createAccount}>
+                <TouchableOpacity
+                  disabled={!isValid}
+                  onPress={(e: any) => handleSubmit(e)}
+                  style={styles.button}
+                >
+                  <Text>Login</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+        </Formik>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={styles.backButton}
+        >
+          <Text>Go Back</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
     </LinearGradient>
   );
 };
@@ -128,7 +131,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     padding: 10,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   createAccount: {
     marginTop: 20,
