@@ -1,5 +1,4 @@
 import React, { FC, createContext, useEffect, useState } from "react";
-
 import { Formik } from "formik";
 import {
   StyleSheet,
@@ -11,14 +10,12 @@ import {
   Pressable,
   Image,
 } from "react-native";
-
 import { getAsyncStorage, setAsyncStorage } from "../utils/asyncStorage";
 
 //Form validation
 import * as Yup from "yup";
 import { useNavigation, useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
-
 import { createNewAccount } from "../utils/api";
 
 interface SignUpPageProps {
@@ -65,17 +62,16 @@ const SignUpPage: FC<SignUpPageProps> = () => {
           confirmPassword: "",
         }}
         validationSchema={SignupSchema}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={async (values) => {
           const newAccount = {
             email: values.email,
             username: values.username,
             password: values.password,
           };
-
           const newUser = {
             username: values.username,
           };
+
           await setAsyncStorage("user", newUser);
 
           createNewAccount(newAccount)
@@ -100,7 +96,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
         }) => (
           <>
             <View>
-              <Text style={{ fontWeight: 'bold' }}>Email</Text>
+              <Text style={{ fontWeight: "bold" }}>Email</Text>
               {touched.email && errors.email && (
                 <Text style={{ color: "red" }}>{errors.email}</Text>
               )}
@@ -113,7 +109,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               />
             </View>
             <View>
-              <Text style={{ fontWeight: 'bold' }}>Username</Text>
+              <Text style={{ fontWeight: "bold" }}>Username</Text>
               {touched.username && errors.username && (
                 <Text style={{ color: "red" }}>{errors.username}</Text>
               )}
@@ -126,7 +122,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               />
             </View>
             <View>
-              <Text style={{ fontWeight: 'bold' }}>Password</Text>
+              <Text style={{ fontWeight: "bold" }}>Password</Text>
               {touched.password && errors.password && (
                 <Text style={{ color: "red" }}>{errors.password}</Text>
               )}
@@ -140,7 +136,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               />
             </View>
             <View>
-              <Text style={{ fontWeight: 'bold' }}>Confirm Password</Text>
+              <Text style={{ fontWeight: "bold" }}>Confirm Password</Text>
               {touched.confirmPassword && errors.confirmPassword && (
                 <Text style={{ color: "red" }}>{errors.confirmPassword}</Text>
               )}
@@ -194,7 +190,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     padding: 10,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   createAccount: {
     marginTop: 20,
@@ -257,5 +253,3 @@ const styles = StyleSheet.create({
 });
 
 export default SignUpPage;
-
-
