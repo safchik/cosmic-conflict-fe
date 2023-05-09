@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const gameAPI = axios.create({
-
-  baseURL: "http://localhost:9090/api"
+  baseURL: "http://localhost:9090/api",
 });
 
 export const createNewAccount = async (postedAccount) => {
@@ -20,6 +19,14 @@ export const login = async (account) => {
 };
 
 export const getUsers = async () => {
+  console.log("in api file");
   const response = await gameAPI.get("/characters");
+  return response;
+};
+
+// /log
+
+export const getAllBattles = async () => {
+  const response = await gameAPI.get("/log");
   return response;
 };
