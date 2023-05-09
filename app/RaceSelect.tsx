@@ -64,6 +64,7 @@ const RaceSelect: FC<SignUpPageProps> = () => {
 
           createNewCharacter(newCharacter)
             .then((response) => {
+              setAsyncStorage("user", response.character);
               router.push({ pathname: "./CharacterPage" });
             })
             .catch((err) => {
