@@ -9,14 +9,26 @@ import {
   Pressable,
 } from "react-native";
 import { Link } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
+
+import * as Font from "expo-font";
+
+export const loadFonts = async () => {
+  return Font.loadAsync({
+    "sci-fi-font": require("../assets/images/Fonts/AquireBold-8Ma60.otf"),
+  });
+};
 import { Audio, AVPlaybackStatus } from "expo-av";
 
 const splashSound = require("../assets/media/splash.mp3");
 const placeholderLogo = require("../assets/images/placeholderLogo.png");
 
+//LOCKS SCREEN TO PORTRAIT
+import * as ScreenOrientation from "expo-screen-orientation";
+
 export default function App() {
   useEffect(() => {
+    lockOrientation();
     const soundObject = new Audio.Sound();
     const playSound = async (): Promise<void> => {
       try {
@@ -32,6 +44,12 @@ export default function App() {
       soundObject.unloadAsync();
     };
   }, []);
+
+  const lockOrientation = async () => {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT
+    );
+  };
 
   return (
     <ImageBackground

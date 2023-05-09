@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const gameAPI = axios.create({
-  baseURL: "http://localhost:9090/api",
+
+  baseURL: "http://localhost:9090/api"
 });
 
 export const createNewAccount = async (postedAccount) => {
