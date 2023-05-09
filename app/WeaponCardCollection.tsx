@@ -110,12 +110,12 @@ const shopArr = [
   },
 ];
 
-interface ItemCardCollectionProps {
+interface WeaponCardCollectionProps {
   items: Item[];
   showModal: (item: Item) => void;
 }
 
-const ItemCardCollection: FC<ItemCardCollectionProps> = ({
+const WeaponCardCollection: FC<WeaponCardCollectionProps> = ({
   items,
   showModal,
 }) => {
@@ -134,44 +134,53 @@ const ItemCardCollection: FC<ItemCardCollectionProps> = ({
 
   return (
     <View style={styles.itemCardContainer}>
-      {shopArr.map((item) => (
-        <ItemCard
-          key={item._id}
-          onPress={() => handleItemPress(item)}
-          type={item.type}
-          itemName={item.itemName}
-          attackStat={item.attackStat}
-          defenceStat={item.defenceStat}
-          buff={item.buff}
-          cost={item.cost}
-        />
-      ))}
+    {shopArr.filter(item => item.type === 'weapon').map((item) => (
+      <ItemCard
+        key={item._id}
+        onPress={() => handleItemPress(item)}
+        type={item.type}
+        itemName={item.itemName}
+        attackStat={item.attackStat}
+        defenceStat={item.defenceStat}
+        buff={item.buff}
+        cost={item.cost}
+      />
+    ))}
 
-      {selectedItem && (
-        <Modal animationType="fade" transparent={true}>
-          <View style={styles.modalBackground}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>{selectedItem.itemName}</Text>
-              <Image style={styles.eachImage} source={human} />
-              <Text style={styles.modalText}>Type: {selectedItem.type}</Text>
-              <Text style={styles.modalText}>
-                Attack: {selectedItem.attackStat}
-              </Text>
-              <Text style={styles.modalText}>
-                Defence: {selectedItem.defenceStat}
-              </Text>
-              {selectedItem.buff && (
-                <Text style={styles.modalText}>Buff: {selectedItem.buff}</Text>
-              )}
-              <Text style={styles.modalText}>
-                Cost: {selectedItem.cost} Credits
-              </Text>
-              <Pressable style={styles.modalButton} onPress={handleModalClose}>
-                <Text style={styles.modalButtonText}>Close</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
+{selectedItem && (
+  <Modal animationType="fade" transparent={true}>
+    <View style={styles.modalBackground}>
+      <View style={styles.modalContainer}>
+        <Text style={styles.modalTitle}>{selectedItem.itemName}</Text>
+        <Text style={styles.modalText}>Type: {selectedItem.type}</Text>
+        <Text style={styles.modalText}>
+          Attack: {selectedItem.attackStat}
+        </Text>
+        <Text style={styles.modalText}>
+          Defence: {selectedItem.defenceStat}
+        </Text>
+        {selectedItem.buff && (
+          <Text style={styles.modalText}>Buff: {selectedItem.buff}</Text>
+        )}
+        <Text style={styles.modalText}>
+          Cost: {selectedItem.cost} Credits
+        </Text>
+        <Pressable
+          style={styles.modalButton}
+          onPress={() => {
+            // possible logic to Subtract cost from user's gold
+            // user.gold -= selectedItem.cost;
+            handleModalClose();
+          }}
+        >
+          <Text style={styles.modalButtonText}>Purchase</Text>
+        </Pressable>
+        <Pressable style={styles.modalButton} onPress={handleModalClose}>
+          <Text style={styles.modalButtonText}>Close</Text>
+        </Pressable>
+      </View>
+    </View>
+  </Modal>
       )}
     </View>
   );
@@ -192,15 +201,21 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     width: "80%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalText: {
     fontSize: 16,
     marginBottom: 5,
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalButton: {
     backgroundColor: "#2196F3",
@@ -222,4 +237,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ItemCardCollection;
+export default WeaponCardCollection;

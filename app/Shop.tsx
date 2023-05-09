@@ -9,36 +9,40 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
-import ItemCardCollection from "../app/ItemCardCollection";
+import WeaponCardCollection from "./WeaponCardCollection";
+import ArmorCardCollection from "./ArmorCardCollection"
+import HealingCardCollection from "./HealingCardCollection"
+
+
 
 interface AccountProps {
   logout: () => void;
   showModal: () => void;
 }
 
-interface ItemCardProps {
-  onPress: () => void;
-  type: string;
-  itemName: string;
-  attackStat: number;
-  defenceStat: number;
-  buff: string;
-  cost: number;
-}
-interface ItemCollectionProps {
-  onPress: () => void;
-  type: string;
-  itemName: string;
-  attackStat: number;
-  defenceStat: number;
-  buff: string;
-  cost: number;
-}
+// interface ItemCardProps {
+//   onPress: () => void;
+//   type: string;
+//   itemName: string;
+//   attackStat: number;
+//   defenceStat: number;
+//   buff: string;
+//   cost: number;
+// }
+// interface ItemCollectionProps {
+//   onPress: () => void;
+//   type: string;
+//   itemName: string;
+//   attackStat: number;
+//   defenceStat: number;
+//   buff: string;
+//   cost: number;
+// }
 
 const Shop: FC<AccountProps> = ({ logout }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [basket, setBasket] = useState([]);
-  const [setModalItem, ModalItem] = useState("");
+  // const [basket, setBasket] = useState([]);
+  const [setModalItem] = useState("");
 
   const showModal = () => {
     setModalVisible(true);
@@ -66,31 +70,34 @@ const Shop: FC<AccountProps> = ({ logout }) => {
           colors={["rgba(0,0,0,0.2)", "transparent"]}
           style={styles.gradient}
         />
-        <Text style={styles.title}>Item Shop</Text>
-        <Text style={styles.gold}>Credits Owned: {user.gold}</Text>
+        <Text style={styles.title}>Elzar's Bazaar</Text>
         <View style={styles.row}>
-          <Text style={styles.label}>Weapons </Text>
+          <Text style={styles.label}>Weapons</Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <ItemCardCollection
+          <WeaponCardCollection
             setModalItem={setModalItem}
             logout={logout}
             showModal={showModal}
           />
         </ScrollView>
-        <View style={styles.row}>
-          <Text style={styles.label}>Armour </Text>
-        </View>
+          <Text style={styles.label}>Armour</Text>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <ItemCardCollection
+          <ArmorCardCollection
             setModalItem={setModalItem}
             logout={logout}
             showModal={showModal}
           />
         </ScrollView>
-        <Pressable style={styles.button}>
-          <Text style={styles.buttonText}>Purchase</Text>
-        </Pressable>
+        <Text style={styles.label}>Healing</Text>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <HealingCardCollection
+            setModalItem={setModalItem}
+            logout={logout}
+            showModal={showModal}
+          />
+        </ScrollView>
+        <Text style={styles.credits}>Total Credits: <Text style={{ color: "white" }}>{user.gold}</Text></Text>
       </SafeAreaView>
     </ImageBackground>
   );
@@ -103,12 +110,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  eachImage: {
-    width: 100,
-    height: 100,
-    margin: 10,
-    borderRadius: 5,
-  },
   gradient: {
     position: "absolute",
     left: 0,
@@ -119,14 +120,29 @@ const styles = StyleSheet.create({
   title: {
     display: "flex",
     marginTop: 60,
-    fontSize: 40,
+    fontSize: 50,
     fontWeight: "bold",
     marginBottom: 20,
-    color: "white",
+    color: "#ff3366",
     justifyContent: "center",
     textAlign: "center",
     textShadowColor: "black",
-    textShadowRadius: 30,
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 2,
+    fontFamily: "Orbitron"
+  },
+  credits: {
+    display: "flex",
+    fontSize: 30,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "#ff3366",
+    justifyContent: "center",
+    textAlign: "center",
+    textShadowColor: "black",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 2,
+    fontFamily: "Roboto"
   },
   gold: {
     fontSize: 24,
@@ -140,15 +156,19 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     marginVertical: 10,
+    alignItems: "center",
+    justifyContent: 'center'
   },
   label: {
-    fontSize: 25,
+    fontFamily: "Roboto",
+    fontSize: 30,
     fontWeight: "bold",
     marginLeft: 20,
-    color: "white",
+    color: "gold",
     textShadowColor: "black",
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 2,
+    textAlign: "center",
   },
   button: {
     marginBottom: 40,
@@ -192,7 +212,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   itemCard: {
-    backgroundColor: "white",
     borderRadius: 10,
     padding: 10,
     marginHorizontal: 10,
@@ -205,6 +224,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    borderWidth: 2,
+    borderColor: "#ff3366",
   },
   itemText: {
     fontSize: 16,
@@ -212,18 +233,18 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 4,
   },
-  addToBasketButton: {
-    backgroundColor: "#2196F3",
-    borderRadius: 20,
-    padding: 10,
-    marginTop: 15,
-  },
+  // addToBasketButton: {
+  //   backgroundColor: "#2196F3",
+  //   borderRadius: 20,
+  //   padding: 10,
+  //   marginTop: 15,
+  // },
 
-  addToBasketText: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
+  // addToBasketText: {
+  //   color: "white",
+  //   fontWeight: "bold",
+  //   textAlign: "center",
+  // },
 });
 
 export default Shop;
