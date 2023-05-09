@@ -53,17 +53,18 @@ const RaceSelect: FC<SignUpPageProps> = () => {
           };
 
           const currentUser = await getAsyncStorage("user");
+          console.log({ currentUser });
           await setAsyncStorage("user", { ...currentUser, race: values.race });
 
           createNewCharacter(newCharacter)
             .then((response) => {
+              console.log("here");
               router.push({ pathname: "./CharacterPage" });
             })
             .catch((err) => {
               // TODO render error message in UI
               console.log(err.message);
             });
-
         }}
       >
         {({
