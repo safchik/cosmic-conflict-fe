@@ -4,12 +4,9 @@ import {
   Text,
   View,
   Pressable,
-  ImageBackground,
-  Modal,
-  Image,
+  ImageBackground
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 import ItemCardCollection from "../app/ItemCardCollection";
