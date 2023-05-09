@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { Link } from "expo-router";
 import React, { useEffect, useContext, useState } from "react";
-
 import * as Font from "expo-font";
 
 export const loadFonts = async () => {
