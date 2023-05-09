@@ -6,6 +6,7 @@ import {
   Pressable,
   ImageBackground,
   Modal,
+  Image,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
@@ -40,6 +41,7 @@ interface ItemCollectionProps {
 const Shop: FC<AccountProps> = ({ logout }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [basket, setBasket] = useState([]);
+  const [setModalItem, ModalItem] = useState("");
 
   const showModal = () => {
     setModalVisible(true);
@@ -73,38 +75,26 @@ const Shop: FC<AccountProps> = ({ logout }) => {
           <Text style={styles.label}>Weapons </Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <ItemCardCollection logout={logout} showModal={showModal} />
+          <ItemCardCollection
+            setModalItem={setModalItem}
+            logout={logout}
+            showModal={showModal}
+          />
         </ScrollView>
         <View style={styles.row}>
           <Text style={styles.label}>Armour </Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <ItemCardCollection logout={logout} showModal={showModal} />
+          <ItemCardCollection
+            setModalItem={setModalItem}
+            logout={logout}
+            showModal={showModal}
+          />
         </ScrollView>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Purchase</Text>
         </Pressable>
       </SafeAreaView>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={hideModal}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.itemText}>Item name</Text>
-            <Text style={styles.itemText}>Are you sure?</Text>
-            <Pressable style={styles.addToBasketButton}>
-              <Text style={styles.addToBasketText}>Add to basket</Text>
-            </Pressable>
-            <Pressable style={styles.closeButton} onPress={hideModal}>
-              <Text style={styles.closeButtonText}>Close</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
     </ImageBackground>
   );
 };
@@ -115,6 +105,12 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     justifyContent: "center",
     alignItems: "center",
+  },
+  eachImage: {
+    width: 100,
+    height: 100,
+    margin: 10,
+    borderRadius: 5,
   },
   gradient: {
     position: "absolute",
