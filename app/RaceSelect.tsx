@@ -1,4 +1,4 @@
-import React, { FC, createContext, useEffect, useState } from "react";
+import React, { FC } from "react";
 import { Formik } from "formik";
 import {
   StyleSheet,
@@ -13,7 +13,7 @@ import {
 
 //Form validation
 import * as Yup from "yup";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { getAsyncStorage, setAsyncStorage } from "../utils/asyncStorage";
 import { createNewCharacter } from "../utils/api";
 
@@ -63,7 +63,7 @@ const RaceSelect: FC<SignUpPageProps> = () => {
             .catch((err) => {
               // TODO render error message in UI
               // (shouldn't need one because can't fail two choice selection)
-              console.log(err.message);
+              throw err.message;
             });
         }}
       >
