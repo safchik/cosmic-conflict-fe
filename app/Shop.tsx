@@ -42,10 +42,17 @@ const Shop: FC<AccountProps> = ({ logout }) => {
   };
 
   useEffect(() => {
-    api.getAllItems().then((data) => {
-      setItems(data.shopItems);
-    });
-  });
+    const fetchData = async () => {
+      try {
+        const data = await api.getAllItems();
+        setItems(data.shopItems);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    fetchData();
+  }, []);
 
   return (
     <ImageBackground

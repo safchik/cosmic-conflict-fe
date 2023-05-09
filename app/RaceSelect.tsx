@@ -1,5 +1,6 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Formik } from "formik";
+
 import {
   StyleSheet,
   Text,
@@ -37,6 +38,7 @@ const RaceSelect: FC<SignUpPageProps> = () => {
   const router = useRouter();
   const human = require("../assets/images/human.png");
   const alien = require("../assets/images/alien.png");
+  const [character, setCharacter] = useState({});
 
   return (
     <SafeAreaView style={styles.form}>
@@ -57,8 +59,11 @@ const RaceSelect: FC<SignUpPageProps> = () => {
           };
           createNewCharacter(newCharacter)
             .then(async (response) => {
+              console.log("newChar", response.character);
               await setAsyncStorage("user", response.character);
-              router.push({ pathname: "./CharacterPage" });
+              router.push({
+                pathname: "./CharacterPage",
+              });
             })
             .catch((err) => {
               // TODO render error message in UI

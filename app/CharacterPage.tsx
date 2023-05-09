@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,20 +8,25 @@ import {
   ImageBackground,
 } from "react-native";
 import { Link } from "expo-router";
-import { LinearGradient } from "expo-linear-gradient";
 import { TouchableOpacity } from "react-native-gesture-handler";
-
-const character = {
-  username: "janedoe",
-  characterName: "CharName",
-  race: "human",
-  gold: 175,
-  attack: 100,
-  defence: 120,
-  inventory: ["blaster", "knife", "dagger", "axe"],
-};
+import useGlobalStorage from "../hooks/useGlobalStorage";
+import * as api from "../utils/api";
 
 const CharacterPage: React.FC = () => {
+  const { value } = useGlobalStorage("user");
+  const [character, setCharacter] = useState({});
+  // console.log({ value });
+  useEffect(() => {
+    async function updateCharacter() {
+      if (value) {
+        await setCharacter(value);
+      }
+    }
+
+    updateCharacter();
+    // console.log({ character });
+  }, [value]);
+
   return (
     <ImageBackground
       source={require("../assets/images/charPageBG.jpg")}
@@ -60,7 +65,7 @@ const CharacterPage: React.FC = () => {
           <Text style={styles.label}>Credits </Text>
           <Text style={styles.value}>{character.gold}</Text>
         </View>
-        <View>
+        {/* <View>
           <Text style={[styles.items, { color: "white" }]}>Inventory </Text>
           {character.inventory.map((item) => {
             return (
@@ -69,7 +74,7 @@ const CharacterPage: React.FC = () => {
               </Text>
             );
           })}
-        </View>
+        </View> */}
         <View>
           <Link href={"./Shop"}>
             <TouchableOpacity style={styles.button}>
