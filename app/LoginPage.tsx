@@ -10,6 +10,7 @@ import {
   Pressable,
 } from "react-native";
 import { getUserCharacter, login } from "../utils/api";
+import { LinearGradient } from "expo-linear-gradient";
 
 //Form validation
 import * as Yup from "yup";
@@ -31,6 +32,7 @@ const LoginPage: FC<LoginPageProps> = () => {
   const router = useRouter();
 
   return (
+    <LinearGradient colors={['#3D3D3D', '#7DF9FF']} style={styles.form}>
     <SafeAreaView style={styles.form}>
       <Formik
         initialValues={{
@@ -69,7 +71,7 @@ const LoginPage: FC<LoginPageProps> = () => {
         }) => (
           <>
             <View>
-              <Text>Username</Text>
+            <Text style={{ fontWeight: 'bold' }}>Username</Text>
               {touched.username && errors.username && (
                 <Text>{errors.username}</Text>
               )}
@@ -82,7 +84,7 @@ const LoginPage: FC<LoginPageProps> = () => {
               />
             </View>
             <View>
-              <Text>Password</Text>
+            <Text style={{ fontWeight: 'bold' }}>Password</Text>
               {touched.password && errors.password && (
                 <Text>{errors.password}</Text>
               )}
@@ -111,6 +113,7 @@ const LoginPage: FC<LoginPageProps> = () => {
         <Text>Go Back</Text>
       </TouchableOpacity>
     </SafeAreaView>
+    </LinearGradient>
   );
 };
 
@@ -121,7 +124,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f62681",
   },
   input: {
     height: 40,
@@ -130,6 +132,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     padding: 10,
+    backgroundColor: "white"
   },
   createAccount: {
     marginTop: 20,
