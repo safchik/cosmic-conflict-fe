@@ -16,7 +16,7 @@ export const createNewAccount = async (postedAccount) => {
 export const login = async (account) => {
   console.log(account);
   try {
-    const response = await gameAPI.post("/login", account);
+    const response = await gameAPI.post("/auth/login", account);
     return response.data;
   } catch (err) {
     throw err.response;
@@ -25,7 +25,7 @@ export const login = async (account) => {
 
 export const logout = async () => {
   try {
-    const response = await gameAPI.post("/logout");
+    const response = await gameAPI.post("/auth/logout");
     return response.data;
   } catch (err) {
     throw err.response.data;
