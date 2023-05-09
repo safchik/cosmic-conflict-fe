@@ -56,19 +56,14 @@ const RaceSelect: FC<SignUpPageProps> = () => {
             username: currentUser.username,
           };
 
-          await setAsyncStorage("user", {
-            ...currentUser,
-            race: values.race,
-            characterName: values.characterName,
-          });
-
           createNewCharacter(newCharacter)
-            .then((response) => {
-              setAsyncStorage("user", response.character);
+            .then(async (response) => {
+              await setAsyncStorage("user", response.character);
               router.push({ pathname: "./CharacterPage" });
             })
             .catch((err) => {
               // TODO render error message in UI
+              // (shouldn't need one because can't fail two choice selection)
               console.log(err.message);
             });
         }}
