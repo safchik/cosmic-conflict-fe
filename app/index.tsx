@@ -9,6 +9,7 @@ import {
   Pressable,
 } from "react-native";
 import { Link } from "expo-router";
+import React, { useEffect, useContext, useState } from "react";
 import * as Font from "expo-font";
 
 export const loadFonts = async () => {
@@ -16,17 +17,17 @@ export const loadFonts = async () => {
     "sci-fi-font": require("../assets/images/Fonts/AquireBold-8Ma60.otf"),
   });
 };
-import React, { useEffect, useState, useContext } from "react";
 import { Audio, AVPlaybackStatus } from "expo-av";
-// import { AuthContext, AuthProvider } from "../contexts/Auth";
 
 const splashSound = require("../assets/media/splash.mp3");
 const placeholderLogo = require("../assets/images/placeholderLogo.png");
 
-export default function App() {
-  // const auth = useContext(AuthContext);
+//LOCKS SCREEN TO PORTRAIT
+import * as ScreenOrientation from "expo-screen-orientation";
 
+export default function App() {
   useEffect(() => {
+    lockOrientation();
     const soundObject = new Audio.Sound();
     const playSound = async (): Promise<void> => {
       try {
@@ -43,8 +44,13 @@ export default function App() {
     };
   }, []);
 
+  const lockOrientation = async () => {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT
+    );
+  };
+
   return (
-    // <AuthProvider>
     <ImageBackground
       source={require("../assets/images/mainBackground.jpg")}
       style={styles.background}
@@ -67,7 +73,6 @@ export default function App() {
         <StatusBar style="auto" />
       </View>
     </ImageBackground>
-    // </AuthProvider>
   );
 }
 
