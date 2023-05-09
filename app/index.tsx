@@ -17,9 +17,9 @@ export const loadFonts = async () => {
     "sci-fi-font": require("../assets/images/Fonts/AquireBold-8Ma60.otf"),
   });
 };
-import { Audio, AVPlaybackStatus } from "expo-av";
+import { Audio } from "expo-av";
 
-const splashSound = require("../assets/media/splash.mp3");
+const backgroundSound = require("../assets/media/level.wav");
 const placeholderLogo = require("../assets/images/placeholderLogo.png");
 
 //LOCKS SCREEN TO PORTRAIT
@@ -31,7 +31,7 @@ export default function App() {
     const soundObject = new Audio.Sound();
     const playSound = async (): Promise<void> => {
       try {
-        await soundObject.loadAsync(splashSound);
+        await soundObject.loadAsync(backgroundSound);
         await soundObject.setIsLoopingAsync(true);
         await soundObject.playAsync();
       } catch (err) {
