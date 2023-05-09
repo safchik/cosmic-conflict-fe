@@ -44,25 +44,25 @@ const RaceSelect: FC<SignUpPageProps> = () => {
       <Formik
         initialValues={{
           race: "",
-          character: "",
+          characterName: "",
         }}
         validationSchema={SignupSchema}
         onSubmit={async (values) => {
+          const currentUser = await getAsyncStorage("user");
+
           const newCharacter = {
             race: values.race,
+            characterName: values.characterName,
+            username: currentUser.username,
           };
-
-          const currentUser = await getAsyncStorage("user");
-          console.log({ currentUser });
-          await setAsyncStorage("user", { ...currentUser, race: values.race });
-
           createNewCharacter(newCharacter)
-            .then((response) => {
-              console.log("here");
+            .then(async (response) => {
+              await setAsyncStorage("user", response.character);
               router.push({ pathname: "./CharacterPage" });
             })
             .catch((err) => {
               // TODO render error message in UI
+              // (shouldn't need one because can't fail two choice selection)
               console.log(err.message);
             });
         }}
@@ -81,27 +81,27 @@ const RaceSelect: FC<SignUpPageProps> = () => {
             <View style={styles.images}>
               <Pressable
                 style={{
-                  backgroundColor: values.race === "Alien" ? "#000" : "#ccc",
+                  backgroundColor: values.race === "alien" ? "#000" : "#ccc",
                   padding: 1,
                   marginVertical: 5,
                   marginHorizontal: 5,
                   borderRadius: 10,
                   borderWidth: 2,
                 }}
-                onPress={() => handleChange("race")("Human")}
+                onPress={() => handleChange("race")("human")}
               >
                 <Image style={styles.eachImage} source={human} />
               </Pressable>
               <Pressable
                 style={{
-                  backgroundColor: values.race === "Human" ? "#000" : "#ccc",
+                  backgroundColor: values.race === "human" ? "#000" : "#ccc",
                   padding: 1,
                   marginVertical: 5,
                   marginHorizontal: 5,
                   borderRadius: 10,
                   borderWidth: 2,
                 }}
-                onPress={() => handleChange("race")("Alien")}
+                onPress={() => handleChange("race")("alien")}
               >
                 <Image style={styles.eachImage} source={alien} />
               </Pressable>
@@ -111,14 +111,14 @@ const RaceSelect: FC<SignUpPageProps> = () => {
               <Text style={styles.eachBonusText}>20% Attack Bonus</Text>
             </View>
             <View>
-              {touched.character && errors.character && (
-                <Text>{errors.character}</Text>
+              {touched.characterName && errors.characterName && (
+                <Text>{errors.characterName}</Text>
               )}
               <TextInput
                 style={styles.input}
-                value={values.character}
-                onChangeText={handleChange("character")}
-                onBlur={handleBlur("character")}
+                value={values.characterName}
+                onChangeText={handleChange("characterName")}
+                onBlur={handleBlur("characterName")}
                 placeholder="Character Name"
               />
             </View>
