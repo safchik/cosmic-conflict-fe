@@ -41,12 +41,13 @@ const LoginPage: FC<LoginPageProps> = () => {
         onSubmit={async (values) => {
           await setAsyncStorage("user", values.username);
           login(values)
-            .then(async () => {
+            .then(async (userCharacter) => {
               const fetchedChar = await getUserCharacter(
                 "username",
                 values.username
               );
               if (fetchedChar) {
+                await setAsyncStorage("user", fetchedChar);
                 router.push({ pathname: "./CharacterPage" });
               } else {
                 router.push({ pathname: "./RaceSelect" });
