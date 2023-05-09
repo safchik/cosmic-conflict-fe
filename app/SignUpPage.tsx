@@ -1,4 +1,5 @@
-import React, { FC, createContext, useState } from "react";
+import React, { FC, createContext, useEffect, useState } from "react";
+
 import { Formik } from "formik";
 import {
   StyleSheet,
@@ -10,12 +11,15 @@ import {
   Pressable,
   Image,
 } from "react-native";
-import * as api from "../utils/api";
+
+import { getAsyncStorage, setAsyncStorage } from "../utils/asyncStorage";
 
 //Form validation
 import * as Yup from "yup";
 import { useNavigation, useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+
+import { createNewAccount } from "../utils/api";
 
 interface SignUpPageProps {
   human: Image;
@@ -47,7 +51,6 @@ const SignupSchema = Yup.object().shape({
 });
 
 const SignUpPage: FC<SignUpPageProps> = () => {
-  const [user, setUser] = useState<object>({});
   //needed for Go Back Button
   const router = useRouter();
 
@@ -69,9 +72,21 @@ const SignUpPage: FC<SignUpPageProps> = () => {
             username: values.username,
             password: values.password,
           };
-          setUser(newAccount);
-          api.createNewAccount(newAccount);
-          router.push({ pathname: "./RaceSelect" });
+
+          const newUser = {
+            username: values.username,
+          };
+          await setAsyncStorage("user", newUser);
+
+          createNewAccount(newAccount)
+            .then((response) => {
+              router.push({ pathname: "./RaceSelect" });
+            })
+            .catch((err) => {
+              // TODO render error message in UI
+              console.log(err);
+              // console.log(err.message);
+            });
         }}
       >
         {({
@@ -86,7 +101,9 @@ const SignUpPage: FC<SignUpPageProps> = () => {
           <>
             <View>
               <Text style={{ fontWeight: 'bold' }}>Email</Text>
-              {touched.email && errors.email && <Text>{errors.email}</Text>}
+              {touched.email && errors.email && (
+                <Text style={{ color: "red" }}>{errors.email}</Text>
+              )}
               <TextInput
                 style={styles.input}
                 value={values.email}
@@ -98,7 +115,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
             <View>
               <Text style={{ fontWeight: 'bold' }}>Username</Text>
               {touched.username && errors.username && (
-                <Text>{errors.username}</Text>
+                <Text style={{ color: "red" }}>{errors.username}</Text>
               )}
               <TextInput
                 style={styles.input}
@@ -111,7 +128,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
             <View>
               <Text style={{ fontWeight: 'bold' }}>Password</Text>
               {touched.password && errors.password && (
-                <Text>{errors.password}</Text>
+                <Text style={{ color: "red" }}>{errors.password}</Text>
               )}
               <TextInput
                 style={styles.input}
@@ -125,7 +142,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
             <View>
               <Text style={{ fontWeight: 'bold' }}>Confirm Password</Text>
               {touched.confirmPassword && errors.confirmPassword && (
-                <Text style={{ color: "white" }}>{errors.confirmPassword}</Text>
+                <Text style={{ color: "red" }}>{errors.confirmPassword}</Text>
               )}
               <TextInput
                 style={styles.input}

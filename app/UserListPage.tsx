@@ -1,4 +1,5 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
+        
 import {
   Text,
   SafeAreaView,
@@ -37,7 +38,7 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
   };
 
   useEffect(() => {
-    api.getUsers().then((data) => {
+    api.getAllCharacters().then((data) => {
       console.log(data);
     });
   });
