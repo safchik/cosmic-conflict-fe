@@ -50,6 +50,7 @@ const SignupSchema = Yup.object().shape({
 const SignUpPage: FC<SignUpPageProps> = () => {
   //needed for Go Back Button
   const router = useRouter();
+  const [error, setError] = useState(null);
 
   return (
     <LinearGradient colors={["#3D3D3D", "#7DF9FF"]} style={styles.form}>
@@ -79,9 +80,8 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               router.push({ pathname: "./RaceSelect" });
             })
             .catch((err) => {
-              // TODO render error message in UI
-              console.log(err);
-              // console.log(err.message);
+              console.log(err.message);
+              setError(err.message);
             });
         }}
       >
@@ -96,6 +96,17 @@ const SignUpPage: FC<SignUpPageProps> = () => {
         }) => (
           <>
             <View>
+              {error === null ? null : (
+                <Text
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                    marginBottom: 8,
+                  }}
+                >
+                  {error}
+                </Text>
+              )}
               <Text style={{ fontWeight: "bold" }}>Email</Text>
               {touched.email && errors.email && (
                 <Text style={{ color: "red" }}>{errors.email}</Text>
