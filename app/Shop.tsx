@@ -1,47 +1,27 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   Pressable,
-  ImageBackground
+  ImageBackground,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 import WeaponCardCollection from "./WeaponCardCollection";
-import ArmorCardCollection from "./ArmorCardCollection"
-import HealingCardCollection from "./HealingCardCollection"
-
-
+import ArmorCardCollection from "./ArmorCardCollection";
+import HealingCardCollection from "./HealingCardCollection";
+import * as api from "../utils/api";
 
 interface AccountProps {
   logout: () => void;
   showModal: () => void;
 }
 
-// interface ItemCardProps {
-//   onPress: () => void;
-//   type: string;
-//   itemName: string;
-//   attackStat: number;
-//   defenceStat: number;
-//   buff: string;
-//   cost: number;
-// }
-// interface ItemCollectionProps {
-//   onPress: () => void;
-//   type: string;
-//   itemName: string;
-//   attackStat: number;
-//   defenceStat: number;
-//   buff: string;
-//   cost: number;
-// }
-
 const Shop: FC<AccountProps> = ({ logout }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  // const [basket, setBasket] = useState([]);
+  const [items, setItems] = useState([]);
   const [setModalItem] = useState("");
 
   const showModal = () => {
@@ -60,6 +40,13 @@ const Shop: FC<AccountProps> = ({ logout }) => {
     attack: 15,
     defense: 2,
   };
+
+  useEffect(() => {
+    api.getAllItems().then((data) => {
+      setItems(data.shopItems);
+    });
+  });
+
   return (
     <ImageBackground
       source={require("../assets/images/shop/shop-background2.jpg")}
@@ -76,14 +63,16 @@ const Shop: FC<AccountProps> = ({ logout }) => {
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <WeaponCardCollection
+            items={items}
             setModalItem={setModalItem}
             logout={logout}
             showModal={showModal}
           />
         </ScrollView>
-          <Text style={styles.label}>Armour</Text>
+        <Text style={styles.label}>Armour</Text>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <ArmorCardCollection
+            items={items}
             setModalItem={setModalItem}
             logout={logout}
             showModal={showModal}
@@ -92,12 +81,15 @@ const Shop: FC<AccountProps> = ({ logout }) => {
         <Text style={styles.label}>Healing</Text>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <HealingCardCollection
+            items={items}
             setModalItem={setModalItem}
             logout={logout}
             showModal={showModal}
           />
         </ScrollView>
-        <Text style={styles.credits}>Total Credits: <Text style={{ color: "white" }}>{user.gold}</Text></Text>
+        <Text style={styles.credits}>
+          Gold: <Text style={{ color: "white" }}>{user.gold}</Text>
+        </Text>
       </SafeAreaView>
     </ImageBackground>
   );
@@ -129,7 +121,7 @@ const styles = StyleSheet.create({
     textShadowColor: "black",
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 2,
-    fontFamily: "Orbitron"
+    fontFamily: "Orbitron",
   },
   credits: {
     display: "flex",
@@ -142,7 +134,7 @@ const styles = StyleSheet.create({
     textShadowColor: "black",
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 2,
-    fontFamily: "Roboto"
+    fontFamily: "Roboto",
   },
   gold: {
     fontSize: 24,
@@ -157,7 +149,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginVertical: 10,
     alignItems: "center",
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   label: {
     fontFamily: "Roboto",

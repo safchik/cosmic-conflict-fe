@@ -55,7 +55,6 @@ const RaceSelect: FC<SignUpPageProps> = () => {
             characterName: values.characterName,
             username: currentUser.username,
           };
-
           createNewCharacter(newCharacter)
             .then(async (response) => {
               await setAsyncStorage("user", response.character);
