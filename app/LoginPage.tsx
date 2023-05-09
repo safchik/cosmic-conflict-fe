@@ -9,11 +9,12 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import { postAccount } from "../utils/api";
+import { getUserCharacter, login } from "../utils/api";
 
 //Form validation
 import * as Yup from "yup";
 import { useRouter } from "expo-router";
+import { setAsyncStorage } from "../utils/asyncStorage";
 
 interface LoginPageProps {}
 
@@ -37,8 +38,23 @@ const LoginPage: FC<LoginPageProps> = () => {
           password: "",
         }}
         validationSchema={LoginSchema}
-        onSubmit={(values) => {
-          postAccount(values);
+        onSubmit={async (values) => {
+          await setAsyncStorage("user", values.username);
+          login(values)
+            .then(async () => {
+              const fetchedChar = await getUserCharacter(
+                "username",
+                values.username
+              );
+              if (fetchedChar) {
+                router.push({ pathname: "./CharacterPage" });
+              } else {
+                router.push({ pathname: "./RaceSelect" });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }}
       >
         {({

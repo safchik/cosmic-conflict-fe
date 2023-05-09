@@ -1,4 +1,4 @@
-import React, { FC, createContext, useState } from "react";
+import React, { FC, createContext, useEffect, useState } from "react";
 import { Formik } from "formik";
 import {
   StyleSheet,
@@ -14,7 +14,8 @@ import {
 //Form validation
 import * as Yup from "yup";
 import { useNavigation, useRouter } from "expo-router";
-import { createNewAccount } from "../utils/api";
+import { getAsyncStorage, setAsyncStorage } from "../utils/asyncStorage";
+import { createNewCharacter } from "../utils/api";
 
 interface SignUpPageProps {
   human: Image;
@@ -32,7 +33,6 @@ const SignupSchema = Yup.object().shape({
 });
 
 const RaceSelect: FC<SignUpPageProps> = () => {
-  const [user, setUser] = useState<object>({});
   //needed for Go Back Button
   const router = useRouter();
   const human = require("../assets/images/human.png");
@@ -47,15 +47,23 @@ const RaceSelect: FC<SignUpPageProps> = () => {
           character: "",
         }}
         validationSchema={SignupSchema}
-        onSubmit={(values) => {
-          //console.log(values);
-          const newAccount = {
+        onSubmit={async (values) => {
+          const newCharacter = {
             race: values.race,
           };
-          setUser(newAccount);
 
-          createNewAccount(newAccount);
-          router.push({ pathname: "./CharacterPage" });
+          const currentUser = await getAsyncStorage("user");
+          await setAsyncStorage("user", { ...currentUser, race: values.race });
+
+          createNewCharacter(newCharacter)
+            .then((response) => {
+              router.push({ pathname: "./CharacterPage" });
+            })
+            .catch((err) => {
+              // TODO render error message in UI
+              console.log(err.message);
+            });
+
         }}
       >
         {({
