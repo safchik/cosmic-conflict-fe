@@ -225,18 +225,6 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 4,
   },
-  // addToBasketButton: {
-  //   backgroundColor: "#2196F3",
-  //   borderRadius: 20,
-  //   padding: 10,
-  //   marginTop: 15,
-  // },
-
-  // addToBasketText: {
-  //   color: "white",
-  //   fontWeight: "bold",
-  //   textAlign: "center",
-  // },
 });
 
 export default Shop;
