@@ -23,10 +23,14 @@ import { Audio, AVPlaybackStatus } from "expo-av";
 const splashSound = require("../assets/media/splash.mp3");
 const placeholderLogo = require("../assets/images/placeholderLogo.png");
 
+//LOCKS SCREEN TO PORTRAIT
+import * as ScreenOrientation from "expo-screen-orientation";
+
 export default function App() {
   // const auth = useContext(AuthContext);
 
   useEffect(() => {
+    lockOrientation();
     const soundObject = new Audio.Sound();
     const playSound = async (): Promise<void> => {
       try {
@@ -42,6 +46,12 @@ export default function App() {
       soundObject.unloadAsync();
     };
   }, []);
+
+  const lockOrientation = async () => {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT
+    );
+  };
 
   return (
     // <AuthProvider>
