@@ -11,6 +11,7 @@ import {
   Pressable,
   Image,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 //Form validation
 import * as Yup from "yup";
@@ -41,6 +42,8 @@ const RaceSelect: FC<SignUpPageProps> = () => {
   const [character, setCharacter] = useState({});
 
   return (
+    <LinearGradient colors={["#3D3D3D", "#7DF9FF"]} style={styles.form}>
+
     <SafeAreaView style={styles.form}>
       <Text style={styles.title}>Select Your Race</Text>
       <Formik
@@ -82,7 +85,7 @@ const RaceSelect: FC<SignUpPageProps> = () => {
           isValid,
         }) => (
           <>
-            <Text>Select your Race: {values.race}</Text>
+            <Text >{values.race}</Text>
             <View style={styles.images}>
               <Pressable
                 style={{
@@ -145,6 +148,7 @@ const RaceSelect: FC<SignUpPageProps> = () => {
         </Pressable>
       </View>
     </SafeAreaView>
+    </LinearGradient>
   );
 };
 
@@ -153,11 +157,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f62681",
+    // backgroundColor: "#f62681",
   },
   title: {
-    fontSize: 40,
+    fontWeight: "bold",
+    fontSize: 35,
+    color: "white",
     marginBottom: 25,
+    textShadowColor: "black",
+    textShadowRadius: 5,
+    textShadowOffset: { width: 2, height: 2 },
   },
   input: {
     height: 40,
@@ -166,6 +175,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     padding: 10,
+    backgroundColor: "white",
   },
   createAccount: {
     marginTop: 20,
