@@ -1,7 +1,8 @@
 import React, { FC, useState } from "react";
 import { StyleSheet, View, Modal, Pressable, Text, Image } from "react-native";
 import ItemCard from "../components/ItemCard";
-
+import { buyItem } from "../utils/api";
+import { setAsyncStorage } from "../utils/asyncStorage";
 interface AccountProps {
   logout: () => void;
 }
@@ -37,6 +38,18 @@ const HealingCardCollection: FC<HealingCardCollectionProps> = ({
     showModal(item);
   };
 
+  const handlePurchase = (item: Item) => {
+    const id = item._id;
+    console.log({ id });
+    buyItem(id)
+      .then((response) => {
+        console.log({ response });
+        setAsyncStorage("user", response.character[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <View style={styles.itemCardContainer}>
       {items
@@ -71,7 +84,7 @@ const HealingCardCollection: FC<HealingCardCollectionProps> = ({
                 onPress={() => {
                   // possible logic to Subtract cost from user's gold
                   //    user.gold -= selectedItem.cost;
-                  handleModalClose();
+                  handlePurchase(selectedItem);
                 }}
               >
                 <Text style={styles.modalButtonText}>Purchase</Text>
@@ -113,7 +126,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: "center",
     alignItems: "center",
-    textAlign: "center"
+    textAlign: "center",
   },
   modalText: {
     fontSize: 16,
