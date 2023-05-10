@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
+  ImageBackground 
 } from 'react-native';
 
 import { Link } from 'expo-router';
@@ -63,10 +64,6 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
         </TouchableOpacity>
       </View>
       <Modal visible={modalVisible} animationType="fade" transparent>
-        <LinearGradient
-          colors={['#3D3D3D', '#000000']}
-          style={styles.modalContainer}
-        >
           <View style={styles.modalContent}>
             <Text style={[styles.modalTitle, { fontFamily: 'Roboto' }]}>
               {user.username}
@@ -100,7 +97,6 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
               </TouchableOpacity>
             </Link>
           </View>
-        </LinearGradient>
       </Modal>
     </View>
   );
@@ -124,7 +120,7 @@ const UserListPage: FC = () => {
   }, []);
 
   return (
-    <LinearGradient colors={['#7DF9FF', '#3D3D3D']} style={styles.container}>
+    <LinearGradient colors={['#3D3D3D', '#7DF9FF']} style={styles.container}>
       <SafeAreaView>
         <FlatList
           data={userList}
@@ -157,7 +153,12 @@ const styles = StyleSheet.create({
   userListText: {
     marginTop: 10,
     textAlign: 'center',
-    fontSize: 20
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "gold",
+    textShadowColor: "black",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 2,
   },
   userListItemText: {
     flex: 1,
@@ -171,6 +172,9 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     borderRadius: 50,
     justifyContent: 'center',
+    backgroundColor: 'black',
+    borderWidth: 2,
+    borderColor: "white"
    
   },
   modalContainer: {
@@ -185,6 +189,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: 300,
+    height: 300,
+    alignSelf: 'center',
+    marginTop: 'auto',
+    marginBottom: 'auto',
+     borderWidth: 2,
+    borderColor: "black",
   },
   modalTitle: {
     fontSize: 24,
