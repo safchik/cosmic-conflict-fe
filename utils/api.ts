@@ -1,10 +1,16 @@
 import axios from "axios";
 
 const gameAPI = axios.create({
-  baseURL: "http://localhost:9090/api",
+  baseURL: "https://cosmic-conflict-api.onrender.com/api",
 });
 
-export const createNewAccount = async (postedAccount) => {
+interface NewAccount {
+  username: string;
+  password: string;
+  email: string;
+}
+
+export const createNewAccount = async (postedAccount: NewAccount) => {
   try {
     const response = await gameAPI.post("/auth/signup", postedAccount);
     return response.data;
@@ -13,13 +19,18 @@ export const createNewAccount = async (postedAccount) => {
   }
 };
 
-export const login = async (account) => {
+interface Account {
+  username: string;
+  password: string;
+}
+
+export const login = async (account: Account) => {
   console.log(account);
   try {
     const response = await gameAPI.post("/auth/login", account);
     return response.data;
   } catch (err) {
-    throw err.response;
+    throw err;
   }
 };
 
@@ -41,7 +52,13 @@ export const getAllCharacters = async () => {
   }
 };
 
-export const createNewCharacter = async (newCharacter) => {
+interface Character {
+  race: string;
+  characterName: string;
+  username: string;
+}
+
+export const createNewCharacter = async (newCharacter: Character) => {
   try {
     const response = await gameAPI.post("/characters", newCharacter);
     return response.data;

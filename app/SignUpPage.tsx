@@ -10,7 +10,7 @@ import {
   Pressable,
   Image,
 } from "react-native";
-import { getAsyncStorage, setAsyncStorage } from "../utils/asyncStorage";
+import { setAsyncStorage } from "../utils/asyncStorage";
 
 //Form validation
 import * as Yup from "yup";
