@@ -110,6 +110,8 @@ const styles = StyleSheet.create({
     width: "50%",
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 2,
+    borderColor: "black",
   },
   modalTitle: {
     fontSize: 20,
@@ -130,6 +132,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 20,
     alignSelf: "center",
+    borderWidth: 2,
+    borderColor: "black",
   },
   modalButtonText: {
     color: "white",

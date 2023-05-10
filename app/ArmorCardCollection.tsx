@@ -61,9 +61,6 @@ const ArmorCardCollection: FC<ArmorCardCollectionProps> = ({
               <Text style={styles.modalTitle}>{selectedItem.itemName}</Text>
               <Text style={styles.modalText}>Type: {selectedItem.type}</Text>
               <Text style={styles.modalText}>
-                Attack: {selectedItem.attack}
-              </Text>
-              <Text style={styles.modalText}>
                 Defence: {selectedItem.defence}
               </Text>
               {selectedItem.buff && (
@@ -108,6 +105,8 @@ const styles = StyleSheet.create({
     width: "50%",
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 2,
+    borderColor: "black",
   },
   modalTitle: {
     fontSize: 20,
@@ -116,6 +115,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     fontFamily: "Orbitron",
+    textAlign: "center"
   },
   modalText: {
     fontSize: 16,
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     fontFamily: "Orbitron",
+    textAlign: "center"
   },
   modalButton: {
     backgroundColor: "#2196F3",
@@ -130,6 +131,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 20,
     alignSelf: "center",
+    borderWidth: 2,
+    borderColor: "black",
   },
   modalButtonText: {
     color: "white",
