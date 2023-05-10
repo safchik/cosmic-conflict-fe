@@ -10,9 +10,8 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
-
-  ImageBackground 
-} from 'react-native';
+  ImageBackground,
+} from "react-native";
 import { Link } from "expo-router";
 import usersData from "./users";
 import BattleAction from "./BattleAction";
@@ -68,7 +67,6 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
           colors={["#3D3D3D", "#000000"]}
           style={styles.modalContainer}
         >
-
           <View style={styles.modalContent}>
             <Text style={[styles.modalTitle, { fontFamily: "Roboto" }]}>
               {user.username}
@@ -102,6 +100,7 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
               </TouchableOpacity>
             </Link>
           </View>
+        </LinearGradient>
       </Modal>
     </View>
   );
@@ -125,9 +124,12 @@ const UserListPage: FC = () => {
   }, []);
 
   return (
-    <LinearGradient colors={['#3D3D3D', '#7DF9FF', '#ee8055']} style={styles.container}>
+    <LinearGradient
+      colors={["#3D3D3D", "#7DF9FF", "#ee8055"]}
+      style={styles.container}
+    >
       <SafeAreaView>
-      <Text style={styles.title}>Enemies</Text>
+        <Text style={styles.title}>Enemies</Text>
         <FlatList
           data={users}
           renderItem={({ item }) => <UserListItem user={item} />}
@@ -184,14 +186,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   userListImage: {
-
     marginTop: 10,
     width: 150,
     height: 150,
-    resizeMode: 'contain',
+    resizeMode: "contain",
     borderRadius: 50,
-    justifyContent: 'center',
-    backgroundColor: 'black',
+    justifyContent: "center",
+    backgroundColor: "black",
     borderWidth: 2,
     borderColor: "#fcf5e5",
   },
@@ -208,9 +209,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: 300,
     height: 300,
-    alignSelf: 'center',
-    marginTop: 'auto',
-    marginBottom: 'auto',
+    alignSelf: "center",
+    marginTop: "auto",
+    marginBottom: "auto",
     borderWidth: 2,
     borderColor: "black",
   },
