@@ -18,10 +18,6 @@ import BattleAction from "./BattleAction";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation, useRouter } from "expo-router";
 
-
-import { LinearGradient } from "expo-linear-gradient";
-
-
 import * as api from "../utils/api";
 import { setAsyncStorage } from "../utils/asyncStorage";
 interface User {
@@ -48,12 +44,10 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
     setModalVisible(false);
   };
 
-
   const handleAttack = () => {
     writeItemToStorage(user);
     router.push({ pathname: "./BattleAction" });
   };
-
 
   return (
     <View style={styles.userListItem}>
@@ -69,12 +63,10 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
         </TouchableOpacity>
       </View>
       <Modal visible={modalVisible} animationType="fade" transparent>
-
         <LinearGradient
           colors={["#3D3D3D", "#000000"]}
           style={styles.modalContainer}
         >
-
           <View style={styles.modalContent}>
             <Text style={[styles.modalTitle, { fontFamily: "Roboto" }]}>
               {user.username}
@@ -107,7 +99,6 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
                 </Text>
               </TouchableOpacity>
             </Link>
-
           </View>
         </LinearGradient>
       </Modal>
@@ -120,7 +111,7 @@ const UserListPage: FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   useEffect(() => {
     api
-      .getUsers()
+      .getAllCharacters()
       .then((data) => {
         const usersData = data.data as User[];
         setUsers(usersData);

@@ -22,7 +22,7 @@ const BattleAction: FC<BattleProps> = (params) => {
 
   useEffect(() => {
     if (value) {
-      api.postBattle(value).then((result) => {
+      api.attackCharacter(value).then((result) => {
         console.log(result);
       });
     }
