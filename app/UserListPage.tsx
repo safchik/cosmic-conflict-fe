@@ -120,8 +120,9 @@ const UserListPage: FC = () => {
   }, []);
 
   return (
-    <LinearGradient colors={['#3D3D3D', '#7DF9FF']} style={styles.container}>
+    <LinearGradient colors={['#3D3D3D', '#7DF9FF', '#ee8055']} style={styles.container}>
       <SafeAreaView>
+      <Text style={styles.title}>Enemies</Text>
         <FlatList
           data={userList}
           renderItem={({ item }) => <UserListItem user={item} />}
@@ -133,6 +134,18 @@ const UserListPage: FC = () => {
 };
 
 const styles = StyleSheet.create({
+  title: {
+    display: "flex",
+    fontSize: 50,
+    fontWeight: "bold",
+    color: "#ff3366",
+    justifyContent: "center",
+    textAlign: "center",
+    textShadowColor: "black",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 2,
+    fontFamily: "Roboto",
+  },
   container: {
     flex: 1,
     alignItems: 'center',
@@ -144,21 +157,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 5,
     padding: 10,
-    borderWidth: 15,
-    borderColor: "black",
-    borderRadius: 150,
-    width: 300,
-    height: 300,
+    borderColor: "transparent",
+    borderRadius: 50,
+    width: 250,
+    height: 250,
   },
   userListText: {
-    marginTop: 10,
-    textAlign: 'center',
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: "bold",
-    color: "gold",
+    color: "#f1b14d",
+    justifyContent: "center",
+    textAlign: "center",
     textShadowColor: "black",
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 2,
+    fontFamily: "Roboto",
   },
   userListItemText: {
     flex: 1,
@@ -167,15 +180,14 @@ const styles = StyleSheet.create({
   },
   userListImage: {
     marginTop: 10,
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     resizeMode: 'contain',
     borderRadius: 50,
     justifyContent: 'center',
     backgroundColor: 'black',
     borderWidth: 2,
-    borderColor: "white"
-   
+    borderColor: "#fcf5e5",
   },
   modalContainer: {
     flex: 1,
@@ -193,7 +205,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 'auto',
     marginBottom: 'auto',
-     borderWidth: 2,
+    borderWidth: 2,
     borderColor: "black",
   },
   modalTitle: {
