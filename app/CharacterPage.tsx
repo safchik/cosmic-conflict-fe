@@ -10,7 +10,6 @@ import {
 import { Link } from "expo-router";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import useGlobalStorage from "../hooks/useGlobalStorage";
-import Loading from "../components/Loading";
 
 interface Character {
   characterName: string;
@@ -51,8 +50,7 @@ const CharacterPage: React.FC = () => {
     >
       {isLoading ? (
         <View>
-          <Text>Loading...</Text>
-          <Loading />
+          <Text style={{ fontWeight: "bold" }}>Loading...</Text>
         </View>
       ) : (
         <View style={styles.container}>
@@ -170,6 +168,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 30,
+    marginVertical: 20,
     backgroundColor: "white",
     paddingHorizontal: 20,
     paddingVertical: 10,
