@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -6,89 +7,121 @@ import {
   StyleSheet,
   Image,
   ImageBackground,
-} from 'react-native';
-import { Link } from 'expo-router';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import useGlobalStorage from '../hooks/useGlobalStorage';
-import * as api from '../utils/api';
+
+} from "react-native";
+import { Link } from "expo-router";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import useGlobalStorage from "../hooks/useGlobalStorage";
+import Loading from "../components/Loading";
+
+interface Character {
+  characterName: string;
+  attack: number;
+  defense: number;
+  gold: number;
+  race: string;
+  username: string;
+  inventory: [];
+}
 
 const CharacterPage: React.FC = () => {
-  const { value: user } = useGlobalStorage('user');
-  const [character, setCharacter] = useState({});
+  const { value: user } = useGlobalStorage("user");
+  const [character, setCharacter] = useState({
+    characterName: "",
+    attack: 0,
+    defence: 0,
+    gold: 0,
+    race: "",
+    inventory: [],
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function updateCharacter() {
       if (user) {
-        await setCharacter(user);
+        setCharacter(user);
       }
     }
-
     updateCharacter();
+    setIsLoading(false);
   }, [user]);
+
 
   return (
     <ImageBackground
       source={require('../assets/images/charPageBG.jpg')}
       style={styles.container}
     >
-      <View style={styles.container}>
-        <View style={styles.row}>
-          <Text style={styles.title}>{character.characterName}</Text>
-        </View>
-        <View style={styles.imageWrapper}>
-          {character.race === 'human' ? (
-            <Image
-              source={require('../assets/images/human.png')}
-              style={styles.image}
-            />
-          ) : (
-            <Image
-              source={require('../assets/images/alien.png')}
-              style={styles.image}
-            />
-          )}
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.label}>Attack </Text>
-          <Text style={[styles.value, { color: 'red' }]}>
-            {character.attack}
-          </Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.label}>Defence </Text>
-          <Text style={[styles.value, { color: '#939596' }]}>
-            {character.defence}
-          </Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.label}>Credits </Text>
-          <Text style={styles.value}>{character.gold}</Text>
-        </View>
-        {/* <View>
-          <Text style={[styles.items, { color: "white" }]}>Inventory </Text>
-          {character.inventory.map((item) => {
-            return (
-              <Text key={item} style={styles.items}>
-                {item}
-              </Text>
-            );
-          })}
-        </View> */}
+      {isLoading ? (
         <View>
-          <Link href={'./Shop'}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Shop</Text>
-            </TouchableOpacity>
-          </Link>
+          <Text>Loading...</Text>
+          <Loading />
         </View>
-        <View>
-          <Link href={'./UserListPage'}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Battle!</Text>
-            </TouchableOpacity>
-          </Link>
+      ) : (
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <Text style={styles.title}>{character.characterName}</Text>
+          </View>
+          <View style={styles.imageWrapper}>
+            {character.race === "human" ? (
+              <Image
+                source={require("../assets/images/human.png")}
+                style={styles.image}
+              />
+            ) : (
+              <Image
+                source={require("../assets/images/alien.png")}
+                style={styles.image}
+              />
+            )}
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Attack </Text>
+            <Text style={[styles.value, { color: "red" }]}>
+              {character.attack}
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Defence </Text>
+            <Text style={[styles.value, { color: "#939596" }]}>
+              {character.defence}
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Credits </Text>
+            <Text style={styles.value}>{character.gold}</Text>
+          </View>
+          <View>
+            <Text style={[styles.items, { color: "white" }]}>Inventory </Text>
+            {character.inventory.length === 0 ? (
+              <Text style={styles.label}>No Items Held</Text>
+            ) : (
+              character.inventory.map((item) => {
+                return (
+                  <Text key={item} style={styles.items}>
+                    {item}
+                  </Text>
+                );
+              })
+            )}
+          </View>
+          <View>
+            <Link href={"./Shop"}>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Shop</Text>
+              </TouchableOpacity>
+            </Link>
+          </View>
+          <View>
+            <Link href={"./Battle"}>
+              <Pressable style={styles.button}>
+                <Text style={styles.buttonText}>Battle!</Text>
+              </Pressable>
+            </Link>
+          </View>
+
         </View>
-      </View>
+      )}
     </ImageBackground>
   );
 };
