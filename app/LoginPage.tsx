@@ -123,7 +123,7 @@ const LoginPage: FC<LoginPageProps> = () => {
                     Incorrect Username or Password
                   </Text>
                 )}
-                <Text style={{ fontWeight: "bold" }}>Username</Text>
+                <Text style={styles.formText}>Username</Text>
                 {touched.username && errors.username && (
                   <Text>{errors.username}</Text>
                 )}
@@ -136,7 +136,7 @@ const LoginPage: FC<LoginPageProps> = () => {
                 />
               </View>
               <View>
-                <Text style={{ fontWeight: "bold" }}>Password</Text>
+                <Text style={styles.formText}>Password</Text>
                 {touched.password && errors.password && (
                   <Text style={{ color: "red" }}>{errors.password}</Text>
                 )}
@@ -184,6 +184,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  formText: {
+    fontWeight: "bold",
+    color: "white",
+    textShadowColor: "#000000", 
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 3, 
   },
   input: {
     height: 40,
