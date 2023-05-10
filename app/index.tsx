@@ -19,8 +19,9 @@ export const loadFonts = async () => {
 };
 import { Audio } from "expo-av";
 
-const backgroundSound = require("../assets/media/level.wav");
 const placeholderLogo = require("../assets/images/placeholderLogo.png");
+const backgroundSound = require("../assets/media/level.wav");
+const clickSound = require("../assets/media/open.wav");
 
 //LOCKS SCREEN TO PORTRAIT
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -101,15 +102,25 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: 10,
-    padding: 10,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "black",
-    backgroundColor: "white",
+    paddingVertical: 15,
+    paddingHorizontal: 25,
+    borderRadius: 15,
+    backgroundColor: "#b094cc",
+    shadowColor: "#999",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    elevation: 5,
   },
   buttonText: {
-    color: "black",
+    color: "white",
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 24,
+    textAlign: "center",
+    textTransform: "uppercase",
   },
 });
+
