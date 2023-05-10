@@ -15,7 +15,6 @@ import * as api from "../utils/api";
 import { getUserCharacter, login } from "../utils/api";
 import { LinearGradient } from "expo-linear-gradient";
 
-
 //Form validation
 import * as Yup from "yup";
 import { useRouter } from "expo-router";
@@ -69,7 +68,7 @@ const LoginPage: FC<LoginPageProps> = () => {
           }) => (
             <>
               <View>
-                {error === null ? null : (
+                {error === false ? null : (
                   <Text
                     style={{
                       color: "red",
