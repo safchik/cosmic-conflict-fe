@@ -11,6 +11,7 @@ import {
   Modal,
   Pressable,
   ImageBackground,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { Link } from "expo-router";
 import usersData from "./users";
@@ -20,6 +21,7 @@ import { useNavigation, useRouter } from "expo-router";
 
 import * as api from "../utils/api";
 interface User {
+  characterName: string;
   username: string;
   race: string;
   gold: number;
@@ -50,64 +52,80 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
   };
 
   return (
-    <View style={styles.userListItem}>
-      <View style={styles.userListItemText}>
-        <TouchableOpacity onPress={showModal}>
-          <Image source={user.image} style={styles.userListImage} />
-          <Text style={[styles.userListText, { fontFamily: "Roboto" }]}>
-            {user.username}
-          </Text>
-          <Text style={[styles.userListText, { fontFamily: "Roboto" }]}>
-            Credits: {user.gold}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <Modal visible={modalVisible} animationType="fade" transparent>
-        <LinearGradient
-          colors={["#3D3D3D", "#000000"]}
-          style={styles.modalContainer}
-        >
-          <View style={styles.modalContent}>
-            <Text style={[styles.modalTitle, { fontFamily: "Roboto" }]}>
-              {user.username}
+    <SafeAreaView>
+      <View style={styles.userListItem}>
+        <View style={styles.userListItemText}>
+          <TouchableOpacity onPress={showModal}>
+            {user.race === "human" ? (
+              <Image
+                source={require("../assets/images/human.png")}
+                style={styles.userListImage}
+              />
+            ) : (
+              <Image
+                source={require("../assets/images/alien.png")}
+                style={styles.userListImage}
+              />
+            )}
+            <Text style={[styles.userListName, { fontFamily: "Roboto" }]}>
+              {user.characterName}
             </Text>
-            <Text style={styles.modalText}>Race: {user.race}</Text>
-            <Text style={styles.modalText}>Health: {user.health}</Text>
-            <Text style={styles.modalText}>Credits: {user.gold}</Text>
-            <Text style={styles.modalText}>Attack: {user.attack}</Text>
-            <Text style={styles.modalText}>Defence: {user.defence}</Text>
-            <TouchableOpacity style={styles.modalButton} onPress={hideModal}>
-              <Text style={[styles.modalButtonText, { fontFamily: "Roboto" }]}>
-                Close
+            <Text style={[styles.userListText, { fontFamily: "Roboto" }]}>
+              Credits: {user.gold}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <Modal visible={modalVisible} animationType="slide" transparent>
+          <TouchableWithoutFeedback onPress={hideModal}>
+            <View style={styles.modalContent}>
+              <Text style={[styles.modalTitle, { fontFamily: "Roboto" }]}>
+                {user.characterName}
               </Text>
-            </TouchableOpacity>
-
-            <Link
-              href={{
-                pathname: "./BattleAction",
-                // , params: { user: user }
-              }}
-            >
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={handleAttack}
-              >
+              <Text style={styles.modalText}>Race: {user.race}</Text>
+              {/* <Text style={styles.modalText}>Health: {user.health}</Text> */}
+              <Text style={[styles.modalText, { color: "#d1b92e" }]}>
+                Credits: {user.gold}
+              </Text>
+              <Text style={[styles.modalText, { color: "red" }]}>
+                Attack: {user.attack}
+              </Text>
+              <Text style={[styles.modalText, { color: "#939596" }]}>
+                Defence: {user.defence}
+              </Text>
+              <TouchableOpacity style={styles.modalButton} onPress={hideModal}>
                 <Text
                   style={[styles.modalButtonText, { fontFamily: "Roboto" }]}
                 >
-                  Attack
+                  Close
                 </Text>
               </TouchableOpacity>
-            </Link>
-          </View>
-        </LinearGradient>
-      </Modal>
-    </View>
+              <Link
+                href={{
+                  pathname: "./BattleAction",
+                  // , params: { user: user }
+                }}
+              >
+                <TouchableOpacity
+                  style={[styles.modalButton, { backgroundColor: "red" }]}
+                  onPress={handleAttack}
+                >
+                  <Text
+                    style={[styles.modalButtonText, { fontFamily: "Roboto" }]}
+                  >
+                    Attack
+                  </Text>
+                </TouchableOpacity>
+              </Link>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const UserListPage: FC = () => {
-  const [userList, setUserList] = useState<User[]>(usersData);
+  // const [userList, setUserList] = useState<User[]>(usersData);
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
@@ -116,7 +134,6 @@ const UserListPage: FC = () => {
       .then((data) => {
         const usersData = data.characters as User[];
         setUsers(usersData);
-        //console.log(usersData);
       })
       .catch((err) => {
         console.log(err);
@@ -128,12 +145,14 @@ const UserListPage: FC = () => {
       colors={["#3D3D3D", "#7DF9FF", "#ee8055"]}
       style={styles.container}
     >
+      <View style={styles.headerBackground}></View>
       <SafeAreaView>
         <Text style={styles.title}>Enemies</Text>
         <FlatList
           data={users}
           renderItem={({ item }) => <UserListItem user={item} />}
           keyExtractor={(item) => item.username}
+          showsVerticalScrollIndicator={false}
         />
       </SafeAreaView>
     </LinearGradient>
@@ -152,6 +171,16 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 2,
     fontFamily: "Roboto",
+    marginTop: 50,
+  },
+  headerBackground: {
+    position: "absolute",
+    top: 0,
+    height: 117,
+    width: "100%",
+    backgroundColor: "#dedede",
+    shadowColor: "#000",
+    shadowOffset: { width: 2, height: 2 },
   },
   container: {
     flex: 1,
@@ -166,13 +195,25 @@ const styles = StyleSheet.create({
     padding: 10,
     borderColor: "transparent",
     borderRadius: 50,
-    width: 250,
-    height: 250,
+    width: 240,
+    height: 240,
+    marginBottom: 30,
   },
   userListText: {
-    fontSize: 30,
+    fontSize: 26,
     fontWeight: "bold",
     color: "#f1b14d",
+    justifyContent: "center",
+    textAlign: "center",
+    textShadowColor: "black",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 2,
+    fontFamily: "Roboto",
+  },
+  userListName: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "white",
     justifyContent: "center",
     textAlign: "center",
     textShadowColor: "black",
@@ -186,7 +227,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   userListImage: {
-    marginTop: 10,
+    alignSelf: "center",
+    marginTop: 80,
     width: 150,
     height: 150,
     resizeMode: "contain",
@@ -222,6 +264,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   modalText: {
+    fontSize: 17,
+    fontWeight: "bold",
+    marginVertical: 5,
+    textAlign: "center",
+  },
+  modalTextValues: {
     fontSize: 16,
     marginVertical: 5,
     textAlign: "center",
@@ -231,7 +279,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
-    marginTop: 10,
+    marginVertical: 10,
   },
   modalButtonText: {
     color: "white",
