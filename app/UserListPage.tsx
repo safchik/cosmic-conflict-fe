@@ -10,8 +10,9 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
-} from "react-native";
 
+  ImageBackground 
+} from 'react-native';
 import { Link } from "expo-router";
 import usersData from "./users";
 import BattleAction from "./BattleAction";
@@ -67,6 +68,7 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
           colors={["#3D3D3D", "#000000"]}
           style={styles.modalContainer}
         >
+
           <View style={styles.modalContent}>
             <Text style={[styles.modalTitle, { fontFamily: "Roboto" }]}>
               {user.username}
@@ -100,7 +102,6 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
               </TouchableOpacity>
             </Link>
           </View>
-        </LinearGradient>
       </Modal>
     </View>
   );
@@ -124,8 +125,9 @@ const UserListPage: FC = () => {
   }, []);
 
   return (
-    <LinearGradient colors={["#7DF9FF", "#3D3D3D"]} style={styles.container}>
+    <LinearGradient colors={['#3D3D3D', '#7DF9FF', '#ee8055']} style={styles.container}>
       <SafeAreaView>
+      <Text style={styles.title}>Enemies</Text>
         <FlatList
           data={users}
           renderItem={({ item }) => <UserListItem user={item} />}
@@ -137,6 +139,18 @@ const UserListPage: FC = () => {
 };
 
 const styles = StyleSheet.create({
+  title: {
+    display: "flex",
+    fontSize: 50,
+    fontWeight: "bold",
+    color: "#ff3366",
+    justifyContent: "center",
+    textAlign: "center",
+    textShadowColor: "black",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 2,
+    fontFamily: "Roboto",
+  },
   container: {
     flex: 1,
     alignItems: "center",
@@ -148,14 +162,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 5,
     padding: 10,
-    borderWidth: 25,
-    borderRadius: 150,
-    backgroundColor: "white",
-    width: 300,
-    height: 300,
+    borderColor: "transparent",
+    borderRadius: 50,
+    width: 250,
+    height: 250,
   },
   userListText: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#f1b14d",
+    justifyContent: "center",
     textAlign: "center",
+    textShadowColor: "black",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 2,
+    fontFamily: "Roboto",
   },
   userListItemText: {
     flex: 1,
@@ -163,10 +184,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   userListImage: {
-    width: 100,
-    height: 100,
-    resizeMode: "contain",
+
+    marginTop: 10,
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
     borderRadius: 50,
+    justifyContent: 'center',
+    backgroundColor: 'black',
+    borderWidth: 2,
+    borderColor: "#fcf5e5",
   },
   modalContainer: {
     flex: 1,
@@ -180,6 +207,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: 300,
+    height: 300,
+    alignSelf: 'center',
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    borderWidth: 2,
+    borderColor: "black",
   },
   modalTitle: {
     fontSize: 24,
