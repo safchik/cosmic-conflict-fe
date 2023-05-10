@@ -15,6 +15,7 @@ import * as api from "../utils/api";
 const CharacterPage: React.FC = () => {
   const { value } = useGlobalStorage("user");
   const [character, setCharacter] = useState({});
+
   // console.log({ value });
   useEffect(() => {
     async function updateCharacter() {
@@ -77,7 +78,7 @@ const CharacterPage: React.FC = () => {
         </View> */}
         <View>
           <Link href={"./Shop"}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} >
               <Text style={styles.buttonText}>Shop</Text>
             </TouchableOpacity>
           </Link>
