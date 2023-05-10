@@ -12,16 +12,17 @@ import { ScrollView } from "react-native-gesture-handler";
 import WeaponCardCollection from "./WeaponCardCollection";
 import ArmorCardCollection from "./ArmorCardCollection";
 import HealingCardCollection from "./HealingCardCollection";
+import useGlobalStorage from "../hooks/useGlobalStorage";
 import * as api from "../utils/api";
 import { useRouter } from "expo-router";
 
 interface AccountProps {
   logout: () => void;
   showModal: () => void;
-
 }
 
 const Shop: FC<AccountProps> = ({ logout }) => {
+  const { value: user } = useGlobalStorage("user");
   const [modalVisible, setModalVisible] = useState(false);
   const [items, setItems] = useState([]);
   const [setModalItem] = useState("");
@@ -33,15 +34,6 @@ const Shop: FC<AccountProps> = ({ logout }) => {
 
   const hideModal = () => {
     setModalVisible(false);
-  };
-
-  const user = {
-    username: "player2",
-    characterName: "Zorg",
-    race: "alien",
-    gold: 50,
-    attack: 15,
-    defense: 2,
   };
 
   useEffect(() => {
@@ -134,7 +126,6 @@ const styles = StyleSheet.create({
     textShadowColor: "black",
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 2,
-    fontFamily: "Orbitron",
   },
   credits: {
     display: "flex",
@@ -173,7 +164,6 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 2,
     textAlign: "center",
-    
   },
   button: {
     marginBottom: 40,

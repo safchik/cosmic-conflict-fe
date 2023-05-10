@@ -1,7 +1,17 @@
 import React, { FC, useState } from "react";
-import { StyleSheet, View, Modal, Pressable, Text, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Modal,
+  Pressable,
+  Text,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import ItemCard from "../components/ItemCard";
-
+import { buyItem } from "../utils/api";
+import { setAsyncStorage } from "../utils/asyncStorage";
+import useGlobalStorage from "../hooks/useGlobalStorage";
 interface AccountProps {
   logout: () => void;
 }
@@ -27,6 +37,8 @@ const HealingCardCollection: FC<HealingCardCollectionProps> = ({
   showModal,
 }) => {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const { setValue: setUser } = useGlobalStorage("user");
 
   const handleModalClose = () => {
     setSelectedItem(null);
@@ -35,6 +47,23 @@ const HealingCardCollection: FC<HealingCardCollectionProps> = ({
   const handleItemPress = (item: Item) => {
     setSelectedItem(item);
     showModal(item);
+  };
+
+  const handlePurchase = (item: Item) => {
+    const id = item._id;
+    buyItem(id)
+      .then((response) => {
+        console.log(response);
+        if (response.updatedCharacter) {
+          setUser(response.updatedCharacter);
+        } else {
+          setError(response.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setError(err.message);
+      });
   };
 
   return (
@@ -58,6 +87,9 @@ const HealingCardCollection: FC<HealingCardCollectionProps> = ({
         <Modal animationType="fade" transparent={true}>
           <View style={styles.modalBackground}>
             <View style={styles.modalContainer}>
+              {error === null ? null : (
+                <Text style={{ color: "red" }}>{error}</Text>
+              )}
               <Text style={styles.modalTitle}>{selectedItem.itemName}</Text>
               <Text style={styles.modalText}>Type: {selectedItem.type}</Text>
               {selectedItem.buff && (
@@ -66,16 +98,16 @@ const HealingCardCollection: FC<HealingCardCollectionProps> = ({
               <Text style={styles.modalText}>
                 Cost: {selectedItem.cost} Credits
               </Text>
-              <Pressable
+              <TouchableOpacity
                 style={styles.modalButton}
                 onPress={() => {
                   // possible logic to Subtract cost from user's gold
                   //    user.gold -= selectedItem.cost;
-                  handleModalClose();
+                  handlePurchase(selectedItem);
                 }}
               >
                 <Text style={styles.modalButtonText}>Purchase</Text>
-              </Pressable>
+              </TouchableOpacity>
               <Pressable style={styles.modalButton} onPress={handleModalClose}>
                 <Text style={styles.modalButtonText}>Close</Text>
               </Pressable>
@@ -113,7 +145,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: "center",
     alignItems: "center",
-    textAlign: "center"
+    textAlign: "center",
   },
   modalText: {
     fontSize: 16,

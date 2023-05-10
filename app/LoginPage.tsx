@@ -93,7 +93,6 @@ const LoginPage: FC<LoginPageProps> = () => {
             try {
               await setAsyncStorage("user", values.username);
               const { character } = await login(values);
-              console.log("character", character);
               await setAsyncStorage("user", character[0]);
               router.push({ pathname: "./CharacterPage" });
             } catch (error) {
