@@ -148,14 +148,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 5,
     padding: 10,
-    borderWidth: 25,
+    borderWidth: 15,
+    borderColor: "black",
     borderRadius: 150,
-    backgroundColor: 'white',
     width: 300,
     height: 300,
   },
   userListText: {
+    marginTop: 10,
     textAlign: 'center',
+    fontSize: 20
   },
   userListItemText: {
     flex: 1,
@@ -163,10 +165,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   userListImage: {
+    marginTop: 10,
     width: 100,
     height: 100,
     resizeMode: 'contain',
     borderRadius: 50,
+    justifyContent: 'center',
+   
   },
   modalContainer: {
     flex: 1,
