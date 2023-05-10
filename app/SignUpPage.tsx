@@ -11,7 +11,7 @@ import {
   Image,
   ImageBackground
 } from "react-native";
-import { getAsyncStorage, setAsyncStorage } from "../utils/asyncStorage";
+import { setAsyncStorage } from "../utils/asyncStorage";
 
 //Form validation
 import * as Yup from "yup";
@@ -51,6 +51,7 @@ const SignupSchema = Yup.object().shape({
 const SignUpPage: FC<SignUpPageProps> = () => {
   //needed for Go Back Button
   const router = useRouter();
+  const [error, setError] = useState(null);
 
   // Define an array of background images
   const backgroundImages = [
@@ -67,13 +68,13 @@ const SignUpPage: FC<SignUpPageProps> = () => {
   // Define state to keep track of the current background image
   const [backgroundImageIndex, setBackgroundImageIndex] = useState(0);
 
-  // Use the useEffect hook to change the background image every 8 seconds
+  // Use the useEffect hook to change the background image every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setBackgroundImageIndex((prevIndex) =>
         (prevIndex + 1) % backgroundImages.length
       );
-    }, 8000);
+    }, 10000);
     return () => clearInterval(interval);
   }, [backgroundImageIndex]);
 
@@ -126,9 +127,8 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               router.push({ pathname: "./RaceSelect" });
             })
             .catch((err) => {
-              // TODO render error message in UI
-              console.log(err);
-              // console.log(err.message);
+              console.log(err.message);
+              setError(err.message);
             });
         }}
       >
@@ -143,6 +143,17 @@ const SignUpPage: FC<SignUpPageProps> = () => {
         }) => (
           <>
             <View>
+              {error === null ? null : (
+                <Text
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                    marginBottom: 8,
+                  }}
+                >
+                  {error}
+                </Text>
+              )}
               <Text style={{ fontWeight: "bold" }}>Email</Text>
               {touched.email && errors.email && (
                 <Text style={{ color: "red" }}>{errors.email}</Text>

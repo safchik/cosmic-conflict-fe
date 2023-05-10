@@ -10,6 +10,9 @@ import {
   Pressable,
   ImageBackground
 } from "react-native";
+
+import * as api from "../utils/api";
+
 import { getUserCharacter, login } from "../utils/api";
 import { Audio } from "expo-av";
 
@@ -31,6 +34,7 @@ const LoginSchema = Yup.object().shape({
 const LoginPage: FC<LoginPageProps> = () => {
   //needed for Go Back Button
   const router = useRouter();
+  const [error, setError] = useState(false);
 
   // Define an array of background images
   const backgroundImages = [
@@ -78,7 +82,6 @@ const LoginPage: FC<LoginPageProps> = () => {
       style={styles.background}
       resizeMode="cover"
     >
-
       <SafeAreaView style={styles.form}>
         <Formik
           initialValues={{
@@ -87,23 +90,16 @@ const LoginPage: FC<LoginPageProps> = () => {
           }}
           validationSchema={LoginSchema}
           onSubmit={async (values) => {
-            await setAsyncStorage("user", values.username);
-            login(values)
-              .then(async (userCharacter) => {
-                const fetchedChar = await getUserCharacter(
-                  "username",
-                  values.username
-                );
-                if (fetchedChar) {
-                  await setAsyncStorage("user", fetchedChar);
-                  router.push({ pathname: "./CharacterPage" });
-                } else {
-                  router.push({ pathname: "./RaceSelect" });
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+            try {
+              await setAsyncStorage("user", values.username);
+              const { character } = await login(values);
+              console.log("character", character);
+              await setAsyncStorage("user", character[0]);
+              router.push({ pathname: "./CharacterPage" });
+            } catch (error) {
+              setError(true);
+              console.error(error);
+            }
           }}
         >
           {({
@@ -117,7 +113,18 @@ const LoginPage: FC<LoginPageProps> = () => {
           }) => (
             <>
               <View>
-                <Text style={{ fontWeight: 'bold' }}>Username</Text>
+                {error === false ? null : (
+                  <Text
+                    style={{
+                      color: "red",
+                      fontWeight: "bold",
+                      marginBottom: 8,
+                    }}
+                  >
+                    Incorrect Username or Password
+                  </Text>
+                )}
+                <Text style={{ fontWeight: "bold" }}>Username</Text>
                 {touched.username && errors.username && (
                   <Text>{errors.username}</Text>
                 )}
@@ -130,9 +137,9 @@ const LoginPage: FC<LoginPageProps> = () => {
                 />
               </View>
               <View>
-                <Text style={{ fontWeight: 'bold' }}>Password</Text>
+                <Text style={{ fontWeight: "bold" }}>Password</Text>
                 {touched.password && errors.password && (
-                  <Text>{errors.password}</Text>
+                  <Text style={{ color: "red" }}>{errors.password}</Text>
                 )}
                 <TextInput
                   style={styles.input}
@@ -155,12 +162,14 @@ const LoginPage: FC<LoginPageProps> = () => {
             </>
           )}
         </Formik>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={styles.backButton}
+        >
           <Text>Go Back</Text>
         </TouchableOpacity>
       </SafeAreaView>
-
-    </ImageBackground>
+    </LinearGradient>
   );
 };
 
@@ -184,7 +193,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     padding: 10,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   createAccount: {
     marginTop: 20,

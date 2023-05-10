@@ -1,5 +1,6 @@
-import React, { FC, createContext, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Formik } from "formik";
+
 import {
   StyleSheet,
   Text,
@@ -11,10 +12,11 @@ import {
   Image,
   ImageBackground
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 //Form validation
 import * as Yup from "yup";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { getAsyncStorage, setAsyncStorage } from "../utils/asyncStorage";
 import { createNewCharacter } from "../utils/api";
 import { Audio } from "expo-av";
@@ -41,8 +43,9 @@ const RaceSelect: FC<SignUpPageProps> = () => {
   const router = useRouter();
   const human = require("../assets/images/human.png");
   const alien = require("../assets/images/alien.png");
+  const [character, setCharacter] = useState({});
 
-  useEffect(() => {
+    useEffect(() => {
     const soundObject = new Audio.Sound();
     const playSound = async (): Promise<void> => {
       try {
@@ -65,113 +68,112 @@ const RaceSelect: FC<SignUpPageProps> = () => {
       style={styles.background}
       resizeMode="cover"
     >
-      <SafeAreaView style={styles.form}>
-        <Text style={styles.title}>Select Your Race</Text>
-        <Formik
-          initialValues={{
-            race: "",
-            characterName: "",
-          }}
-          validationSchema={SignupSchema}
-          onSubmit={async (values) => {
-            const currentUser = await getAsyncStorage("user");
+    <SafeAreaView style={styles.form}>
+      <Text style={styles.title}>Select Your Race</Text>
+      <Formik
+        initialValues={{
+          race: "",
+          characterName: "",
+        }}
+        validationSchema={SignupSchema}
+        onSubmit={async (values) => {
+          const currentUser = await getAsyncStorage("user");
 
-            const newCharacter = {
-              race: values.race,
-              characterName: values.characterName,
-              username: currentUser.username,
-            };
-
-            await setAsyncStorage("user", {
-              ...currentUser,
-              race: values.race,
-              characterName: values.characterName,
-            });
-
-            createNewCharacter(newCharacter)
-              .then((response) => {
-                router.push({ pathname: "./CharacterPage" });
-              })
-              .catch((err) => {
-                // TODO render error message in UI
-                console.log(err.message);
+          const newCharacter = {
+            race: values.race,
+            characterName: values.characterName,
+            username: currentUser.username,
+          };
+          createNewCharacter(newCharacter)
+            .then(async (response) => {
+              console.log("newChar", response.character);
+              await setAsyncStorage("user", response.character);
+              router.push({
+                pathname: "./CharacterPage",
               });
-          }}
-        >
-          {({
-            handleChange,
-            handleSubmit,
-            handleBlur,
-            values,
-            errors,
-            touched,
-            isValid,
-          }) => (
-            <>
-              <Text>Select your Race: {values.race}</Text>
-              <View style={styles.images}>
-                <Pressable
-                  style={{
-                    backgroundColor: values.race === "alien" ? "#000" : "#ccc",
-                    padding: 1,
-                    marginVertical: 5,
-                    marginHorizontal: 5,
-                    borderRadius: 10,
-                    borderWidth: 2,
-                  }}
-                  onPress={() => handleChange("race")("human")}
-                >
-                  <Image style={styles.eachImage} source={human} />
-                </Pressable>
-                <Pressable
-                  style={{
-                    backgroundColor: values.race === "human" ? "#000" : "#ccc",
-                    padding: 1,
-                    marginVertical: 5,
-                    marginHorizontal: 5,
-                    borderRadius: 10,
-                    borderWidth: 2,
-                  }}
-                  onPress={() => handleChange("race")("alien")}
-                >
-                  <Image style={styles.eachImage} source={alien} />
-                </Pressable>
-              </View>
-              <View style={styles.bonuses}>
-                <Text style={styles.eachBonusText}>20% Defence Bonus</Text>
-                <Text style={styles.eachBonusText}>20% Attack Bonus</Text>
-              </View>
-              <View>
-                {touched.characterName && errors.characterName && (
-                  <Text>{errors.characterName}</Text>
-                )}
-                <TextInput
-                  style={styles.input}
-                  value={values.characterName}
-                  onChangeText={handleChange("characterName")}
-                  onBlur={handleBlur("characterName")}
-                  placeholder="Character Name"
-                />
-              </View>
-              <View style={styles.button}>
-                <TouchableOpacity
-                  disabled={!isValid}
-                  onPress={(e: any) => handleSubmit(e)}
-                >
-                  <Text>Create Account</Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
-        </Formik>
+            })
+            .catch((err) => {
+              // TODO render error message in UI
+              // (shouldn't need one because can't fail two choice selection)
+              throw err.message;
+            });
+        }}
+      >
+        {({
+          handleChange,
+          handleSubmit,
+          handleBlur,
+          values,
+          errors,
+          touched,
+          isValid,
+        }) => (
+          <>
+            <Text >{values.race}</Text>
+            <View style={styles.images}>
+              <Pressable
+                style={{
+                  backgroundColor: values.race === "alien" ? "#000" : "#ccc",
+                  padding: 1,
+                  marginVertical: 5,
+                  marginHorizontal: 5,
+                  borderRadius: 10,
+                  borderWidth: 2,
+                }}
+                onPress={() => handleChange("race")("human")}
+              >
+                <Image style={styles.eachImage} source={human} />
+              </Pressable>
+              <Pressable
+                style={{
+                  backgroundColor: values.race === "human" ? "#000" : "#ccc",
+                  padding: 1,
+                  marginVertical: 5,
+                  marginHorizontal: 5,
+                  borderRadius: 10,
+                  borderWidth: 2,
+                }}
+                onPress={() => handleChange("race")("alien")}
+              >
+                <Image style={styles.eachImage} source={alien} />
+              </Pressable>
+            </View>
+            <View style={styles.bonuses}>
+              <Text style={styles.eachBonusText}>20% Defence Bonus</Text>
+              <Text style={styles.eachBonusText}>20% Attack Bonus</Text>
+            </View>
+            <View>
+              {touched.characterName && errors.characterName && (
+                <Text>{errors.characterName}</Text>
+              )}
+              <TextInput
+                style={styles.input}
+                value={values.characterName}
+                onChangeText={handleChange("characterName")}
+                onBlur={handleBlur("characterName")}
+                placeholder="Character Name"
+              />
+            </View>
+            <View style={styles.button}>
+              <TouchableOpacity
+                disabled={!isValid}
+                onPress={(e: any) => handleSubmit(e)}
+              >
+                <Text>Create Account</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+      </Formik>
 
-        <View>
-          <Pressable onPress={() => router.back()} style={styles.button}>
-            <Text>Go Back</Text>
-          </Pressable>
-        </View>
-      </SafeAreaView>
-    </ImageBackground >
+      <View>
+        <Pressable onPress={() => router.back()} style={styles.button}>
+          <Text>Go Back</Text>
+        </Pressable>
+      </View>
+    </SafeAreaView>
+    </LinearGradient>
+      
   );
 };
 
@@ -186,11 +188,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-
   },
   title: {
-    fontSize: 40,
+    fontWeight: "bold",
+    fontSize: 35,
+    color: "white",
     marginBottom: 25,
+    textShadowColor: "black",
+    textShadowRadius: 5,
+    textShadowOffset: { width: 2, height: 2 },
   },
   input: {
     height: 40,
@@ -199,6 +205,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     padding: 10,
+    backgroundColor: "white",
   },
   createAccount: {
     marginTop: 20,

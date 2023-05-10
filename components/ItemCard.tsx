@@ -5,8 +5,8 @@ interface ItemCardProps {
   onPress: () => void;
   type: string;
   itemName: string;
-  attackStat: number;
-  defenceStat: number;
+  attack: number;
+  defence: number;
   buff: string | null;
   cost: number;
 }
@@ -15,8 +15,8 @@ const ItemCard = ({
   onPress,
   type,
   itemName,
-  attackStat,
-  defenceStat,
+  attack,
+  defence,
   buff,
   cost,
 }: ItemCardProps) => {
@@ -25,13 +25,13 @@ const ItemCard = ({
       <LinearGradient colors={["#3D3D3D", "#0B7A75"]} style={[styles.card]}>
         <View style={styles.cardBody}>
           <Text style={styles.cardTitle}>{itemName}</Text>
-          {attackStat !== 0 && (
-            <Text style={styles.cardStats}>Attack: {attackStat}</Text>
+          {attack !== 0 && (
+            <Text style={styles.cardStats}>Attack: {attack}</Text>
           )}
-          {defenceStat !== 0 && (
-            <Text style={styles.cardStats}>Defense: {defenceStat}</Text>
+          {defence !== 0 && (
+            <Text style={styles.cardStats}>Defense: {defence}</Text>
           )}
-          {buff && <Text style={styles.cardBuff}>Buff: {buff}</Text>}
+          {buff && <Text style={styles.cardBuff}>{buff}</Text>}
           <Text style={styles.cardCost}>{cost} Credits</Text>
         </View>
       </LinearGradient>
@@ -41,7 +41,7 @@ const ItemCard = ({
 
 const styles = StyleSheet.create({
   card: {
-    width: 120,
+    width: 130,
     height: 130,
     borderRadius: 10,
     marginVertical: 12,
@@ -58,6 +58,10 @@ const styles = StyleSheet.create({
   cardBody: {
     flex: 1,
     alignItems: "center",
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
     justifyContent: "center",
   },
   cardTitle: {
@@ -68,6 +72,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 4,
+    paddingTop: 10,
     textAlign: "center",
   },
   cardStats: {
