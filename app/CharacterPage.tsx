@@ -131,6 +131,14 @@ const CharacterPage: React.FC = () => {
               <Text>Logout</Text>
             </TouchableOpacity>
           </View>
+          <View>
+            <Link href={"./BattleLog"}>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Battle Log</Text>
+              </TouchableOpacity>
+            </Link>
+          </View>
+        </View>
         )}
       </SafeAreaView>
     </ImageBackground>
