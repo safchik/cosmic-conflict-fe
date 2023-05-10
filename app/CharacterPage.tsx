@@ -6,10 +6,12 @@ import {
   StyleSheet,
   Image,
   ImageBackground,
+  SafeAreaView,
 } from "react-native";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import useGlobalStorage from "../hooks/useGlobalStorage";
+import { logout } from "../utils/api";
 
 interface Character {
   characterName: string;
@@ -43,79 +45,94 @@ const CharacterPage: React.FC = () => {
     setIsLoading(false);
   }, [user]);
 
+  const router = useRouter();
+  const handleLogout = () => {
+    logout().then(() => {
+      router.push({ pathname: "./" });
+    });
+  };
+
   return (
     <ImageBackground
       source={require("../assets/images/charPageBG.jpg")}
       style={styles.container}
     >
-      {isLoading ? (
-        <View>
-          <Text style={{ fontWeight: "bold" }}>Loading...</Text>
-        </View>
-      ) : (
-        <View style={styles.container}>
-          <View style={styles.row}>
-            <Text style={styles.title}>{character.characterName}</Text>
-          </View>
-          <View style={styles.imageWrapper}>
-            {character.race === "human" ? (
-              <Image
-                source={require("../assets/images/human.png")}
-                style={styles.image}
-              />
-            ) : (
-              <Image
-                source={require("../assets/images/alien.png")}
-                style={styles.image}
-              />
-            )}
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Attack </Text>
-            <Text style={[styles.value, { color: "red" }]}>
-              {character.attack}
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Defence </Text>
-            <Text style={[styles.value, { color: "#939596" }]}>
-              {character.defence}
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Credits </Text>
-            <Text style={styles.value}>{character.gold}</Text>
-          </View>
+      <SafeAreaView>
+        {isLoading ? (
           <View>
-            <Text style={[styles.items, { color: "white" }]}>Inventory </Text>
-            {!character.inventory || character.inventory.length === 0 ? (
-              <Text style={styles.label}>No Items Held</Text>
-            ) : (
-              character.inventory.map((item) => {
-                return (
-                  <Text key={item} style={styles.items}>
-                    {item}
-                  </Text>
-                );
-              })
-            )}
+            <Text style={{ fontWeight: "bold" }}>Loading...</Text>
           </View>
-          <View>
-            <Link href={"./Shop"}>
-              <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Shop</Text>
-              </TouchableOpacity>
-            </Link>
+        ) : (
+          <View style={styles.container}>
+            <View style={styles.row}>
+              <Text style={styles.title}>{character.characterName}</Text>
+            </View>
+            <View style={styles.imageWrapper}>
+              {character.race === "human" ? (
+                <Image
+                  source={require("../assets/images/human.png")}
+                  style={styles.image}
+                />
+              ) : (
+                <Image
+                  source={require("../assets/images/alien.png")}
+                  style={styles.image}
+                />
+              )}
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.label}>Attack </Text>
+              <Text style={[styles.value, { color: "red" }]}>
+                {character.attack}
+              </Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.label}>Defence </Text>
+              <Text style={[styles.value, { color: "#939596" }]}>
+                {character.defence}
+              </Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.label}>Credits </Text>
+              <Text style={styles.value}>{character.gold}</Text>
+            </View>
+            <View>
+              <Text style={[styles.items, { color: "white" }]}>Inventory </Text>
+              {!character.inventory || character.inventory.length === 0 ? (
+                <Text style={styles.label}>No Items Held</Text>
+              ) : (
+                character.inventory.map((item) => {
+                  return (
+                    <Text key={item} style={styles.items}>
+                      {item}
+                    </Text>
+                  );
+                })
+              )}
+            </View>
+            <View>
+              <Link href={"./Shop"}>
+                <TouchableOpacity style={styles.button}>
+                  <Text style={styles.buttonText}>Shop</Text>
+                </TouchableOpacity>
+              </Link>
+            </View>
+            <View>
+              <Link href={"./UserListPage"}>
+                <Pressable style={styles.button}>
+                  <Text style={styles.buttonText}>Battle!</Text>
+                </Pressable>
+              </Link>
+            </View>
+            <TouchableOpacity
+              onPress={handleLogout}
+              style={styles.logoutButton}
+            >
+              <Text>Logout</Text>
+            </TouchableOpacity>
           </View>
-          <View>
-            <Link href={"./Battle"}>
-              <Pressable style={styles.button}>
-                <Text style={styles.buttonText}>Battle!</Text>
-              </Pressable>
-            </Link>
-          </View>
-        </View>
-      )}
+        )}
+      </SafeAreaView>
     </ImageBackground>
   );
 };
@@ -178,6 +195,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
+  logoutButton: {
+    margin: 10,
+    marginTop: 50,
+    padding: 15,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "black",
+    backgroundColor: "#b094cc",
+    shadowColor: "#999",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+  },
+
   image: {
     width: 100,
     height: 100,
