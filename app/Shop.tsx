@@ -18,6 +18,7 @@ import { useRouter } from "expo-router";
 interface AccountProps {
   logout: () => void;
   showModal: () => void;
+
 }
 
 const Shop: FC<AccountProps> = ({ logout }) => {
@@ -52,7 +53,7 @@ const Shop: FC<AccountProps> = ({ logout }) => {
         console.log(error);
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -165,9 +166,8 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: "Roboto",
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: "bold",
-    marginLeft: 20,
     color: "gold",
     textShadowColor: "black",
     textShadowOffset: { width: 2, height: 2 },
