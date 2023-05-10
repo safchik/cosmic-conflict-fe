@@ -79,9 +79,10 @@ export const getUserCharacter = async (queryKey, queryValue) => {
   }
 };
 
-export const attackCharacter = async (characterName) => {
+export const attackCharacter = async (enemy) => {
+  const character = enemy.characterName;
   try {
-    const response = await gameAPI.post(`/battle/attack/${characterName}`);
+    const response = await gameAPI.post(`/battle/attack/${character}`);
     return response.data;
   } catch (err) {
     throw err.response.data;
