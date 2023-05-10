@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from 'react';
 
 import {
   Text,
@@ -10,16 +10,15 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
-} from "react-native";
+} from 'react-native';
 
-import { Link } from "expo-router";
-import usersData from "./users";
-import BattleAction from "./BattleAction";
-import { LinearGradient } from "expo-linear-gradient";
-import { useNavigation, useRouter } from "expo-router";
+import { Link } from 'expo-router';
+import usersData from './users';
+import BattleAction from './BattleAction';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation, useRouter } from 'expo-router';
 
-import * as api from "../utils/api";
-import { setAsyncStorage } from "../utils/asyncStorage";
+import * as api from '../utils/api';
 interface User {
   username: string;
   race: string;
@@ -29,12 +28,13 @@ interface User {
   health: number;
   image: any;
 }
-import useGlobalStorage from "../hooks/useGlobalStorage";
+import useGlobalStorage from '../hooks/useGlobalStorage';
+
 const UserListItem: FC<{ user: User }> = ({ user }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const router = useRouter();
-  const { value, writeItemToStorage } = useGlobalStorage("selectedUser");
+  const { setValue: setSelectedUser } = useGlobalStorage('selectedUser');
 
   const showModal = () => {
     setModalVisible(true);
@@ -45,8 +45,8 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
   };
 
   const handleAttack = () => {
-    writeItemToStorage(user);
-    router.push({ pathname: "./BattleAction" });
+    setSelectedUser(user);
+    router.push({ pathname: './BattleAction' });
   };
 
   return (
@@ -54,21 +54,21 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
       <View style={styles.userListItemText}>
         <TouchableOpacity onPress={showModal}>
           <Image source={user.image} style={styles.userListImage} />
-          <Text style={[styles.userListText, { fontFamily: "Roboto" }]}>
+          <Text style={[styles.userListText, { fontFamily: 'Roboto' }]}>
             {user.username}
           </Text>
-          <Text style={[styles.userListText, { fontFamily: "Roboto" }]}>
+          <Text style={[styles.userListText, { fontFamily: 'Roboto' }]}>
             Credits: {user.gold}
           </Text>
         </TouchableOpacity>
       </View>
       <Modal visible={modalVisible} animationType="fade" transparent>
         <LinearGradient
-          colors={["#3D3D3D", "#000000"]}
+          colors={['#3D3D3D', '#000000']}
           style={styles.modalContainer}
         >
           <View style={styles.modalContent}>
-            <Text style={[styles.modalTitle, { fontFamily: "Roboto" }]}>
+            <Text style={[styles.modalTitle, { fontFamily: 'Roboto' }]}>
               {user.username}
             </Text>
             <Text style={styles.modalText}>Race: {user.race}</Text>
@@ -77,14 +77,14 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
             <Text style={styles.modalText}>Attack: {user.attack}</Text>
             <Text style={styles.modalText}>Defence: {user.defence}</Text>
             <TouchableOpacity style={styles.modalButton} onPress={hideModal}>
-              <Text style={[styles.modalButtonText, { fontFamily: "Roboto" }]}>
+              <Text style={[styles.modalButtonText, { fontFamily: 'Roboto' }]}>
                 Close
               </Text>
             </TouchableOpacity>
 
             <Link
               href={{
-                pathname: "./BattleAction",
+                pathname: './BattleAction',
                 // , params: { user: user }
               }}
             >
@@ -93,7 +93,7 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
                 onPress={handleAttack}
               >
                 <Text
-                  style={[styles.modalButtonText, { fontFamily: "Roboto" }]}
+                  style={[styles.modalButtonText, { fontFamily: 'Roboto' }]}
                 >
                   Attack
                 </Text>
@@ -109,6 +109,7 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
 const UserListPage: FC = () => {
   const [userList, setUserList] = useState<User[]>(usersData);
   const [users, setUsers] = useState<User[]>([]);
+
   useEffect(() => {
     api
       .getAllCharacters()
@@ -121,8 +122,9 @@ const UserListPage: FC = () => {
         console.log(err);
       });
   }, []);
+
   return (
-    <LinearGradient colors={["#7DF9FF", "#3D3D3D"]} style={styles.container}>
+    <LinearGradient colors={['#7DF9FF', '#3D3D3D']} style={styles.container}>
       <SafeAreaView>
         <FlatList
           data={userList}
@@ -137,69 +139,69 @@ const UserListPage: FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   userListItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginVertical: 5,
     padding: 10,
     borderWidth: 25,
     borderRadius: 150,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     width: 300,
     height: 300,
   },
   userListText: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   userListItemText: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   userListImage: {
     width: 100,
     height: 100,
-    resizeMode: "contain",
+    resizeMode: 'contain',
     borderRadius: 50,
   },
   modalContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   modalContent: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 20,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     width: 300,
   },
   modalTitle: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 10,
-    textAlign: "center",
+    textAlign: 'center',
   },
   modalText: {
     fontSize: 16,
     marginVertical: 5,
-    textAlign: "center",
+    textAlign: 'center',
   },
   modalButton: {
-    backgroundColor: "#2e4cff",
+    backgroundColor: '#2e4cff',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
     marginTop: 10,
   },
   modalButtonText: {
-    color: "white",
-    fontWeight: "bold",
+    color: 'white',
+    fontWeight: 'bold',
     fontSize: 16,
   },
 });
