@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,27 +7,26 @@ import {
   TextInput,
   TouchableOpacity,
   Pressable,
-} from "react-native";
-import { getAsyncStorage } from "../utils/asyncStorage";
-import * as api from "../utils/api";
-import useGlobalStorage from "../hooks/useGlobalStorage";
+} from 'react-native';
+import * as api from '../utils/api';
+import useGlobalStorage from '../hooks/useGlobalStorage';
 interface BattleProps {
   character: string;
   user: object;
 }
 
 const BattleAction: FC<BattleProps> = (params) => {
-  const { value } = useGlobalStorage("selectedUser");
+  const { value: selectedUser } = useGlobalStorage('selectedUser');
   const [battle, setBattle] = useState();
 
   useEffect(() => {
-    if (value) {
-      api.attackCharacter(value).then((result) => {
+    if (selectedUser) {
+      api.attackCharacter(selectedUser).then((result) => {
         console.log(result);
       });
     }
-  }, [value]);
-  console.log("in battle:", value);
+  }, [selectedUser]);
+  console.log('in battle:', selectedUser);
 
   return (
     <View>
