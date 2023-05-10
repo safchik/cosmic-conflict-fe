@@ -28,8 +28,6 @@ const HealingCardCollection: FC<HealingCardCollectionProps> = ({
 }) => {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
-  const human = require("../assets/images/human.png");
-
   const handleModalClose = () => {
     setSelectedItem(null);
   };
@@ -62,12 +60,6 @@ const HealingCardCollection: FC<HealingCardCollectionProps> = ({
             <View style={styles.modalContainer}>
               <Text style={styles.modalTitle}>{selectedItem.itemName}</Text>
               <Text style={styles.modalText}>Type: {selectedItem.type}</Text>
-              <Text style={styles.modalText}>
-                Attack: {selectedItem.attack}
-              </Text>
-              <Text style={styles.modalText}>
-                Defence: {selectedItem.defence}
-              </Text>
               {selectedItem.buff && (
                 <Text style={styles.modalText}>Buff: {selectedItem.buff}</Text>
               )}
@@ -112,6 +104,8 @@ const styles = StyleSheet.create({
     width: "20%",
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 2,
+    borderColor: "black",
   },
   modalTitle: {
     fontSize: 20,
@@ -119,6 +113,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: "center",
     alignItems: "center",
+    textAlign: "center"
   },
   modalText: {
     fontSize: 16,
@@ -132,6 +127,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 20,
     alignSelf: "center",
+    borderWidth: 2,
+    borderColor: "black",
   },
   modalButtonText: {
     color: "white",

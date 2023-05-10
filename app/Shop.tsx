@@ -13,6 +13,7 @@ import WeaponCardCollection from "./WeaponCardCollection";
 import ArmorCardCollection from "./ArmorCardCollection";
 import HealingCardCollection from "./HealingCardCollection";
 import * as api from "../utils/api";
+import { useRouter } from "expo-router";
 
 interface AccountProps {
   logout: () => void;
@@ -23,6 +24,7 @@ const Shop: FC<AccountProps> = ({ logout }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [items, setItems] = useState([]);
   const [setModalItem] = useState("");
+  const router = useRouter();
 
   const showModal = () => {
     setModalVisible(true);
@@ -95,8 +97,11 @@ const Shop: FC<AccountProps> = ({ logout }) => {
           />
         </ScrollView>
         <Text style={styles.credits}>
-          Gold: <Text style={{ color: "white" }}>{user.gold}</Text>
+          Total Credits: <Text style={{ color: "white" }}>{user.gold}</Text>
         </Text>
+        <Pressable onPress={() => router.back()} style={styles.button}>
+          <Text>Go Back</Text>
+        </Pressable>
       </SafeAreaView>
     </ImageBackground>
   );
@@ -168,6 +173,7 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 2,
     textAlign: "center",
+    
   },
   button: {
     marginBottom: 40,
@@ -178,6 +184,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
+    margin: 10,
+    padding: 10,
+    borderWidth: 2,
+    borderColor: "black",
   },
   buttonText: {
     fontSize: 18,
