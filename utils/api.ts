@@ -1,7 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
 
 const gameAPI = axios.create({
-  baseURL: 'http://localhost:9090/api',
+  baseURL: "https://cosmic-conflict-api.onrender.com/api",
 });
 
 interface NewAccount {
@@ -12,7 +12,7 @@ interface NewAccount {
 
 export const createNewAccount = async (postedAccount: NewAccount) => {
   try {
-    const response = await gameAPI.post('/auth/signup', postedAccount);
+    const response = await gameAPI.post("/auth/signup", postedAccount);
     return response.data;
   } catch (err) {
     throw err.response.data;
@@ -27,7 +27,7 @@ interface Account {
 export const login = async (account: Account) => {
   console.log(account);
   try {
-    const response = await gameAPI.post('/auth/login', account);
+    const response = await gameAPI.post("/auth/login", account);
     return response.data;
   } catch (err) {
     throw err;
@@ -36,7 +36,7 @@ export const login = async (account: Account) => {
 
 export const logout = async () => {
   try {
-    const response = await gameAPI.post('/auth/logout');
+    const response = await gameAPI.post("/auth/logout");
     return response.data;
   } catch (err) {
     throw err.response.data;
@@ -45,7 +45,7 @@ export const logout = async () => {
 
 export const getAllCharacters = async () => {
   try {
-    const response = await gameAPI.get('/characters');
+    const response = await gameAPI.get("/characters");
     return response.data;
   } catch (err) {
     throw err.response.data;
@@ -60,7 +60,7 @@ interface Character {
 
 export const createNewCharacter = async (newCharacter: Character) => {
   try {
-    const response = await gameAPI.post('/characters', newCharacter);
+    const response = await gameAPI.post("/characters", newCharacter);
     return response.data;
   } catch (err) {
     throw err.response.data;
@@ -99,7 +99,7 @@ export const getBattleLog = async () => {
 
 export const getAllItems = async () => {
   try {
-    const response = await gameAPI.get('/shop');
+    const response = await gameAPI.get("/shop");
     return response.data;
   } catch (err) {
     throw err.response.data;
