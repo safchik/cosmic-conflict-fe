@@ -8,7 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   Pressable,
-  ImageBackground
+  ImageBackground,
 } from "react-native";
 
 import * as api from "../utils/api";
@@ -21,7 +21,7 @@ import * as Yup from "yup";
 import { useRouter } from "expo-router";
 import { setAsyncStorage } from "../utils/asyncStorage";
 
-interface LoginPageProps { }
+interface LoginPageProps {}
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required(),
@@ -52,8 +52,8 @@ const LoginPage: FC<LoginPageProps> = () => {
   // Use the useEffect hook to change the background image every 8 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setBackgroundImageIndex((prevIndex) =>
-        (prevIndex + 1) % backgroundImages.length
+      setBackgroundImageIndex(
+        (prevIndex) => (prevIndex + 1) % backgroundImages.length
       );
     }, 8000);
     return () => clearInterval(interval);
@@ -169,7 +169,7 @@ const LoginPage: FC<LoginPageProps> = () => {
           <Text>Go Back</Text>
         </TouchableOpacity>
       </SafeAreaView>
-    </LinearGradient>
+    </ImageBackground>
   );
 };
 
