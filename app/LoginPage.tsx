@@ -42,20 +42,18 @@ const LoginPage: FC<LoginPageProps> = () => {
           }}
           validationSchema={LoginSchema}
           onSubmit={async (values) => {
-            await setAsyncStorage("user", values.username);
-            login(values)
-              .then(async (userCharacter) => {
-                if (userCharacter) {
-                  await setAsyncStorage("user", userCharacter);
-                  router.push({ pathname: "./CharacterPage" });
-                } else {
-                  router.push({ pathname: "./RaceSelect" });
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-                setError(err.message);
-              });
+            try {
+              await setAsyncStorage("user", values.username);
+              const { character } = await login(values);
+              const userCharacter = await getUserCharacter(
+                "characterName",
+                character[0].characterName
+              );
+              await setAsyncStorage("user", userCharacter.character);
+              router.push({ pathname: "./CharacterPage" });
+            } catch (error) {
+              console.error(error);
+            }
           }}
         >
           {({
@@ -95,7 +93,8 @@ const LoginPage: FC<LoginPageProps> = () => {
               <View>
                 <Text style={{ fontWeight: "bold" }}>Password</Text>
                 {touched.password && errors.password && (
-                  <Text>{errors.password}</Text>
+
+                  <Text style={{ color: "red" }}>{errors.password}</Text>
                 )}
                 <TextInput
                   style={styles.input}

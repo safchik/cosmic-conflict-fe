@@ -42,10 +42,17 @@ const Shop: FC<AccountProps> = ({ logout }) => {
   };
 
   useEffect(() => {
-    api.getAllItems().then((data) => {
-      setItems(data.shopItems);
-    });
-  });
+    const fetchData = async () => {
+      try {
+        const data = await api.getAllItems();
+        setItems(data.shopItems);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    fetchData();
+  }, []);
 
   return (
     <ImageBackground
@@ -225,18 +232,6 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 4,
   },
-  // addToBasketButton: {
-  //   backgroundColor: "#2196F3",
-  //   borderRadius: 20,
-  //   padding: 10,
-  //   marginTop: 15,
-  // },
-
-  // addToBasketText: {
-  //   color: "white",
-  //   fontWeight: "bold",
-  //   textAlign: "center",
-  // },
 });
 
 export default Shop;

@@ -72,6 +72,7 @@ export const getUserCharacter = async (queryKey, queryValue) => {
     const response = await gameAPI.get(
       `/characters/single?${queryKey}=${queryValue}`
     );
+    // console.log(response.data);
     return response.data;
   } catch (err) {
     throw err.response.data;
