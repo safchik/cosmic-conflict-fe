@@ -30,7 +30,7 @@ const LoginSchema = Yup.object().shape({
 const LoginPage: FC<LoginPageProps> = () => {
   //needed for Go Back Button
   const router = useRouter();
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
 
   return (
     <LinearGradient colors={["#3D3D3D", "#7DF9FF"]} style={styles.form}>
@@ -45,13 +45,11 @@ const LoginPage: FC<LoginPageProps> = () => {
             try {
               await setAsyncStorage("user", values.username);
               const { character } = await login(values);
-              const userCharacter = await getUserCharacter(
-                "characterName",
-                character[0].characterName
-              );
-              await setAsyncStorage("user", userCharacter.character);
+              console.log("character", character);
+              await setAsyncStorage("user", character);
               router.push({ pathname: "./CharacterPage" });
             } catch (error) {
+              setError(true);
               console.error(error);
             }
           }}
@@ -93,7 +91,6 @@ const LoginPage: FC<LoginPageProps> = () => {
               <View>
                 <Text style={{ fontWeight: "bold" }}>Password</Text>
                 {touched.password && errors.password && (
-
                   <Text style={{ color: "red" }}>{errors.password}</Text>
                 )}
                 <TextInput
