@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { Formik } from "formik";
 import {
   StyleSheet,
@@ -8,19 +8,20 @@ import {
   TextInput,
   TouchableOpacity,
   Pressable,
+  ImageBackground
 } from "react-native";
 
 import * as api from "../utils/api";
 
 import { getUserCharacter, login } from "../utils/api";
-import { LinearGradient } from "expo-linear-gradient";
+import { Audio } from "expo-av";
 
 //Form validation
 import * as Yup from "yup";
 import { useRouter } from "expo-router";
 import { setAsyncStorage } from "../utils/asyncStorage";
 
-interface LoginPageProps {}
+interface LoginPageProps { }
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required(),
@@ -35,8 +36,52 @@ const LoginPage: FC<LoginPageProps> = () => {
   const router = useRouter();
   const [error, setError] = useState(false);
 
+  // Define an array of background images
+  const backgroundImages = [
+    require("../assets/collection/fightscene/scene2.png"),
+    require("../assets/collection/fightscene/scene3.png"),
+    require("../assets/collection/fightscene/scene4.png"),
+    require("../assets/collection/fightscene/scene5.png"),
+  ];
+
+  const backgroundSound = require("../assets/media/radio.wav");
+
+  // Define state to keep track of the current background image
+  const [backgroundImageIndex, setBackgroundImageIndex] = useState(0);
+
+  // Use the useEffect hook to change the background image every 8 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBackgroundImageIndex((prevIndex) =>
+        (prevIndex + 1) % backgroundImages.length
+      );
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [backgroundImageIndex]);
+
+  useEffect(() => {
+    const soundObject = new Audio.Sound();
+    const playSound = async (): Promise<void> => {
+      try {
+        await soundObject.loadAsync(backgroundSound);
+        await soundObject.setIsLoopingAsync(true);
+        await soundObject.playAsync();
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    playSound();
+    return (): void => {
+      soundObject.unloadAsync();
+    };
+  }, []);
+
   return (
-    <LinearGradient colors={["#3D3D3D", "#7DF9FF"]} style={styles.form}>
+    <ImageBackground
+      source={backgroundImages[backgroundImageIndex]}
+      style={styles.background}
+      resizeMode="cover"
+    >
       <SafeAreaView style={styles.form}>
         <Formik
           initialValues={{
@@ -131,6 +176,11 @@ const LoginPage: FC<LoginPageProps> = () => {
 export default LoginPage;
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   form: {
     flex: 1,
     alignItems: "center",
@@ -158,7 +208,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     borderColor: "black",
-    backgroundColor: "white",
+    backgroundColor: "#b094cc",
+    shadowColor: "#999",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    elevation: 5,
   },
   backButton: {
     margin: 10,
@@ -166,7 +224,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     borderColor: "black",
-    backgroundColor: "white",
+    backgroundColor: "#b094cc",
+    shadowColor: "#999",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    elevation: 5,
     position: "absolute",
     top: 50,
     right: 5,

@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
+  ImageBackground
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -18,6 +19,9 @@ import * as Yup from "yup";
 import { useRouter } from "expo-router";
 import { getAsyncStorage, setAsyncStorage } from "../utils/asyncStorage";
 import { createNewCharacter } from "../utils/api";
+import { Audio } from "expo-av";
+
+const splashSound = require("../assets/media/splash.mp3");
 
 interface SignUpPageProps {
   human: Image;
@@ -41,9 +45,29 @@ const RaceSelect: FC<SignUpPageProps> = () => {
   const alien = require("../assets/images/alien.png");
   const [character, setCharacter] = useState({});
 
-  return (
-    <LinearGradient colors={["#3D3D3D", "#7DF9FF"]} style={styles.form}>
+    useEffect(() => {
+    const soundObject = new Audio.Sound();
+    const playSound = async (): Promise<void> => {
+      try {
+        await soundObject.loadAsync(splashSound);
+        await soundObject.setIsLoopingAsync(true);
+        await soundObject.playAsync();
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    playSound();
+    return (): void => {
+      soundObject.unloadAsync();
+    };
+  }, []);
 
+  return (
+    <ImageBackground
+      source={require("../assets/collection/fightscene/download.gif")}
+      style={styles.background}
+      resizeMode="cover"
+    >
     <SafeAreaView style={styles.form}>
       <Text style={styles.title}>Select Your Race</Text>
       <Formik
@@ -149,15 +173,21 @@ const RaceSelect: FC<SignUpPageProps> = () => {
       </View>
     </SafeAreaView>
     </LinearGradient>
+      
   );
 };
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+
+    justifyContent: "center",
+    alignItems: "center",
+  },
   form: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "#f62681",
   },
   title: {
     fontWeight: "bold",
@@ -191,8 +221,19 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "black",
-    backgroundColor: "white",
+    backgroundColor: "#99beeb",
+    shadowColor: "#999",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    elevation: 5,
+  },
+  backgroundImages: {
+    display: "flex",
+    flexDirection: "column"
   },
   images: {
     display: "flex",

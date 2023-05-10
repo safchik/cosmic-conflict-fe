@@ -17,10 +17,11 @@ export const loadFonts = async () => {
     "sci-fi-font": require("../assets/images/Fonts/AquireBold-8Ma60.otf"),
   });
 };
-import { Audio, AVPlaybackStatus } from "expo-av";
+import { Audio } from "expo-av";
 
-const splashSound = require("../assets/media/splash.mp3");
 const placeholderLogo = require("../assets/images/placeholderLogo.png");
+const backgroundSound = require("../assets/media/level.wav");
+const clickSound = require("../assets/media/open.wav");
 
 //LOCKS SCREEN TO PORTRAIT
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -31,7 +32,7 @@ export default function App() {
     const soundObject = new Audio.Sound();
     const playSound = async (): Promise<void> => {
       try {
-        await soundObject.loadAsync(splashSound);
+        await soundObject.loadAsync(backgroundSound);
         await soundObject.setIsLoopingAsync(true);
         await soundObject.playAsync();
       } catch (err) {
@@ -101,15 +102,25 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: 10,
-    padding: 10,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "black",
-    backgroundColor: "white",
+    paddingVertical: 15,
+    paddingHorizontal: 25,
+    borderRadius: 15,
+    backgroundColor: "#b094cc",
+    shadowColor: "#999",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    elevation: 5,
   },
   buttonText: {
-    color: "black",
+    color: "white",
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 24,
+    textAlign: "center",
+    textTransform: "uppercase",
   },
 });
+

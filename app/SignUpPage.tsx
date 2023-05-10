@@ -9,14 +9,15 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
+  ImageBackground
 } from "react-native";
 import { setAsyncStorage } from "../utils/asyncStorage";
 
 //Form validation
 import * as Yup from "yup";
-import { useRouter } from "expo-router";
-import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation, useRouter } from "expo-router";
 import { createNewAccount } from "../utils/api";
+import { Audio } from "expo-av";
 
 interface SignUpPageProps {
   human: Image;
@@ -52,8 +53,54 @@ const SignUpPage: FC<SignUpPageProps> = () => {
   const router = useRouter();
   const [error, setError] = useState(null);
 
+  // Define an array of background images
+  const backgroundImages = [
+    require("../assets/collection/fightscene/scene6.jpg"),
+    require("../assets/collection/fightscene/scene7.jpg"),
+    require("../assets/collection/fightscene/scene8.jpg"),
+    require("../assets/collection/fightscene/scene9.jpg"),
+    require("../assets/collection/fightscene/scene91.jpg"),
+  ];
+
+  const backgroundSound = require("../assets/media/suspence.wav");
+
+
+  // Define state to keep track of the current background image
+  const [backgroundImageIndex, setBackgroundImageIndex] = useState(0);
+
+  // Use the useEffect hook to change the background image every 10 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBackgroundImageIndex((prevIndex) =>
+        (prevIndex + 1) % backgroundImages.length
+      );
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [backgroundImageIndex]);
+
+  useEffect(() => {
+    const soundObject = new Audio.Sound();
+    const playSound = async (): Promise<void> => {
+      try {
+        await soundObject.loadAsync(backgroundSound);
+        await soundObject.setIsLoopingAsync(true);
+        await soundObject.playAsync();
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    playSound();
+    return (): void => {
+      soundObject.unloadAsync();
+    };
+  }, []);
+
   return (
-    <LinearGradient colors={["#3D3D3D", "#7DF9FF"]} style={styles.form}>
+    <ImageBackground
+      source={backgroundImages[backgroundImageIndex]}
+      style={styles.background}
+      resizeMode="cover"
+    >
       <Text style={styles.title}>Create your character</Text>
       <Formik
         initialValues={{
@@ -174,16 +221,20 @@ const SignUpPage: FC<SignUpPageProps> = () => {
       <Pressable onPress={() => router.back()} style={styles.backButton}>
         <Text>Go Back</Text>
       </Pressable>
-    </LinearGradient>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   form: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "#f62681",
   },
   title: {
     fontWeight: "bold",
@@ -214,22 +265,25 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: 10,
-    padding: 10,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "black",
-    backgroundColor: "white",
-    shadowColor: "#000",
+    paddingVertical: 15,
+    paddingHorizontal: 25,
+    borderRadius: 15,
+    backgroundColor: "#b094cc",
+    shadowColor: "#999",
     shadowOffset: {
-      width: 2,
-      height: 2,
+      width: 0,
+      height: 9,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    elevation: 5,
   },
   buttonText: {
-    fontSize: 18,
+    color: "white",
     fontWeight: "bold",
+    fontSize: 24,
+    textAlign: "center",
+    textTransform: "uppercase",
   },
   images: {
     display: "flex",
@@ -254,8 +308,15 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "black",
-    backgroundColor: "white",
+    backgroundColor: "#b7a8c9",
+    shadowColor: "#999",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    elevation: 5,
     position: "absolute",
     top: 50,
     right: 5,
