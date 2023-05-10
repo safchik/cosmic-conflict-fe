@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-        
+
 import {
   Text,
   SafeAreaView,
@@ -11,11 +11,19 @@ import {
   Modal,
   Pressable,
 } from "react-native";
+
+import { Link } from "expo-router";
 import usersData from "./users";
+import BattleAction from "./BattleAction";
+import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation, useRouter } from "expo-router";
+
+
 import { LinearGradient } from "expo-linear-gradient";
 
-import * as api from "../utils/api";
 
+import * as api from "../utils/api";
+import { setAsyncStorage } from "../utils/asyncStorage";
 interface User {
   username: string;
   race: string;
@@ -25,9 +33,12 @@ interface User {
   health: number;
   image: any;
 }
-
+import useGlobalStorage from "../hooks/useGlobalStorage";
 const UserListItem: FC<{ user: User }> = ({ user }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation();
+  const router = useRouter();
+  const { value, writeItemToStorage } = useGlobalStorage("selectedUser");
 
   const showModal = () => {
     setModalVisible(true);
@@ -37,11 +48,12 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
     setModalVisible(false);
   };
 
-  useEffect(() => {
-    api.getAllCharacters().then((data) => {
-      console.log(data);
-    });
-  });
+
+  const handleAttack = () => {
+    writeItemToStorage(user);
+    router.push({ pathname: "./BattleAction" });
+  };
+
 
   return (
     <View style={styles.userListItem}>
@@ -51,17 +63,25 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
           <Text style={[styles.userListText, { fontFamily: "Roboto" }]}>
             {user.username}
           </Text>
+          <Text style={[styles.userListText, { fontFamily: "Roboto" }]}>
+            Credits: {user.gold}
+          </Text>
         </TouchableOpacity>
       </View>
       <Modal visible={modalVisible} animationType="fade" transparent>
-        <LinearGradient colors={["#3D3D3D"]} style={styles.modalContainer}>
+
+        <LinearGradient
+          colors={["#3D3D3D", "#000000"]}
+          style={styles.modalContainer}
+        >
+
           <View style={styles.modalContent}>
             <Text style={[styles.modalTitle, { fontFamily: "Roboto" }]}>
               {user.username}
             </Text>
             <Text style={styles.modalText}>Race: {user.race}</Text>
             <Text style={styles.modalText}>Health: {user.health}</Text>
-            <Text style={styles.modalText}>Gold: {user.gold}</Text>
+            <Text style={styles.modalText}>Credits: {user.gold}</Text>
             <Text style={styles.modalText}>Attack: {user.attack}</Text>
             <Text style={styles.modalText}>Defence: {user.defence}</Text>
             <TouchableOpacity style={styles.modalButton} onPress={hideModal}>
@@ -69,11 +89,25 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
                 Close
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.modalButton}>
-              <Text style={[styles.modalButtonText, { fontFamily: "Roboto" }]}>
-                Attack
-              </Text>
-            </TouchableOpacity>
+
+            <Link
+              href={{
+                pathname: "./BattleAction",
+                // , params: { user: user }
+              }}
+            >
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={handleAttack}
+              >
+                <Text
+                  style={[styles.modalButtonText, { fontFamily: "Roboto" }]}
+                >
+                  Attack
+                </Text>
+              </TouchableOpacity>
+            </Link>
+
           </View>
         </LinearGradient>
       </Modal>
@@ -83,7 +117,19 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
 
 const UserListPage: FC = () => {
   const [userList, setUserList] = useState<User[]>(usersData);
-
+  const [users, setUsers] = useState<User[]>([]);
+  useEffect(() => {
+    api
+      .getUsers()
+      .then((data) => {
+        const usersData = data.data as User[];
+        setUsers(usersData);
+        console.log(users);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   return (
     <LinearGradient colors={["#7DF9FF", "#3D3D3D"]} style={styles.container}>
       <SafeAreaView>

@@ -83,10 +83,10 @@ const CharacterPage: React.FC = () => {
           </Link>
         </View>
         <View>
-          <Link href={"./Battle"}>
-            <Pressable style={styles.button}>
+          <Link href={"./UserListPage"}>
+            <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>Battle!</Text>
-            </Pressable>
+            </TouchableOpacity>
           </Link>
         </View>
       </View>

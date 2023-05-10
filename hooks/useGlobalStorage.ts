@@ -20,8 +20,9 @@ function useGlobalStorage(key) {
   useEffect(() => {
     // sets new value in state
     readItemFromStorage();
-    // console.log({ value });
-  }, [value]);
+
+  }, []);
+
 
   return { value, writeItemToStorage };
 }
