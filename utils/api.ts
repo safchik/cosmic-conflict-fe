@@ -13,7 +13,6 @@ export const createNewAccount = async (postedAccount) => {
 };
 
 export const login = async (account) => {
-  // console.log(account);
   const response = await gameAPI.post("/login", account);
   return response.data;
 };
@@ -28,5 +27,14 @@ export const getUsers = async () => {
 
 export const getAllBattles = async () => {
   const response = await gameAPI.get("/log");
+  return response;
+};
+
+export const postBattle = async (characterName) => {
+  console.log("in battlerrr: ", characterName);
+
+  const response = await gameAPI.post(
+    `/battle/attack/${characterName.username}`
+  );
   return response;
 };
