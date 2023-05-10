@@ -1,4 +1,4 @@
-import React, { FC, createContext, useState } from "react";
+import React, { FC, createContext, useEffect, useState } from "react";
 import { Formik } from "formik";
 import {
   StyleSheet,
@@ -10,12 +10,13 @@ import {
   Pressable,
   Image,
 } from "react-native";
-import * as api from "../utils/api";
+import { setAsyncStorage } from "../utils/asyncStorage";
 
 //Form validation
 import * as Yup from "yup";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import { createNewAccount } from "../utils/api";
 
 interface SignUpPageProps {
   human: Image;
@@ -47,9 +48,9 @@ const SignupSchema = Yup.object().shape({
 });
 
 const SignUpPage: FC<SignUpPageProps> = () => {
-  const [user, setUser] = useState<object>({});
   //needed for Go Back Button
   const router = useRouter();
+  const [error, setError] = useState(null);
 
   return (
     <LinearGradient colors={["#3D3D3D", "#7DF9FF"]} style={styles.form}>
@@ -62,16 +63,26 @@ const SignUpPage: FC<SignUpPageProps> = () => {
           confirmPassword: "",
         }}
         validationSchema={SignupSchema}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={async (values) => {
           const newAccount = {
             email: values.email,
             username: values.username,
             password: values.password,
           };
-          setUser(newAccount);
-          api.createNewAccount(newAccount);
-          router.push({ pathname: "./RaceSelect" });
+          const newUser = {
+            username: values.username,
+          };
+
+          await setAsyncStorage("user", newUser);
+
+          createNewAccount(newAccount)
+            .then((response) => {
+              router.push({ pathname: "./RaceSelect" });
+            })
+            .catch((err) => {
+              console.log(err.message);
+              setError(err.message);
+            });
         }}
       >
         {({
@@ -85,8 +96,21 @@ const SignUpPage: FC<SignUpPageProps> = () => {
         }) => (
           <>
             <View>
-              <Text>Email</Text>
-              {touched.email && errors.email && <Text>{errors.email}</Text>}
+              {error === null ? null : (
+                <Text
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                    marginBottom: 8,
+                  }}
+                >
+                  {error}
+                </Text>
+              )}
+              <Text style={{ fontWeight: "bold" }}>Email</Text>
+              {touched.email && errors.email && (
+                <Text style={{ color: "red" }}>{errors.email}</Text>
+              )}
               <TextInput
                 style={styles.input}
                 value={values.email}
@@ -96,9 +120,9 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               />
             </View>
             <View>
-              <Text>Username</Text>
+              <Text style={{ fontWeight: "bold" }}>Username</Text>
               {touched.username && errors.username && (
-                <Text>{errors.username}</Text>
+                <Text style={{ color: "red" }}>{errors.username}</Text>
               )}
               <TextInput
                 style={styles.input}
@@ -109,9 +133,9 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               />
             </View>
             <View>
-              <Text>Password</Text>
+              <Text style={{ fontWeight: "bold" }}>Password</Text>
               {touched.password && errors.password && (
-                <Text>{errors.password}</Text>
+                <Text style={{ color: "red" }}>{errors.password}</Text>
               )}
               <TextInput
                 style={styles.input}
@@ -123,9 +147,9 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               />
             </View>
             <View>
-              <Text>Confirm Password</Text>
+              <Text style={{ fontWeight: "bold" }}>Confirm Password</Text>
               {touched.confirmPassword && errors.confirmPassword && (
-                <Text style={{ color: "white" }}>{errors.confirmPassword}</Text>
+                <Text style={{ color: "red" }}>{errors.confirmPassword}</Text>
               )}
               <TextInput
                 style={styles.input}
@@ -177,6 +201,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     padding: 10,
+    backgroundColor: "white",
   },
   createAccount: {
     marginTop: 20,

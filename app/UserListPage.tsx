@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
+
 import {
   Text,
   SafeAreaView,
@@ -10,11 +11,17 @@ import {
   Modal,
   Pressable,
 } from "react-native";
+
 import { Link } from "expo-router";
 import usersData from "./users";
 import BattleAction from "./BattleAction";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation, useRouter } from "expo-router";
+
+
+import { LinearGradient } from "expo-linear-gradient";
+
+
 import * as api from "../utils/api";
 import { setAsyncStorage } from "../utils/asyncStorage";
 interface User {
@@ -41,10 +48,12 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
     setModalVisible(false);
   };
 
+
   const handleAttack = () => {
     writeItemToStorage(user);
     router.push({ pathname: "./BattleAction" });
   };
+
 
   return (
     <View style={styles.userListItem}>
@@ -60,10 +69,12 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
         </TouchableOpacity>
       </View>
       <Modal visible={modalVisible} animationType="fade" transparent>
+
         <LinearGradient
           colors={["#3D3D3D", "#000000"]}
           style={styles.modalContainer}
         >
+
           <View style={styles.modalContent}>
             <Text style={[styles.modalTitle, { fontFamily: "Roboto" }]}>
               {user.username}
@@ -78,6 +89,7 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
                 Close
               </Text>
             </TouchableOpacity>
+
             <Link
               href={{
                 pathname: "./BattleAction",
@@ -95,6 +107,7 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
                 </Text>
               </TouchableOpacity>
             </Link>
+
           </View>
         </LinearGradient>
       </Modal>

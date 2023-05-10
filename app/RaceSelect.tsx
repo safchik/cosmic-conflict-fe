@@ -1,5 +1,6 @@
-import React, { FC, createContext, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Formik } from "formik";
+
 import {
   StyleSheet,
   Text,
@@ -13,8 +14,9 @@ import {
 
 //Form validation
 import * as Yup from "yup";
-import { useNavigation, useRouter } from "expo-router";
-import { createNewAccount } from "../utils/api";
+import { useRouter } from "expo-router";
+import { getAsyncStorage, setAsyncStorage } from "../utils/asyncStorage";
+import { createNewCharacter } from "../utils/api";
 
 interface SignUpPageProps {
   human: Image;
@@ -32,11 +34,11 @@ const SignupSchema = Yup.object().shape({
 });
 
 const RaceSelect: FC<SignUpPageProps> = () => {
-  const [user, setUser] = useState<object>({});
   //needed for Go Back Button
   const router = useRouter();
   const human = require("../assets/images/human.png");
   const alien = require("../assets/images/alien.png");
+  const [character, setCharacter] = useState({});
 
   return (
     <SafeAreaView style={styles.form}>
@@ -44,18 +46,30 @@ const RaceSelect: FC<SignUpPageProps> = () => {
       <Formik
         initialValues={{
           race: "",
-          character: "",
+          characterName: "",
         }}
         validationSchema={SignupSchema}
-        onSubmit={(values) => {
-          //console.log(values);
-          const newAccount = {
-            race: values.race,
-          };
-          setUser(newAccount);
+        onSubmit={async (values) => {
+          const currentUser = await getAsyncStorage("user");
 
-          createNewAccount(newAccount);
-          router.push({ pathname: "./CharacterPage" });
+          const newCharacter = {
+            race: values.race,
+            characterName: values.characterName,
+            username: currentUser.username,
+          };
+          createNewCharacter(newCharacter)
+            .then(async (response) => {
+              console.log("newChar", response.character);
+              await setAsyncStorage("user", response.character);
+              router.push({
+                pathname: "./CharacterPage",
+              });
+            })
+            .catch((err) => {
+              // TODO render error message in UI
+              // (shouldn't need one because can't fail two choice selection)
+              throw err.message;
+            });
         }}
       >
         {({
@@ -72,27 +86,27 @@ const RaceSelect: FC<SignUpPageProps> = () => {
             <View style={styles.images}>
               <Pressable
                 style={{
-                  backgroundColor: values.race === "Alien" ? "#000" : "#ccc",
+                  backgroundColor: values.race === "alien" ? "#000" : "#ccc",
                   padding: 1,
                   marginVertical: 5,
                   marginHorizontal: 5,
                   borderRadius: 10,
                   borderWidth: 2,
                 }}
-                onPress={() => handleChange("race")("Human")}
+                onPress={() => handleChange("race")("human")}
               >
                 <Image style={styles.eachImage} source={human} />
               </Pressable>
               <Pressable
                 style={{
-                  backgroundColor: values.race === "Human" ? "#000" : "#ccc",
+                  backgroundColor: values.race === "human" ? "#000" : "#ccc",
                   padding: 1,
                   marginVertical: 5,
                   marginHorizontal: 5,
                   borderRadius: 10,
                   borderWidth: 2,
                 }}
-                onPress={() => handleChange("race")("Alien")}
+                onPress={() => handleChange("race")("alien")}
               >
                 <Image style={styles.eachImage} source={alien} />
               </Pressable>
@@ -102,14 +116,14 @@ const RaceSelect: FC<SignUpPageProps> = () => {
               <Text style={styles.eachBonusText}>20% Attack Bonus</Text>
             </View>
             <View>
-              {touched.character && errors.character && (
-                <Text>{errors.character}</Text>
+              {touched.characterName && errors.characterName && (
+                <Text>{errors.characterName}</Text>
               )}
               <TextInput
                 style={styles.input}
-                value={values.character}
-                onChangeText={handleChange("character")}
-                onBlur={handleBlur("character")}
+                value={values.characterName}
+                onChangeText={handleChange("characterName")}
+                onBlur={handleBlur("characterName")}
                 placeholder="Character Name"
               />
             </View>

@@ -9,6 +9,7 @@ import {
   Pressable,
 } from "react-native";
 import { Link } from "expo-router";
+import React, { useEffect, useContext, useState } from "react";
 import * as Font from "expo-font";
 
 export const loadFonts = async () => {
@@ -16,9 +17,7 @@ export const loadFonts = async () => {
     "sci-fi-font": require("../assets/images/Fonts/AquireBold-8Ma60.otf"),
   });
 };
-import React, { useEffect, useContext } from "react";
 import { Audio, AVPlaybackStatus } from "expo-av";
-// import { AuthContext, AuthProvider } from "../contexts/Auth";
 
 const splashSound = require("../assets/media/splash.mp3");
 const placeholderLogo = require("../assets/images/placeholderLogo.png");
@@ -27,8 +26,6 @@ const placeholderLogo = require("../assets/images/placeholderLogo.png");
 import * as ScreenOrientation from "expo-screen-orientation";
 
 export default function App() {
-  // const auth = useContext(AuthContext);
-
   useEffect(() => {
     lockOrientation();
     const soundObject = new Audio.Sound();
@@ -54,7 +51,6 @@ export default function App() {
   };
 
   return (
-    // <AuthProvider>
     <ImageBackground
       source={require("../assets/images/mainBackground.jpg")}
       style={styles.background}
@@ -77,7 +73,6 @@ export default function App() {
         <StatusBar style="auto" />
       </View>
     </ImageBackground>
-    // </AuthProvider>
   );
 }
 

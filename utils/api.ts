@@ -1,40 +1,125 @@
 import axios from "axios";
 
 const gameAPI = axios.create({
-  baseURL: "http://localhost:9090/api",
+  baseURL: "https://cosmic-conflict-api.onrender.com/api",
 });
 
-export const createNewAccount = async (postedAccount) => {
-  console.log(postedAccount);
+interface NewAccount {
+  username: string;
+  password: string;
+  email: string;
+}
 
-  const response = await gameAPI.post("/auth/signup", postedAccount);
-  console.log(response.data);
-  return response.data;
+export const createNewAccount = async (postedAccount: NewAccount) => {
+  try {
+    const response = await gameAPI.post("/auth/signup", postedAccount);
+    return response.data;
+  } catch (err) {
+    throw err.response.data;
+  }
 };
 
-export const login = async (account) => {
-  const response = await gameAPI.post("/login", account);
-  return response.data;
+interface Account {
+  username: string;
+  password: string;
+}
+
+export const login = async (account: Account) => {
+  console.log(account);
+  try {
+    const response = await gameAPI.post("/auth/login", account);
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
 };
 
-export const getUsers = async () => {
-  console.log("in api file");
-  const response = await gameAPI.get("/characters");
-  return response;
+export const logout = async () => {
+  try {
+    const response = await gameAPI.post("/auth/logout");
+    return response.data;
+  } catch (err) {
+    throw err.response.data;
+  }
 };
 
-// /log
-
-export const getAllBattles = async () => {
-  const response = await gameAPI.get("/log");
-  return response;
+export const getAllCharacters = async () => {
+  try {
+    const response = await gameAPI.get("/characters");
+    return response.data;
+  } catch (err) {
+    throw err.response.data;
+  }
 };
 
-export const postBattle = async (characterName) => {
-  console.log("in battlerrr: ", characterName);
+interface Character {
+  race: string;
+  characterName: string;
+  username: string;
+}
 
-  const response = await gameAPI.post(
-    `/battle/attack/${characterName.username}`
-  );
-  return response;
+export const createNewCharacter = async (newCharacter: Character) => {
+  try {
+    const response = await gameAPI.post("/characters", newCharacter);
+    return response.data;
+  } catch (err) {
+    throw err.response.data;
+  }
+};
+
+export const getUserCharacter = async (queryKey, queryValue) => {
+  try {
+    const response = await gameAPI.get(
+      `/characters/single?${queryKey}=${queryValue}`
+    );
+    // console.log(response.data);
+    return response.data;
+  } catch (err) {
+    throw err.response.data;
+  }
+};
+
+export const attackCharacter = async (characterName) => {
+  try {
+    const response = await gameAPI.post(`/battle/attack/${characterName}`);
+    return response.data;
+  } catch (err) {
+    throw err.response.data;
+  }
+};
+
+export const getBattleLog = async () => {
+  try {
+    const response = await gameAPI.get(`/battle/log`);
+    return response.data;
+  } catch (err) {
+    throw err.response.data;
+  }
+};
+
+export const getAllItems = async () => {
+  try {
+    const response = await gameAPI.get("/shop");
+    return response.data;
+  } catch (err) {
+    throw err.response.data;
+  }
+};
+
+export const getSingleItem = async (itemId) => {
+  try {
+    const response = await gameAPI.get(`/shop/${itemId}`);
+    return response.data;
+  } catch (err) {
+    throw err.response.data;
+  }
+};
+
+export const buyItem = async (itemId) => {
+  try {
+    const response = await gameAPI.patch(`/shop/${itemId}/purchase`);
+    return response.data;
+  } catch (err) {
+    throw err.response.data;
+  }
 };
