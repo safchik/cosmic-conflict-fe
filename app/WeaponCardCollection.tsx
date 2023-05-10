@@ -36,7 +36,6 @@ const WeaponCardCollection: FC<WeaponCardCollectionProps> = ({
     setSelectedItem(item);
     showModal(item);
   };
-  console.log({ items });
 
   return (
     <View style={styles.itemCardContainer}>
@@ -108,7 +107,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
-    width: "20%",
+    width: "50%",
     justifyContent: "center",
     alignItems: "center",
   },
