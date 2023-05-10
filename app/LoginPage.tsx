@@ -82,7 +82,7 @@ const LoginPage: FC<LoginPageProps> = () => {
               <View>
                 <Text style={{ fontWeight: "bold" }}>Password</Text>
                 {touched.password && errors.password && (
-                  <Text>{errors.password}</Text>
+                  <Text style={{ color: "red" }}>{errors.password}</Text>
                 )}
                 <TextInput
                   style={styles.input}
