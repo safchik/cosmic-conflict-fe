@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useCallback } from "react";
+
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -6,6 +7,7 @@ import {
   StyleSheet,
   Image,
   ImageBackground,
+
 } from "react-native";
 import { Link } from "expo-router";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -23,7 +25,7 @@ interface Character {
 }
 
 const CharacterPage: React.FC = () => {
-  const { value } = useGlobalStorage("user");
+  const { value: user } = useGlobalStorage("user");
   const [character, setCharacter] = useState({
     characterName: "",
     attack: 0,
@@ -36,18 +38,18 @@ const CharacterPage: React.FC = () => {
 
   useEffect(() => {
     async function updateCharacter() {
-      if (value) {
-        setCharacter(value);
+      if (user) {
+        setCharacter(user);
       }
     }
-
     updateCharacter();
     setIsLoading(false);
-  }, [value]);
+  }, [user]);
+
 
   return (
     <ImageBackground
-      source={require("../assets/images/charPageBG.jpg")}
+      source={require('../assets/images/charPageBG.jpg')}
       style={styles.container}
     >
       {isLoading ? (
@@ -117,6 +119,7 @@ const CharacterPage: React.FC = () => {
               </Pressable>
             </Link>
           </View>
+
         </View>
       )}
     </ImageBackground>
@@ -126,59 +129,59 @@ const CharacterPage: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 15,
-    color: "white",
-    textShadowColor: "#000",
+    color: 'white',
+    textShadowColor: '#000',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 2,
   },
   row: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginVertical: 10,
   },
   label: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginRight: 10,
-    color: "white",
-    textShadowColor: "black",
+    color: 'white',
+    textShadowColor: 'black',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 2,
   },
   value: {
     fontSize: 20,
-    color: "gold",
-    fontWeight: "bold",
-    textShadowColor: "black",
+    color: 'gold',
+    fontWeight: 'bold',
+    textShadowColor: 'black',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 2,
   },
   items: {
     marginVertical: 2,
     fontSize: 18,
-    alignSelf: "center",
-    color: "#55f27f",
-    fontWeight: "bold",
-    textShadowColor: "black",
+    alignSelf: 'center',
+    color: '#55f27f',
+    fontWeight: 'bold',
+    textShadowColor: 'black',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 2,
   },
   button: {
     marginTop: 30,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 10,
   },
   buttonText: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   image: {
     width: 100,
@@ -192,7 +195,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     borderRadius: 30,
     elevation: 5,
-    shadowColor: "black",
+    shadowColor: 'black',
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.8,
     shadowRadius: 2,

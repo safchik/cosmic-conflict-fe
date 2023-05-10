@@ -42,7 +42,7 @@ const ItemCard = ({
 const styles = StyleSheet.create({
   card: {
     width: 130,
-    height: 150,
+    height: 130,
     borderRadius: 10,
     marginVertical: 12,
     marginHorizontal: 16,

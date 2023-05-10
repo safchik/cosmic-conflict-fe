@@ -9,8 +9,12 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
+
+import * as api from "../utils/api";
+
 import { getUserCharacter, login } from "../utils/api";
 import { LinearGradient } from "expo-linear-gradient";
+
 
 //Form validation
 import * as Yup from "yup";
