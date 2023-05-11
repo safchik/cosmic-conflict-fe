@@ -3,8 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Pressable,
   ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -26,7 +26,6 @@ const Shop: FC<AccountProps> = ({ logout }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [items, setItems] = useState([]);
   const [setModalItem] = useState("");
-  const router = useRouter();
 
   const showModal = () => {
     setModalVisible(true);
@@ -34,6 +33,11 @@ const Shop: FC<AccountProps> = ({ logout }) => {
 
   const hideModal = () => {
     setModalVisible(false);
+  };
+
+  const router = useRouter();
+  const handlePress = () => {
+    router.push("/CharacterPage");
   };
 
   useEffect(() => {
@@ -92,9 +96,9 @@ const Shop: FC<AccountProps> = ({ logout }) => {
         <Text style={styles.credits}>
           Total Credits: <Text style={{ color: "white" }}>{user.gold}</Text>
         </Text>
-        <Pressable onPress={() => router.back()} style={styles.button}>
+        <TouchableOpacity onPress={handlePress} style={styles.button}>
           <Text>Go Back</Text>
-        </Pressable>
+        </TouchableOpacity>
       </SafeAreaView>
     </ImageBackground>
   );

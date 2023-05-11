@@ -7,7 +7,6 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Pressable,
   ImageBackground,
 } from "react-native";
 
@@ -44,7 +43,7 @@ const LoginPage: FC<LoginPageProps> = () => {
     require("../assets/collection/fightscene/scene5.png"),
   ];
 
-  const backgroundSound = require("../assets/media/radio.wav");
+  const backgroundSound = require("../assets/media/splash.mp3");
 
   // Define state to keep track of the current background image
   const [backgroundImageIndex, setBackgroundImageIndex] = useState(0);
@@ -188,9 +187,9 @@ const styles = StyleSheet.create({
   formText: {
     fontWeight: "bold",
     color: "white",
-    textShadowColor: "#000000", 
+    textShadowColor: "#000000",
     textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 3, 
+    textShadowRadius: 3,
   },
   input: {
     height: 40,

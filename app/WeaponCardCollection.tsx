@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import ItemCard from "../components/ItemCard";
 import { buyItem } from "../utils/api";
-import { setAsyncStorage } from "../utils/asyncStorage";
 import useGlobalStorage from "../hooks/useGlobalStorage";
 
 interface AccountProps {
@@ -85,7 +84,7 @@ const WeaponCardCollection: FC<WeaponCardCollectionProps> = ({
         ))}
 
       {selectedItem && (
-        <Modal animationType="fade" transparent={true}>
+        <Modal animationType="slide" transparent>
           <View style={styles.modalBackground}>
             <View style={styles.modalContainer}>
               {error === null ? null : (
@@ -93,28 +92,31 @@ const WeaponCardCollection: FC<WeaponCardCollectionProps> = ({
               )}
               <Text style={styles.modalTitle}>{selectedItem.itemName}</Text>
               <Text style={styles.modalText}>Type: {selectedItem.type}</Text>
-              <Text style={styles.modalText}>
+              <Text style={[styles.modalText, { color: "red" }]}>
                 Attack: {selectedItem.attack}
               </Text>
               {selectedItem.buff && (
                 <Text style={styles.modalText}>Buff: {selectedItem.buff}</Text>
               )}
-              <Text style={styles.modalText}>
+              <Text style={[styles.modalText, { color: "#d1b92e" }]}>
                 Cost: {selectedItem.cost} Credits
               </Text>
               <TouchableOpacity
-                style={styles.modalButton}
+                style={styles.purchaseButton}
                 onPress={() => {
                   // possible logic to Subtract cost from user's gold
                   // user.gold -= selectedItem.cost;
                   handlePurchase(selectedItem);
                 }}
               >
-                <Text style={styles.modalButtonText}>Purchase</Text>
+                <Text style={[styles.modalButtonText]}>Purchase</Text>
               </TouchableOpacity>
-              <Pressable style={styles.modalButton} onPress={handleModalClose}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={handleModalClose}
+              >
                 <Text style={styles.modalButtonText}>Close</Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
@@ -129,12 +131,11 @@ const styles = StyleSheet.create({
   },
   modalBackground: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalContainer: {
-    backgroundColor: "white",
+    backgroundColor: "#dedede",
     borderRadius: 10,
     padding: 20,
     width: "50%",
@@ -155,9 +156,19 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     justifyContent: "center",
     alignItems: "center",
+    fontWeight: "bold",
   },
   modalButton: {
     backgroundColor: "#2196F3",
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 20,
+    alignSelf: "center",
+    borderWidth: 2,
+    borderColor: "black",
+  },
+  purchaseButton: {
+    backgroundColor: "#d1b92e",
     borderRadius: 10,
     padding: 10,
     marginTop: 20,
