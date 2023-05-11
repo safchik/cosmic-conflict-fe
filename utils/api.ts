@@ -14,7 +14,9 @@ export const createNewAccount = async (postedAccount: NewAccount) => {
   try {
     const response = await gameAPI.post("/auth/signup", postedAccount);
     return response.data;
+    console.log(response);
   } catch (err) {
+    console.log(err);
     throw err.response.data;
   }
 };

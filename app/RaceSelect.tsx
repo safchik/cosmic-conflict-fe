@@ -11,6 +11,7 @@ import {
   Pressable,
   Image,
   ImageBackground,
+  BackHandler,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -61,6 +62,15 @@ const RaceSelect: FC<SignUpPageProps> = () => {
       soundObject.unloadAsync();
     };
   }, []);
+
+  const backAction = () => {
+    // Prevent going back to this page by returning `true`
+    return true;
+  };
+  const backHandler = BackHandler.addEventListener(
+    "hardwareBackPress",
+    backAction
+  );
 
   return (
     <ImageBackground

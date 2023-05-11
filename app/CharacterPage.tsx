@@ -6,6 +6,7 @@ import {
   Image,
   ImageBackground,
   SafeAreaView,
+  BackHandler,
 } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -40,6 +41,15 @@ const CharacterPage: React.FC = () => {
     inventory: [],
   });
   const [isLoading, setIsLoading] = useState(true);
+
+  const backAction = () => {
+    // Prevent going back to this page by returning `true`
+    return true;
+  };
+  const backHandler = BackHandler.addEventListener(
+    "hardwareBackPress",
+    backAction
+  );
 
   useEffect(() => {
     async function updateCharacter() {
