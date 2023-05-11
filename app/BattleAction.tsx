@@ -7,6 +7,7 @@ import {
   TextInput,
   Pressable,
   BackHandler,
+  ImageBackground,
 } from "react-native";
 import { Link } from "expo-router";
 import * as api from "../utils/api";
@@ -44,29 +45,40 @@ const BattleAction: FC<BattleProps> = (params) => {
   }
   console.log(battleResult.battleReport);
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Battle Report</Text>
-      <Text>
-        {battleResult.attackersInfo.characterName} Attacked{" "}
-        {battleResult.defendersInfo.characterName} and the winner was{" "}
-        {battleResult.battleReport.winner} and they received{" "}
-        {battleResult.battleReport.spoils} credits.
-      </Text>
-      <View style={styles.button}>
-        <Link href={"./Shop"}>
-          <TouchableOpacity>
-            <Text style={styles.buttonText}>Shop</Text>
-          </TouchableOpacity>
-        </Link>
+    <ImageBackground
+      source={require("../assets/collection/fightscene/scene7.jpg")}
+      style={styles.background}
+    >
+      <View style={styles.container}>
+        <Text style={styles.title}>Battle Report</Text>
+        <Text style={styles.attacker}>
+          {battleResult.attackersInfo.characterName}
+        </Text>
+        <Text style={styles.text}>Attacked </Text>
+        <Text style={styles.target}>
+          {battleResult.defendersInfo.characterName}
+        </Text>
+        <Text style={styles.text}> the winner was </Text>
+        <Text style={styles.winner}>{battleResult.battleReport.winner}</Text>
+        <Text style={styles.text}> they received </Text>
+        <Text style={styles.credits}>{battleResult.battleReport.spoils}</Text>
+        <Text style={styles.text}>credits.</Text>
+        <View style={styles.button}>
+          <Link href={"./Shop"}>
+            <TouchableOpacity>
+              <Text style={styles.buttonText}>Shop</Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
+        <View style={styles.button}>
+          <Link href={"./CharacterPage"}>
+            <TouchableOpacity>
+              <Text style={styles.buttonText}>Home</Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
       </View>
-      <View style={styles.button}>
-        <Link href={"./CharacterPage"}>
-          <TouchableOpacity>
-            <Text style={styles.buttonText}>Home</Text>
-          </TouchableOpacity>
-        </Link>
-      </View>
-    </View>
+    </ImageBackground>
   );
 };
 const styles = StyleSheet.create({
@@ -76,7 +88,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-    margin: 10,
+    marginTop: 30,
     padding: 10,
     borderRadius: 10,
     borderWidth: 2,
@@ -89,18 +101,66 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,
+    flexDirection: "row",
   },
   buttonText: {
     fontSize: 18,
   },
   title: {
-    fontSize: 24,
+    fontSize: 44,
     textAlign: "center",
     fontWeight: "bold",
-    marginTop: 60,
-    marginBottom: 15,
+    marginTop: 5,
+    marginBottom: 65,
     color: "white",
     textShadowColor: "#000",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 2,
+  },
+  attacker: {
+    fontWeight: "bold",
+    fontSize: 25,
+    color: "red",
+    textShadowColor: "black",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 2,
+  },
+  target: {
+    fontWeight: "bold",
+    fontSize: 25,
+    color: "blue",
+    textShadowColor: "black",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 2,
+  },
+  winner: {
+    fontWeight: "bold",
+    fontSize: 25,
+    color: "green",
+    textShadowColor: "black",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 2,
+  },
+  credits: {
+    fontWeight: "bold",
+    fontSize: 25,
+    color: "gold",
+    textShadowColor: "black",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 2,
+    marginBottom: 4,
+  },
+  background: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  text: {
+    fontWeight: "bold",
+    fontSize: 25,
+    color: "white",
+    textShadowColor: "black",
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 2,
   },
