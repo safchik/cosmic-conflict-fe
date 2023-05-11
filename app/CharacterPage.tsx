@@ -11,6 +11,13 @@ import { Link, useRouter } from "expo-router";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import useGlobalStorage from "../hooks/useGlobalStorage";
 import { logout } from "../utils/api";
+import moneyIcon from "../assets/collection/Character/money.png";
+import shieldIcon from "../assets/collection/Character/shield.png";
+import swordIcon from "../assets/collection/Character/sword.png";
+import shopIcon from "../assets/collection/Character/shopping.png";
+import battleIcon from "../assets/collection/Character/twoswords.png";
+import log from "../assets/collection/Character/log-file.png";
+import logoutNow from "../assets/collection/Character/logout.png";
 
 interface Character {
   characterName: string;
@@ -80,19 +87,17 @@ const CharacterPage: React.FC = () => {
               )}
             </View>
             <View style={styles.row}>
-              <Text style={styles.label}>Attack </Text>
+              <Image source={swordIcon} style={styles.icon} />
               <Text style={[styles.value, { color: "red" }]}>
                 {character.attack}
               </Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Defence </Text>
+
+              <Image source={shieldIcon} style={styles.icon} />
               <Text style={[styles.value, { color: "#939596" }]}>
                 {character.defence}
               </Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Credits </Text>
+
+              <Image source={moneyIcon} style={styles.icon} />
               <Text style={styles.value}>{character.gold}</Text>
             </View>
             <View>
@@ -109,33 +114,29 @@ const CharacterPage: React.FC = () => {
                 })
               )}
             </View>
-            <View>
+            <View style={styles.row}>
               <Link href={"./Shop"}>
-                <TouchableOpacity style={styles.button}>
-                  <Text style={styles.buttonText}>Shop</Text>
+                <TouchableOpacity>
+                  <Image source={shopIcon} style={styles.iconBottom} />
                 </TouchableOpacity>
               </Link>
-            </View>
-            <View>
+
               <Link href={"./UserListPage"}>
-                <TouchableOpacity style={styles.button}>
-                  <Text style={styles.buttonText}>Battle!</Text>
+                <TouchableOpacity>
+                  <Image source={battleIcon} style={styles.iconBottom} />
                 </TouchableOpacity>
               </Link>
             </View>
-            <View>
+            <View style={styles.column}>
               <Link href={"./BattleLog"}>
-                <TouchableOpacity style={styles.button}>
-                  <Text style={styles.buttonText}>Battle Log</Text>
+                <TouchableOpacity>
+                  <Image source={log} style={styles.iconBottom} />
                 </TouchableOpacity>
               </Link>
+              <TouchableOpacity onPress={handleLogout} style={styles.touch}>
+                <Image source={logoutNow} style={styles.iconBottom} />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              onPress={handleLogout}
-              style={styles.logoutButton}
-            >
-              <Text>Logout</Text>
-            </TouchableOpacity>
           </View>
         )}
       </SafeAreaView>
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 15,
+    marginBottom: 5,
     color: "white",
     textShadowColor: "#000",
     textShadowOffset: { width: 2, height: 2 },
@@ -160,7 +161,14 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
-    marginVertical: 10,
+    marginVertical: 5,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  column: {
+    flexDirection: "column",
+    marginVertical: 5,
+    alignItems: "center",
   },
   label: {
     fontSize: 18,
@@ -190,30 +198,17 @@ const styles = StyleSheet.create({
     textShadowRadius: 2,
   },
   button: {
-    marginTop: 30,
-    marginVertical: 20,
+    marginTop: 20,
+    marginVertical: 5,
     backgroundColor: "white",
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
     paddingVertical: 10,
-    borderRadius: 10,
+    alignItems: "center",
+    borderRadius: 5,
   },
   buttonText: {
     fontSize: 18,
     fontWeight: "bold",
-  },
-  logoutButton: {
-    margin: 10,
-    marginTop: 50,
-    padding: 15,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "black",
-    backgroundColor: "#b094cc",
-    shadowColor: "#999",
-    shadowOffset: {
-      width: 0,
-      height: 9,
-    },
   },
 
   image: {
@@ -232,6 +227,23 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
+  },
+  icon: {
+    width: 35,
+    height: 35,
+    marginRight: 10,
+    marginLeft: 10,
+  },
+  iconBottom: {
+    width: 60,
+    height: 60,
+    marginRight: 10,
+    marginLeft: 10,
+    marginBottom: 20,
+  },
+  touch: {
+    marginTop: 20,
+    marginLeft: 10,
   },
 });
 

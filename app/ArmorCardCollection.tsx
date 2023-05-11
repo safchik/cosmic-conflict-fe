@@ -51,7 +51,6 @@ const ArmorCardCollection: FC<ArmorCardCollectionProps> = ({
     const id = item._id;
     buyItem(id)
       .then((response) => {
-        console.log(response);
         if (response.updatedCharacter) {
           setUser(response.updatedCharacter);
         } else {

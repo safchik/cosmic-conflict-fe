@@ -43,7 +43,6 @@ const BattleAction: FC<BattleProps> = (params) => {
       </View>
     );
   }
-  console.log(battleResult.battleReport);
   return (
     <ImageBackground
       source={require("../assets/collection/fightscene/scene7.jpg")}
