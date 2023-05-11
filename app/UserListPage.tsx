@@ -9,14 +9,10 @@ import {
   Image,
   TouchableOpacity,
   Modal,
-  Pressable,
   ImageBackground,
   TouchableWithoutFeedback,
 } from "react-native";
 import { Link } from "expo-router";
-import usersData from "./users";
-import BattleAction from "./BattleAction";
-import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation, useRouter } from "expo-router";
 
 import * as api from "../utils/api";
@@ -34,9 +30,10 @@ import useGlobalStorage from "../hooks/useGlobalStorage";
 
 const UserListItem: FC<{ user: User }> = ({ user }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const navigation = useNavigation();
   const router = useRouter();
   const { setValue: setSelectedUser } = useGlobalStorage("selectedUser");
+  const [alienImageIndex, setAlienImageIndex] = useState(0);
+  const [humanImageIndex, setHumanImageIndex] = useState(0);
 
   const showModal = () => {
     setModalVisible(true);
@@ -50,6 +47,26 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
     setSelectedUser(user);
     router.push({ pathname: "./BattleAction" });
   };
+  const alienImages = [
+    require("../assets/collection/Aliens/1.png"),
+    require("../assets/collection/Aliens/2.png"),
+    require("../assets/collection/Aliens/3.png"),
+    require("../assets/collection/Aliens/4.png"),
+  ];
+  const humanImages = [
+    require("../assets/collection/Humans/1.png"),
+    require("../assets/collection/Humans/2.png"),
+    require("../assets/collection/Humans/3.png"),
+    require("../assets/collection/Humans/4.png"),
+  ];
+
+  useEffect(() => {
+    const randomAlienIndex = Math.floor(Math.random() * alienImages.length);
+    setAlienImageIndex(randomAlienIndex);
+
+    const randomHumanIndex = Math.floor(Math.random() * humanImages.length);
+    setHumanImageIndex(randomHumanIndex);
+  }, []);
 
   return (
     <SafeAreaView>
@@ -58,12 +75,12 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
           <TouchableOpacity onPress={showModal}>
             {user.race === "human" ? (
               <Image
-                source={require("../assets/images/human.png")}
+                source={humanImages[humanImageIndex]}
                 style={styles.userListImage}
               />
             ) : (
               <Image
-                source={require("../assets/images/alien.png")}
+                source={alienImages[alienImageIndex]}
                 style={styles.userListImage}
               />
             )}
@@ -125,7 +142,6 @@ const UserListItem: FC<{ user: User }> = ({ user }) => {
 };
 
 const UserListPage: FC = () => {
-  // const [userList, setUserList] = useState<User[]>(usersData);
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
@@ -141,21 +157,22 @@ const UserListPage: FC = () => {
   }, []);
 
   return (
-    <LinearGradient
-      colors={["#3D3D3D", "#7DF9FF", "#ee8055"]}
-      style={styles.container}
+    <ImageBackground
+      source={require("../assets/collection/fightscene/scene5.png")}
+      style={styles.background}
     >
-      <View style={styles.headerBackground}></View>
-      <SafeAreaView>
-        <Text style={styles.title}>Enemies</Text>
-        <FlatList
-          data={users}
-          renderItem={({ item }) => <UserListItem user={item} />}
-          keyExtractor={(item) => item.username}
-          showsVerticalScrollIndicator={false}
-        />
-      </SafeAreaView>
-    </LinearGradient>
+      <View style={styles.container}>
+        <SafeAreaView>
+          <Text style={styles.title}>Enemies</Text>
+          <FlatList
+            data={users}
+            renderItem={({ item }) => <UserListItem user={item} />}
+            keyExtractor={(item) => item.username}
+            showsVerticalScrollIndicator={false}
+          />
+        </SafeAreaView>
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -173,19 +190,14 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
     marginTop: 50,
   },
-  headerBackground: {
-    position: "absolute",
-    top: 0,
-    height: 117,
-    width: "100%",
-    backgroundColor: "#dedede",
-    shadowColor: "#000",
-    shadowOffset: { width: 2, height: 2 },
-  },
   container: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  background: {
+    flex: 1,
+    resizeMode: "cover",
   },
   userListItem: {
     flexDirection: "row",
