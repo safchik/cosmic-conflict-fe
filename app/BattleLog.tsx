@@ -5,10 +5,11 @@ import {
   SafeAreaView,
   View,
   TextInput,
-  TouchableOpacity,
   Pressable,
   ScrollView,
 } from "react-native";
+import { Link } from "expo-router";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import * as api from "../utils/api";
 import useGlobalStorage from "../hooks/useGlobalStorage";
 
@@ -61,7 +62,8 @@ const BattleLog: FC<BattleProps> = (params) => {
           <View key={index}>
             <Text>
               Attacker: {battle.attacker}, Defender: {battle.defender}, Winner:{" "}
-              {battle.winner}, Spoils: {battle.spoils}
+              {battle.winner}, Spoils: {battle.spoils}, Time:{" "}
+              {battle.timeStamps}
             </Text>
           </View>
         ))}
@@ -77,6 +79,13 @@ const BattleLog: FC<BattleProps> = (params) => {
             <Text>Next</Text>
           </TouchableOpacity>
         )}
+      </View>
+      <View>
+        <Link href={"./CharacterPage"}>
+          <TouchableOpacity>
+            <Text>Home</Text>
+          </TouchableOpacity>
+        </Link>
       </View>
     </ScrollView>
   );
