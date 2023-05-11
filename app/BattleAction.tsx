@@ -42,7 +42,6 @@ const BattleAction: FC<BattleProps> = (params) => {
       </View>
     );
   }
-  console.log(battleResult.battleReport);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Battle Report</Text>
