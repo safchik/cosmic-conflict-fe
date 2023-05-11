@@ -26,7 +26,7 @@ interface Character {
   gold: number;
   race: string;
   username: string;
-  inventory: [];
+  inventory: {};
 }
 
 const CharacterPage: React.FC = () => {
@@ -101,17 +101,30 @@ const CharacterPage: React.FC = () => {
               <Text style={styles.value}>{character.gold}</Text>
             </View>
             <View>
-              <Text style={[styles.items, { color: "white" }]}>Inventory </Text>
-              {!character.inventory || character.inventory.length === 0 ? (
+              <Text style={[styles.items, { color: "white", fontSize: 22 }]}>
+                Inventory{" "}
+              </Text>
+              {!character.inventory ? (
                 <Text style={styles.label}>No Items Held</Text>
               ) : (
-                character.inventory.map((item) => {
-                  return (
-                    <Text key={item} style={styles.items}>
-                      {item}
+                <View>
+                  <View>
+                    <Text style={[styles.items, { color: "white" }]}>
+                      Weapon
                     </Text>
-                  );
-                })
+                    <Text style={styles.items}>
+                      {character.inventory.weapon}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={[styles.items, { color: "white" }]}>
+                      Armour
+                    </Text>
+                    <Text style={styles.items}>
+                      {character.inventory.armour}
+                    </Text>
+                  </View>
+                </View>
               )}
             </View>
             <View style={styles.row}>

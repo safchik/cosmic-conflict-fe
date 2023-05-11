@@ -64,7 +64,7 @@ const RaceSelect: FC<SignUpPageProps> = () => {
 
   return (
     <ImageBackground
-      source={require("../assets/collection/fightscene/download.gif")}
+      source={require("../assets/collection/fightscene/scene5.png")}
       style={styles.background}
       resizeMode="cover"
     >

@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
-  ImageBackground
+  ImageBackground,
 } from "react-native";
 import { setAsyncStorage } from "../utils/asyncStorage";
 
@@ -64,15 +64,14 @@ const SignUpPage: FC<SignUpPageProps> = () => {
 
   const backgroundSound = require("../assets/media/suspence.wav");
 
-
   // Define state to keep track of the current background image
   const [backgroundImageIndex, setBackgroundImageIndex] = useState(0);
 
   // Use the useEffect hook to change the background image every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setBackgroundImageIndex((prevIndex) =>
-        (prevIndex + 1) % backgroundImages.length
+      setBackgroundImageIndex(
+        (prevIndex) => (prevIndex + 1) % backgroundImages.length
       );
     }, 10000);
     return () => clearInterval(interval);
@@ -154,7 +153,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
                   {error}
                 </Text>
               )}
-              <Text style={{ fontWeight: "bold" }}>Email</Text>
+              <Text style={styles.formText}>Email</Text>
               {touched.email && errors.email && (
                 <Text style={{ color: "red" }}>{errors.email}</Text>
               )}
@@ -167,7 +166,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               />
             </View>
             <View>
-              <Text style={{ fontWeight: "bold" }}>Username</Text>
+              <Text style={styles.formText}>Username</Text>
               {touched.username && errors.username && (
                 <Text style={{ color: "red" }}>{errors.username}</Text>
               )}
@@ -180,7 +179,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               />
             </View>
             <View>
-              <Text style={{ fontWeight: "bold" }}>Password</Text>
+              <Text style={styles.formText}>Password</Text>
               {touched.password && errors.password && (
                 <Text style={{ color: "red" }}>{errors.password}</Text>
               )}
@@ -194,7 +193,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               />
             </View>
             <View>
-              <Text style={{ fontWeight: "bold" }}>Confirm Password</Text>
+              <Text style={styles.formText}>Confirm Password</Text>
               {touched.confirmPassword && errors.confirmPassword && (
                 <Text style={{ color: "red" }}>{errors.confirmPassword}</Text>
               )}
@@ -235,6 +234,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  formText: {
+    fontWeight: "bold",
+    color: "white",
+    textShadowColor: "#000000",
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 3,
   },
   title: {
     fontWeight: "bold",

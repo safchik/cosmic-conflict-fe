@@ -26,6 +26,7 @@ const Shop: FC<AccountProps> = ({ logout }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [items, setItems] = useState([]);
   const [setModalItem] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const showModal = () => {
     setModalVisible(true);
@@ -45,6 +46,7 @@ const Shop: FC<AccountProps> = ({ logout }) => {
       try {
         const data = await api.getAllItems();
         setItems(data.shopItems);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -53,6 +55,16 @@ const Shop: FC<AccountProps> = ({ logout }) => {
     fetchData();
   }, []);
 
+  if (isLoading) {
+    return (
+      <ImageBackground
+        source={require("../assets/images/shop/shop-background2.jpg")}
+        style={styles.background}
+      >
+        <Text>Loading...</Text>
+      </ImageBackground>
+    );
+  }
   return (
     <ImageBackground
       source={require("../assets/images/shop/shop-background2.jpg")}
