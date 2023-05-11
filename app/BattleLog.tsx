@@ -62,8 +62,7 @@ const BattleLog: FC<BattleProps> = (params) => {
           <View key={index}>
             <Text>
               Attacker: {battle.attacker}, Defender: {battle.defender}, Winner:{" "}
-              {battle.winner}, Spoils: {battle.spoils}, Time:{" "}
-              {battle.timeStamps}
+              {battle.winner}, Spoils: {battle.spoils}
             </Text>
           </View>
         ))}
